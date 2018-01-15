@@ -1,0 +1,25 @@
+.Keyboard {
+	text-align: center;
+	display: inline-block;
+	border-radius: 20px;
+	background: #4970bd;
+	height: 64px;
+	width: 64px;
+	margin: 5px;
+	-webkit-transition: width .1s, height .1s;
+	transition: width .1s, height .1s;
+}
+
+ p {
+	color: white;
+	text-align: center;
+	font-size: 37px;
+	padding-top: 10px;
+	margin: 0px;
+	
+}
+
+.Keyboard p:hover {
+	cursor: pointer;
+
+}
