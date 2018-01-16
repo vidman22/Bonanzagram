@@ -3,16 +3,16 @@ import io from 'socket.io-client';
 import { USER_CONNECTED, LOGOUT  } from '../Events';
 import LoginForm from '../components/LoginForm/LoginForm';
 import WordBuilder from '../components/WordBuilder/WordBuilder';
-import Aux from '../hoc/Aux/Aux';
+import Aux from '../hoc/Wrap/Wrap';
+const socketUrl = "http://localhost:3001";
+
 import Player from '../components/Player/Player';
 import Buttons from '../components/Buttons/Buttons';
 import axios from 'axios';
-const socketUrl = "http://localhost:3231";
 
 
 
 export default class Layout extends Component {
-
 
 
 
@@ -55,7 +55,6 @@ export default class Layout extends Component {
 	  	MAX_WAITING: 25000,
 	  	callAPI: false,
 	  	isWord: 'word not challenged'
-
 	  };
 
 
@@ -113,7 +112,6 @@ export default class Layout extends Component {
            this.resetTimeOut();
            this.nextTurn();
           });
-		
 	}
 
 	/*
@@ -121,7 +119,6 @@ export default class Layout extends Component {
 	*	@param user {id:number, name:string}
 	*/	
 	setUser = (user)=>{
-
 		const { socket } = this.state;
 		socket.emit(USER_CONNECTED, user);
 		this.setState({showPlayers: true});
@@ -143,7 +140,7 @@ export default class Layout extends Component {
 	// ===================================================================
 	// Game Logic
 
-
+  // not working
 	nextTurn = () => {
 		
 		let current_turn = this.state.current_turn;
@@ -187,7 +184,6 @@ export default class Layout extends Component {
 		console.log("key clicked");
 	}
  
-
 	render() {
 		let players = null;
 
@@ -214,6 +210,7 @@ export default class Layout extends Component {
 					:
 					<div>
 					{players}
+
 					<Buttons 
 					clicked={() => this.callAPI()}
 					click={() => this.callAPI()}/>

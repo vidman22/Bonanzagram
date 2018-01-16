@@ -4,10 +4,9 @@ import Keyboard from '../../components/Keyboard/Keyboard';
 import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
-const socketUrl = "http://localhost:3231"
-
+const socketUrl = "http://localhost:3001"
+  
  export default class WordBuilder extends Component {
-
 
     state = {
       lineOne: ['q','w','e','r','t','y','u','i','o','p'],
@@ -19,7 +18,7 @@ const socketUrl = "http://localhost:3231"
   componentWillMount() {
     this.getInput();
   };
- 
+
   getInput = () => {
 
     const socket = io(socketUrl);
@@ -37,7 +36,6 @@ const socketUrl = "http://localhost:3231"
     const socket = io(socketUrl);
     socket.emit(LETTER_UPDATE, event.toUpperCase());
     // console.log('keyboard input: ' + event);
-  
   }
 
   render () {

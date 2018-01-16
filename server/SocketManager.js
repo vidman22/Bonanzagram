@@ -9,12 +9,9 @@ let connectedUsers = [];
 let text = [];
 
 module.exports = function(socket){
-
-
 					
 	// console.log('\x1bc'); //clears console
 	// console.log('socket: ', socket);
-
 
 	//Verify Username
 	socket.on(VERIFY_USER, (nickname, callback)=>{

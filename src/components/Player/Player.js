@@ -8,7 +8,6 @@ const player = ( props ) => {
             <Avatar />
             <h1>{props.name}</h1>
             <h3>Score: {props.score}</h3>
-            
 
         </div>
     )
