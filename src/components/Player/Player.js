@@ -7,8 +7,7 @@ const player = ( props ) => {
         <div className="Player">
             <Avatar />
             <h1>{props.name}</h1>
-            <button>Challenge Spelling</button>
-            <button onClick = {props.clicked} >Word Completed</button>
+            <h3>Score: {props.score}</h3>
 
         </div>
     )

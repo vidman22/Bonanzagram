@@ -1,6 +1,7 @@
 .Keyboard {
 	text-align: center;
 	display: inline-block;
+	font-family: Helvetica;
 	border-radius: 20px;
 	background: #4970bd;
 	height: 64px;
@@ -21,5 +22,4 @@
 
 .Keyboard p:hover {
 	cursor: pointer;
-
 }

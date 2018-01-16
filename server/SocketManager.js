@@ -5,15 +5,13 @@ const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE  }
 // const { createUser } = require('../Factories');
 
 let connectedUsers = [];
-let connections = [];
+
 let text = [];
 
 module.exports = function(socket){
-
+					
 	// console.log('\x1bc'); //clears console
 	// console.log('socket: ', socket);
-	connections.push(socket.id);
-	console.log('Socket connections: ' + connections);
 
 	//Verify Username
 	socket.on(VERIFY_USER, (nickname, callback)=>{
@@ -46,7 +44,6 @@ module.exports = function(socket){
 				const id = connectedUsers[i].id;
 
 				connectedUsers = connectedUsers.filter((user) => user.id !== id);
-				connections = connections.filter((stringId) => stringId !== id);
 
 			io.emit(USER_DISCONNECTED, connectedUsers);
 			console.log("Disconnect", connectedUsers);

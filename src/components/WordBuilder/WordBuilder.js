@@ -5,14 +5,15 @@ import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
 const socketUrl = "http://localhost:3001"
+  
+ export default class WordBuilder extends Component {
 
-  class WordBuilder extends Component {
-  state = {
-    lineOne: ['q','w','e','r','t','y','u','i','o','p'],
-    lineTwo: ['a','s','d','f','g','h','j','k','l'],
-    lineThree: ['z','x','c','v','b','n','m'],
-    userInput: [],
-  } 
+    state = {
+      lineOne: ['q','w','e','r','t','y','u','i','o','p'],
+      lineTwo: ['a','s','d','f','g','h','j','k','l'],
+      lineThree: ['z','x','c','v','b','n','m'],
+      userInput: [],
+    };
 
   componentWillMount() {
     this.getInput();
@@ -23,10 +24,9 @@ const socketUrl = "http://localhost:3001"
     const socket = io(socketUrl);
 
     socket.on('LETTER_UPDATE', (event) => {
-      console.log('received update: ' + event);
-      // let userInput = [...this.state.userInput];
+      // console.log('received update: ' + event);
       this.setState({userInput: event });
-      console.log('userInput: ' + this.state.userInput);
+      // console.log('userInput: ' + this.state.userInput);
     });
   }
 
@@ -34,13 +34,8 @@ const socketUrl = "http://localhost:3001"
 
   inputChangedHandler = ( event ) => {
     const socket = io(socketUrl);
-    socket.emit(LETTER_UPDATE, event);
-    console.log('keyboard input: ' + event);
-    // const text = this.state.userInput;
-    // text.push(event.toUpperCase());
-    // this.setState( { userInput: text} );
-
-  
+    socket.emit(LETTER_UPDATE, event.toUpperCase());
+    // console.log('keyboard input: ' + event);
   }
 
   render () {
@@ -84,5 +79,3 @@ const socketUrl = "http://localhost:3001"
     );
   }
 }
-
-export default WordBuilder;

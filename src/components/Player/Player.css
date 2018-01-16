@@ -12,17 +12,3 @@
 	color: black;
 	font: Helvetica;
 }
-
-.Player button {
-	display: inline-block;
-	width: 250px;
-	height: 70px;
-	border-radius: 10px;
-	background-color: red;
-	color: white;
-	font-size: 30px;
-}
-
-.Player button:hover {
-	cursor: pointer;
-}
