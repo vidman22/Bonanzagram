@@ -1,0 +1,17 @@
+button {
+	padding: 14px;
+	background-color: #afffdf;
+	border: solid #2ca576 3px;
+	font-size: 80%;
+	color: #3e4a60;
+	width: 130px;
+}
+
+.create {
+	margin-left: 25%;
+}
+
+.join {
+	margin-right: 25%;
+	float: right;
+}
