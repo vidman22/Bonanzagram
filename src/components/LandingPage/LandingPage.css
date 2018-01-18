@@ -8,10 +8,25 @@ button {
 }
 
 .create {
-	margin-left: 25%;
+	margin-left: 15%;
 }
 
 .join {
-	margin-right: 25%;
+	margin-right: 15%;
 	float: right;
+}
+
+form > button {
+	width: 40px;
+	padding: 3px;
+	margin-left: 15px;
+}
+
+input {
+	background-color: #eafff6;
+	border: solid #2ca576 2px;
+}
+
+.join-form > input{
+	margin-right: 30px;
 }
