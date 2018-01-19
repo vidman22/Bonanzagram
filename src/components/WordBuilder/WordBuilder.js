@@ -1,49 +1,47 @@
-import React, {Component} from 'react';
-import Char from '../../components/Char/Char';
+import React, { Component } from 'react';
 import Keyboard from '../../components/Keyboard/Keyboard';
 import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
-const socketUrl = "http://localhost:3001"
+const socketUrl = "http://localhost:3001";
   
  export default class WordBuilder extends Component {
-
-    state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       lineOne: ['q','w','e','r','t','y','u','i','o','p'],
       lineTwo: ['a','s','d','f','g','h','j','k','l'],
       lineThree: ['z','x','c','v','b','n','m'],
       userInput: [],
     };
+   }
 
-  componentWillMount() {
-    this.getInput();
+  componentWillUpdate() {
+    // this.getInput();
   };
 
-  getInput = () => {
+  // getInput = () => {
 
-    const socket = io(socketUrl);
+  //   const socket = io(socketUrl);
 
-    socket.on('LETTER_UPDATE', (event) => {
-      // console.log('received update: ' + event);
-      this.setState({userInput: event });
-      // console.log('userInput: ' + this.state.userInput);
-    });
-  }
+  //   socket.on('LETTER_UPDATE', (event) => {
+  //     // console.log('received update: ' + event);
+  //     this.setState({userInput: event });
+  //     // console.log('userInput: ' + this.state.userInput);
+  //   });
+  // }
 
 
 
   inputChangedHandler = ( event ) => {
     const socket = io(socketUrl);
     socket.emit(LETTER_UPDATE, event.toUpperCase());
+    socket.emit('pass_turn');
     // console.log('keyboard input: ' + event);
   }
 
   render () {
-    const charList = this.state.userInput.map((ch, index) => {
-      return <Char 
-        character={ch} 
-        key={index} />;
-    });
+    
 
     const line_one = this.state.lineOne.map((ch, index) => {
       return <Keyboard
@@ -74,7 +72,6 @@ const socketUrl = "http://localhost:3001"
         <div></div>
         {line_three}
         <div></div>
-        {charList}
       </div>
     );
   }

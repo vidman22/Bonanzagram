@@ -1,12 +1,20 @@
 const io = require('./index.js').io;
 
-const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE  } = require('../src/Events');
+const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL  } = require('../src/Events');
 
 // const { createUser } = require('../Factories');
 
 let connectedUsers = [];
+let current_turn = 0;
+let timeOut;
+let _turn = 0;
+const MAX_WAITING = 5000;
+
+
 
 let text = [];
+
+
 
 module.exports = function(socket){
 					
@@ -22,7 +30,7 @@ module.exports = function(socket){
 		name: nickname}
 	      })
 	   }
-	})
+	});
 
 	//User Connects with username
 	socket.on(USER_CONNECTED, (user)=>{
@@ -32,11 +40,11 @@ module.exports = function(socket){
 		io.emit(USER_CONNECTED, connectedUsers)
 		console.log("connectedUsers", connectedUsers);
 
-	})
+	});
 	
 	//User disconnects
 	socket.on('disconnect', ()=>{
-		console.log('disconnected user: ' + socket.id);
+
 		for (var i = 0; i < connectedUsers.length; i ++ ) {
 			if (connectedUsers[i].id === socket.id) {
 				console.log('found user disconnected: ' + connectedUsers[i].id);
@@ -49,12 +57,57 @@ module.exports = function(socket){
 			console.log("Disconnect", connectedUsers);
 		}
 	  }	
-	})
+	});
 
+	socket.on('pass_turn', () => {
+		console.log('users turn: ', connectedUsers[_turn]);
+		if (connectedUsers[_turn].id) {
+			resetTimout();
+			next_turn();
+			
+		}
+	});
+
+	socket.on('start', () => {
+		next_turn();
+	})
+	// Letter is passed through and added to array
 	socket.on(LETTER_UPDATE, (data)=> {
 		text.push(data);
 		io.emit('LETTER_UPDATE', text);
 		console.log(text);
+	});
+
+	socket.on(PLAYER_SUCCESSFUL, () => {
+		console.log('player_successful');
+		let _turn = current_turn-- % connectedUsers.length;
+		console.log('lost points ' + connectedUsers[_turn].id);
+		io.emit('lost_points', connectedUsers[_turn].id);
+		clearTimeout(timeOut);
+		text.length = 0
+	})
+
+	socket.on(PLAYER_UNSUCCESSFUL, () => {
+		console.log('player_unsuccessful');
+		let _turn = current_turn % connectedUsers.length;
+		console.log('lost_points ' + connectedUsers[_turn].id);
+		io.emit('lost_points', connectedUsers[_turn].id);
+		clearTimeout(timeOut);
+		text.length = 0
+
+	})
+
+	socket.on(WORD_CHALLENGED, (data) => {
+		
+		io.emit('WORD_CHALLENGED', data);
+	})
+
+	socket.on(SEND_MODAL, () => {
+		let _turn = current_turn-- % connectedUsers.length;
+		console.log('modal sent to ' + connectedUsers[_turn].id);
+		io.emit('SEND_MODAL', connectedUsers[_turn].id);
+		clearTimeout(timeOut);
+		text.length = 0;
 	})
 
 	//User logsout
@@ -63,38 +116,33 @@ module.exports = function(socket){
 		io.emit(USER_DISCONNECTED, connectedUsers)
 		console.log("Disconnect", connectedUsers);
 
-	})
+	});
 }
 
-
-/*
-* Adds user to list passed in.
-* @param userList {Object} Object with key value pairs of users
-* @param user {User} the user to added to the list.
-* @return userList {Object} Object with key value pairs of Users
-*/
-function addUser(user){
-	
-	// newList = user
-	// return newList
+// Game Functionality
+function next_turn(){
+	_turn = current_turn++ % connectedUsers.length;
+	console.log('turn: ' + _turn);
+	console.log('line 89: ' + connectedUsers[_turn].id);
+	io.emit(YOUR_TURN, connectedUsers[_turn].id);
+	console.log("next turn triggered ", _turn);
+	triggerTimout();
 }
 
-/*
-* Removes user from the list passed in.
-* @param userList {Object} Object with key value pairs of Users
-* @param username {string} name of user to be removed
-* @return userList {Object} Object with key value pairs of Users
-*/
-function removeUser(){
-
+function triggerTimout() {
+	timeOut = setTimeout(()=>{
+		next_turn();
+	}, MAX_WAITING);
 }
 
-/*
-* Checks if the user is in list passed in.
-* @param userList {Object} Object with key value pairs of Users
-* @param username {String}
-* @return userList {Object} Object with key value pairs of Users
-*/
+function resetTimout(){
+	if(typeof timeOut === 'object'){
+		console.log("timemout reset");
+		clearTimeout(timeOut);
+	}
+}
+
+// Check to see if username is not already taken
 function isUser(userList, username){
   	return username in userList
 }

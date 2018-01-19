@@ -7,7 +7,9 @@ const player = ( props ) => {
         <div className="Player">
             <Avatar />
             <h1>{props.name}</h1>
-            <h3>Score: {props.score}</h3>
+            <h2>Score: {props.score}</h2>
+            <h3>{props.turn}</h3>
+            <h3>Time left: {props.time}</h3>
 
         </div>
     )
