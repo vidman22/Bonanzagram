@@ -1,5 +1,22 @@
 .Layout {
 	text-align: center;
 	font-family: Helvetica;
-	color: purple;
+	color: orangered;
+	height: 900px;
+
+}
+
+.Start {
+	display: inline-block;
+	width: 250px;
+	height: 70px;
+	border-radius: 10px;
+	background-color: blue;
+	color: white;
+	font-size: 30px;
+	margin: auto;
+}
+
+.Start:hover {
+	cursor: pointer;
 }

@@ -1,11 +1,13 @@
 .Player {
+
 	display: inline-block;
-    width: 60%;
-    margin: 16px auto;
+    width: 250px;
+    margin: 3%;
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
     padding: 16px;
     text-align: center;
+
 }
 
 .Player h1 {

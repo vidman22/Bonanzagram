@@ -1,11 +1,23 @@
 .Char {
 
-		display: inline-block;
-        padding: 16px;
-        margin: 10px;
+	display: inline-block;
+        height: 64px;
+        width: 64px;
+        margin: 7px;
         border: 1px solid black;
-        border-radius: 10px;
-        font-size: 20px;
+        border-radius: 15px;
+        font-size: 27px;
         color: black;
         text-align: center;
+        background: #F5F5DC;
+        box-shadow: 0 2px 3px #ccc;
+}
+
+.Char p {
+        color: black;
+        text-align: center;
+        font-size: 37px;
+        padding-top: 11px;
+        margin: 0px;
+        
 }

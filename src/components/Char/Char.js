@@ -6,7 +6,7 @@ const char = (props) => {
 
     return (
         <div className="Char" >
-            {props.character}
+            <p>{props.character}</p>
         </div>
     );
 };
