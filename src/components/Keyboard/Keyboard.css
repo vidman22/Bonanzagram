@@ -7,6 +7,7 @@
 	height: 64px;
 	width: 64px;
 	margin: 5px;
+	box-shadow: 0 2px 3px #ccc;
 	-webkit-transition: width .1s, height .1s;
 	transition: width .1s, height .1s;
 }
@@ -15,11 +16,12 @@
 	color: white;
 	text-align: center;
 	font-size: 37px;
-	padding-top: 10px;
+	padding-top: 11px;
 	margin: 0px;
 	
 }
 
 .Keyboard p:hover {
 	cursor: pointer;
+	box-shadow: ;
 }
