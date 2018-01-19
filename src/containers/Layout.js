@@ -8,7 +8,7 @@ const socketUrl = "http://localhost:3001";
 
 import Player from '../components/Player/Player';
 import Buttons from '../components/Buttons/Buttons';
-import axios from 'axios';
+import axios from 'axios'
 
 
 
@@ -33,7 +33,7 @@ export default class Layout extends Component {
 			   		this.setState({isWord: 'Not a Word!'});
 			   		// this.setState({userInput: });
 			   	return;
-			   }
+			   } 
 			
 			});
 		  }
