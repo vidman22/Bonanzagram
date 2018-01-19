@@ -7,6 +7,7 @@ class LandingPage extends Component {
 		super(props);
 		this.state = {
 		  action: '',
+		  message: '',
 		  name: ''
 		}
 
@@ -17,12 +18,23 @@ class LandingPage extends Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		console.log(this.state);
+		// console.log(this.state);
 
+		const bank = "abcdefghijklmnopqrstuvwxyz123456890";
+		var phrase = this.state.name.charAt(0);
+
+		for(var i=0; i<7; i++) {
+			let rando = Math.floor((Math.random() * bank.length ));
+			phrase += bank.charAt(rando);
+		}
+
+		// console.log(phrase);
+		window.location = './lobby/' + phrase + '/' + this.state.name;
 	}
 	
 	handleChange(event) {
-		const name = event.target.name
+		const name = event.target.name;
+
 		this.setState({
 		  [name]: event.target.value
 		})
@@ -44,12 +56,13 @@ class LandingPage extends Component {
 
 				{this.state.action === 'create' &&
 					<div><br/>
+						<p>enter your display name</p><br/>
 						<form onSubmit={this.handleSubmit}>
 							<input
 							  type="text"
 							  name="name"
 							  onChange={this.handleChange}
-							  placeholder="name"
+							  placeholder="display name"
 							/>
 							<button><b>next</b></button>
 						</form>
@@ -58,12 +71,13 @@ class LandingPage extends Component {
 
 				{this.state.action === 'join' &&
 					<div><br/>
+						<p>enter your display name & lobby phrase</p><br/>
 						<form className="join-form" onSubmit={this.handleSubmit}>
 							<input
 							  type="text"
 							  name="name"
 							  onChange={this.handleChange}
-							  placeholder="name"
+							  placeholder="display name"
 							/>
 							<input 
 								type="text"
