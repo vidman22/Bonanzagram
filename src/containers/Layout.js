@@ -4,17 +4,13 @@ import { USER_CONNECTED, LOGOUT  } from '../Events';
 import LoginForm from '../components/LoginForm/LoginForm';
 import WordBuilder from '../components/WordBuilder/WordBuilder';
 import Aux from '../hoc/Wrap/Wrap';
-const socketUrl = "http://localhost:3001";
-
 import Player from '../components/Player/Player';
 import Buttons from '../components/Buttons/Buttons';
 import axios from 'axios'
-
+const socketUrl = "http://localhost:3001";
 
 
 export default class Layout extends Component {
-
-
 
 	componentDidUpdate() {
 	  const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
@@ -66,7 +62,7 @@ export default class Layout extends Component {
 
 
 
-	/*
+	/* 
 	*	Connect to and initializes the socket.
 	*/
 	initSocket = () => {
