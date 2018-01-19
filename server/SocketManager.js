@@ -2,7 +2,6 @@ const io = require('./index.js').io;
 
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM } = require('../src/Events');
 const MAX_WAITING = 5000;
-const { createUser } = require('../Factories');
 
 const sessions = [];
 
