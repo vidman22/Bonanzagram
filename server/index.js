@@ -22,7 +22,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, '../build/')));
 
-io.on('connection',SocketManager)
+io.on('connection', SocketManager)
 
 server.listen(PORT, () => {
 	console.log("On port: " + PORT);

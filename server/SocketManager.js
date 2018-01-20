@@ -1,5 +1,16 @@
 const io = require('./index.js').io;
 
+// <<<<<<< HEAD
+// const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL  } = require('../src/Events');
+
+// let connectedUsers = [];
+// let current_turn = 0;
+// let timeOut;
+// let _turn = 0;
+// const MAX_WAITING = 5000;
+
+// let text = [];
+// =======
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM } = require('../src/Events');
 const MAX_WAITING = 5000;
 
@@ -12,11 +23,18 @@ class SessionObject {
 		this.timeOut = null,
 		this.turn = 0,
 		this.text = [],
-		this.room = randomString()
+		this.room = randomString()	
+	}
+
+	addUser(n, id) {
+		var tempUser = {
+			name: n,
+			id: id
+		}
+		this.connectedUsers.push(tempUser);
 	}
 }
 
-// var myPhrase;
 
 // for(var i=0; i< 4; i++) {
 // 	let tempRoom = new SessionObject();
@@ -29,11 +47,10 @@ class SessionObject {
 
 
 module.exports = function(socket){
-	// console.log('\x1bc'); //clears console
-	// console.log('socket: ', socket);
 
-	socket.on(NEW_ROOM, (callback) => {
+	socket.on(NEW_ROOM, (id, user, callback) => {
 		let newRoom = new SessionObject();
+		newRoom.addUser(user, id);
 		sessions.push(newRoom);
 		callback(sessions);
 	});
@@ -50,10 +67,17 @@ module.exports = function(socket){
 	// });
 
 	//User Connects with username
+
+	// socket.on(USER_CONNECTED, (user)=>{
+	// 	connectedUsers.push(user);
+
 	socket.on(USER_CONNECTED, (user, room_id)=>{
 		var tempSession = sessionSearch(room_id);
 
+
 		io.emit(USER_CONNECTED, tempSession, room_id);
+		console.log(user);
+		console.log(room_id);
 		// console.log("connectedUsers", connectedUsers);
 
 	});
@@ -61,78 +85,78 @@ module.exports = function(socket){
 	//User disconnects
 	socket.on('disconnect', ()=>{
 
-		for (var i = 0; i < connectedUsers.length; i ++ ) {
-			if (connectedUsers[i].id === socket.id) {
-				console.log('found user disconnected: ' + connectedUsers[i].id);
+		// for (var i = 0; i < connectedUsers.length; i ++ ) {
+		// 	if (connectedUsers[i].id === socket.id) {
+		// 		console.log('found user disconnected: ' + connectedUsers[i].id);
 
-				const id = connectedUsers[i].id;
+		// 		const id = connectedUsers[i].id;
 
-				connectedUsers = connectedUsers.filter((user) => user.id !== id);
+		// 		connectedUsers = connectedUsers.filter((user) => user.id !== id);
 
-			io.emit(USER_DISCONNECTED, connectedUsers);
-			console.log("Disconnect", connectedUsers);
-		}
-	  }	
+		// 	io.emit(USER_DISCONNECTED, connectedUsers);
+		// 	console.log("Disconnect", connectedUsers);
+		// }
+	  // }	
 	});
 
-	socket.on('pass_turn', () => {
-		console.log('users turn: ', connectedUsers[_turn]);
-		if (connectedUsers[_turn].id) {
-			resetTimout();
-			next_turn();
+	// socket.on('pass_turn', () => {
+	// 	console.log('users turn: ', connectedUsers[_turn]);
+	// 	if (connectedUsers[_turn].id) {
+	// 		resetTimout();
+	// 		next_turn();
 			
-		}
-	});
+	// 	}
+	// });
 
-	socket.on('start', () => {
-		next_turn();
-	})
-	// Letter is passed through and added to array
-	socket.on(LETTER_UPDATE, (data)=> {
-		text.push(data);
-		io.emit('LETTER_UPDATE', text);
-		console.log(text);
-	});
+	// socket.on('start', () => {
+	// 	next_turn();
+	// })
+	// // Letter is passed through and added to array
+	// socket.on(LETTER_UPDATE, (data)=> {
+	// 	text.push(data);
+	// 	io.emit('LETTER_UPDATE', text);
+	// 	console.log(text);
+	// });
 
-	socket.on(PLAYER_SUCCESSFUL, () => {
-		console.log('player_successful');
-		let _turn = current_turn-- % connectedUsers.length;
-		console.log('lost points ' + connectedUsers[_turn].id);
-		io.emit('lost_points', connectedUsers[_turn].id);
-		clearTimeout(timeOut);
-		text.length = 0
-	})
+	// socket.on(PLAYER_SUCCESSFUL, () => {
+	// 	console.log('player_successful');
+	// 	let _turn = current_turn-- % connectedUsers.length;
+	// 	console.log('lost points ' + connectedUsers[_turn].id);
+	// 	io.emit('lost_points', connectedUsers[_turn].id);
+	// 	clearTimeout(timeOut);
+	// 	text.length = 0
+	// })
 
-	socket.on(PLAYER_UNSUCCESSFUL, () => {
-		console.log('player_unsuccessful');
-		let _turn = current_turn % connectedUsers.length;
-		console.log('lost_points ' + connectedUsers[_turn].id);
-		io.emit('lost_points', connectedUsers[_turn].id);
-		clearTimeout(timeOut);
-		text.length = 0
+	// socket.on(PLAYER_UNSUCCESSFUL, () => {
+	// 	console.log('player_unsuccessful');
+	// 	let _turn = current_turn % connectedUsers.length;
+	// 	console.log('lost_points ' + connectedUsers[_turn].id);
+	// 	io.emit('lost_points', connectedUsers[_turn].id);
+	// 	clearTimeout(timeOut);
+	// 	text.length = 0
 
-	})
+	// })
 
-	socket.on(WORD_CHALLENGED, (data) => {
+	// socket.on(WORD_CHALLENGED, (data) => {
 		
-		io.emit('WORD_CHALLENGED', data);
-	})
+	// 	io.emit('WORD_CHALLENGED', data);
+	// })
 
-	socket.on(SEND_MODAL, () => {
-		let _turn = current_turn-- % connectedUsers.length;
-		console.log('modal sent to ' + connectedUsers[_turn].id);
-		io.emit('SEND_MODAL', connectedUsers[_turn].id);
-		clearTimeout(timeOut);
-		text.length = 0;
-	})
+	// socket.on(SEND_MODAL, () => {
+	// 	let _turn = current_turn-- % connectedUsers.length;
+	// 	console.log('modal sent to ' + connectedUsers[_turn].id);
+	// 	io.emit('SEND_MODAL', connectedUsers[_turn].id);
+	// 	clearTimeout(timeOut);
+	// 	text.length = 0;
+	// })
 
-	//User logsout
-	socket.on(LOGOUT, ()=>{
-		connectedUsers = connectedUsers.splice(0,1);
-		io.emit(USER_DISCONNECTED, connectedUsers)
-		console.log("Disconnect", connectedUsers);
+	// //User logsout
+	// socket.on(LOGOUT, ()=>{
+	// 	connectedUsers = connectedUsers.splice(0,1);
+	// 	io.emit(USER_DISCONNECTED, connectedUsers)
+	// 	console.log("Disconnect", connectedUsers);
 
-	});
+	// });
 }
 
 // Game Functionality

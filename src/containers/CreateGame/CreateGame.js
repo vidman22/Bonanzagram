@@ -1,32 +1,43 @@
 import React, { Component } from 'react';
-import {NEW_ROOM} from '../../Events'
+import { USER_CONNECTED, NEW_ROOM } from '../../Events'
 
-export default class LoginForm extends Component {
+export default class CreateGame extends Component {
 	constructor(props) {
 	  super(props);
 	
 	  this.state = {
+	  	socket: '',
 	  	nickname:"",
 	  	error:""
 	  };
 	}
 
-	setUser = ({user, isUser})=>{
+	componentDidMount() {
+		// this.myFunction();
+		// console.log(this.props.socket);
+	}
 
-		if(isUser){
-			this.setError("User name taken")
-		}else{
-			this.setError("")
-			this.props.setUser(user)
-		}
+	myFunction = () => {
+		console.log(this.state);
+		console.log(this.props);
 	}
 
 	handleSubmit = (e)=>{
 		e.preventDefault()
-		const { socket } = this.props
-		const { nickname } = this.state
-		socket.emit(NEW_ROOM, "jon", "abc123");
+		const nickname = this.state.nickname;
+		this.props.socket.emit(NEW_ROOM, this.props.socket.id, nickname, data =>{
+			console.log(data);
+		});
+		// console.log('socket:' + sock);
 	}
+
+	// setUser = (user)=>{
+	// 	const { socket } = this.state;
+	// 	console.log('socket:', user);
+	// 	socket.emit(USER_CONNECTED, user);
+	// 	this.setState({showPlayers: true});
+
+	// }
 
 	handleChange = (e)=>{
 		this.setState({nickname:e.target.value})

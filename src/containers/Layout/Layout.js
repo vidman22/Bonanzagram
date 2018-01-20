@@ -1,44 +1,29 @@
 import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
-import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../Events';
-import LoginForm from '../components/LoginForm/LoginForm';
-import WordBuilder from '../components/WordBuilder/WordBuilder';
-import Char from '../components/Char/Char';
-import Aux from '../hoc/Wrap/Wrap';
-import Player from '../components/Player/Player';
-import Buttons from '../components/Buttons/Buttons';
-<<<<<<< HEAD
-import axios from 'axios'
-const socketUrl = "http://localhost:3001";
-=======
-import Modal from '../components/Modal/Modal';
-import Backdrop from '../components/Backdrop/Backdrop';
-import Start from '../components/StartModal/StartModal';
-import Finish from '../components/FinishModal/FinishModal';
+import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
+import LoginForm from '../../components/LoginForm/LoginForm';
+import WordBuilder from '../../components/WordBuilder/WordBuilder';
+import Char from '../../components/Char/Char';
+import Aux from '../../hoc/Wrap/Wrap';
+import Player from '../../components/Player/Player';
+import Buttons from '../../components/Buttons/Buttons';
+import Modal from '../../components/Modal/Modal';
+import Backdrop from '../../components/Backdrop/Backdrop';
+import Start from '../../components/StartModal/StartModal';
+import Finish from '../../components/FinishModal/FinishModal';
 import axios from 'axios';
->>>>>>> f798737efa29a828fbfe2139caf372df3299bc23
 
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
 export default class Layout extends Component {
 
-<<<<<<< HEAD
-	componentDidUpdate() {
-	  const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
-	  if ( this.state.callAPI) {
-	     if (this.state.isWord === 'word not challenged') {
-=======
-
-
 	componentDidUpdate() {  
->>>>>>> f798737efa29a828fbfe2139caf372df3299bc23
-	  
-	     if (this.state.isWord === 'word not challenged') {
+		if (this.state.isWord === 'word not challenged') {
 	        if (this.state.wordChallenge !== '') {
-	     	  const word = this.state.wordChallenge;
-	  		const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
+	     		const word = this.state.wordChallenge;
+	  			const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
 				axios.get(url + word)
 					.then(response => {
 			   		console.log(response.data.def);
@@ -67,8 +52,8 @@ export default class Layout extends Component {
 			   	return;
 			   }
 			});
-		  }
 		}
+	}
 
 		if (this.state.isWord === 'word not challenged') {
 	     	if ( this.state.checkCompletion) {
@@ -106,6 +91,7 @@ export default class Layout extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = { 
+	  	room: 'asdfsd',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
@@ -123,7 +109,6 @@ export default class Layout extends Component {
 	  	isWord: 'word not challenged'
 	  };
 
-
 	};
 
 	componentDidMount() {
@@ -137,7 +122,6 @@ export default class Layout extends Component {
 	*/
 	initSocket = () => {
 
-		const socket = io(socketUrl);
 		this.setState({socket});
 
 

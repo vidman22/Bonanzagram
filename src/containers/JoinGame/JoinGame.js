@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import {NEW_ROOM} from '../../Events'
+import { VERIFY_USER } from '../../Events'
 
-export default class LoginForm extends Component {
+export default class JoinGame extends Component {
 	constructor(props) {
 	  super(props);
 	
 	  this.state = {
 	  	nickname:"",
+	  	gamecode:"",
 	  	error:""
 	  };
 	}
@@ -25,7 +26,7 @@ export default class LoginForm extends Component {
 		e.preventDefault()
 		const { socket } = this.props
 		const { nickname } = this.state
-		socket.emit(NEW_ROOM, "jon", "abc123");
+		socket.emit(VERIFY_USER, nickname, this.setUser)
 	}
 
 	handleChange = (e)=>{
@@ -37,7 +38,7 @@ export default class LoginForm extends Component {
 	}
 
 	render() {	
-		const { nickname, error } = this.state
+		const { nickname, gamecode, error } = this.state
 		return (
 			<div className="login">
 				<form onSubmit={this.handleSubmit} className="login-form" >
@@ -52,6 +53,15 @@ export default class LoginForm extends Component {
 						value={nickname}
 						onChange={this.handleChange}
 						placeholder={'Name'}
+						/>
+						<h2>Add the Join Code</h2>
+					<input
+						ref={(input)=>{ this.textInput = input }} 
+						type="text"
+						id="code"
+						value={gamecode}
+						onChange={this.handleChange}
+						placeholder={'Code'}
 						/>
 						<div className="error">{error ? error:null}</div>
 
