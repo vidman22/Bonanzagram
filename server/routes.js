@@ -32,7 +32,6 @@ module.exports = function(app, passport, db, path) {
 	}));
 
 
-	//After user authenticated they can access home route
 	// app.get("/home", isLoggedIn, (req, res) => {
 		// res.sendFile(__dirname + "/home.html");
 		// res.send("hello");
@@ -42,9 +41,9 @@ module.exports = function(app, passport, db, path) {
 		res.send("hi");
 	});
 
-	app.get('/*', (req, res) => {
-		res.sendFile(path.join(__dirname, '../build/index.html'));
-	})
+	// app.get('/app/*', (req, res) => {
+	// 	res.sendFile(path.join(__dirname, '../build/index.html'));
+	// })
 
 	function isLoggedIn(req, res, next) {
 		if(req.isAuthenticated()) return next();

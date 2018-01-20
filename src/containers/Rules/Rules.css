@@ -1,0 +1,23 @@
+body {
+	background-color: #b349ff;
+	padding: 0;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.header {
+	margin: 0;
+} 
+
+.header > h2 {
+	color: #3e4a60;
+	margin: 0;
+	text-align: center;
+}
+
+.content > h4, p {
+	color: #3e4a60;
+	margin: 6px;
+	text-align: center;
+}

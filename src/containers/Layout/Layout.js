@@ -14,6 +14,7 @@ import Start from '../components/StartModal/StartModal';
 import Finish from '../components/FinishModal/FinishModal';
 import axios from 'axios';
 
+
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
@@ -85,6 +86,7 @@ export default class Layout extends Component {
 			   		socket.emit(PLAYER_UNSUCCESSFUL);
 			   	return;
 			   }
+
 			});
 		  }
 		}
@@ -94,6 +96,7 @@ export default class Layout extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = { 
+	  	room: 'asdfsd',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
@@ -125,7 +128,6 @@ export default class Layout extends Component {
 	*/
 	initSocket = () => {
 
-		const socket = io(socketUrl);
 		this.setState({socket});
 
 
