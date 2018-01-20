@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {Route} from 'react-router-dom';
+import Layout from '../Layout/Layout';
 import { USER_CONNECTED, NEW_ROOM } from '../../Events'
 
 export default class CreateGame extends Component {
@@ -6,9 +8,11 @@ export default class CreateGame extends Component {
 	  super(props);
 	
 	  this.state = {
-	  	socket: '',
+	  	socket: "",
 	  	nickname:"",
-	  	error:""
+	  	error:"",
+	  	showLayout: false,
+	  	room: ""
 	  };
 	}
 
@@ -25,10 +29,13 @@ export default class CreateGame extends Component {
 	handleSubmit = (e)=>{
 		e.preventDefault()
 		const nickname = this.state.nickname;
-		this.props.socket.emit(NEW_ROOM, this.props.socket.id, nickname, data =>{
+		this.props.socket.emit(NEW_ROOM, this.props.socket.id, nickname, (data, room) =>{
 			console.log(data);
+			this.setState({
+				showLayout: true,
+				room: room
+			});
 		});
-		// console.log('socket:' + sock);
 	}
 
 	// setUser = (user)=>{
@@ -51,7 +58,8 @@ export default class CreateGame extends Component {
 		const { nickname, error } = this.state
 		return (
 			<div className="login">
-				<form onSubmit={this.handleSubmit} className="login-form" >
+				{!this.state.showLayout ?
+					<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<label htmlFor="nickname">
 						<h2>Add a Name</h2>
@@ -65,8 +73,14 @@ export default class CreateGame extends Component {
 						placeholder={'Name'}
 						/>
 						<div className="error">{error ? error:null}</div>
+					</form>
+					:
+					<div>
+						<Layout room={this.state.room}/>
+					</div>
+				}
 
-				</form>
+				
 			</div>
 		);
 	}

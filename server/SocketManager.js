@@ -52,7 +52,7 @@ module.exports = function(socket){
 		let newRoom = new SessionObject();
 		newRoom.addUser(user, id);
 		sessions.push(newRoom);
-		callback(sessions);
+		callback(sessions, newRoom.room);
 	});
 
 	//Verify Username
@@ -71,15 +71,16 @@ module.exports = function(socket){
 	// socket.on(USER_CONNECTED, (user)=>{
 	// 	connectedUsers.push(user);
 
-	socket.on(USER_CONNECTED, (user, room_id)=>{
-		var tempSession = sessionSearch(room_id);
-
-
-		io.emit(USER_CONNECTED, tempSession, room_id);
-		console.log(user);
-		console.log(room_id);
-		// console.log("connectedUsers", connectedUsers);
-
+	// JOINING SESSION
+	socket.on(USER_CONNECTED, (user_name, user_id, room_id, callback)=>{
+		var location = sessionSearch(room_id);
+		if(location !== undefined ) {
+			sessions[location].addUser(user_name, user_id);
+			callback(sessions);
+			io.emit(USER_CONNECTED, sessions[location].room, sessions[location].connectedUsers)
+		} else {
+			callback("not found");
+		}
 	});
 	
 	//User disconnects
@@ -200,6 +201,8 @@ function randomString() {
 function sessionSearch(str) {
 	var data = sessions;
 	for(var i =0; i< data.length; i++) {
-		if(data[i].room === str) return data[i];
+		if(data[i].room === str) {
+			return i;
+		}
 	}
 }
