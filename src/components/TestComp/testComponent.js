@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import {NEW_ROOM} from '../../Events'
+import {NEW_ROOM} from '../../Events';
+import io from 'socket.io-client';
+const socketUrl = "http://localhost:3001";
+const socket = io(socketUrl);
 
-export default class LoginForm extends Component {
+
+export default class Test extends Component {
 	constructor(props) {
 	  super(props);
 	
@@ -11,21 +15,15 @@ export default class LoginForm extends Component {
 	  };
 	}
 
-	setUser = ({user, isUser})=>{
-
-		if(isUser){
-			this.setError("User name taken")
-		}else{
-			this.setError("")
-			this.props.setUser(user)
-		}
-	}
-
 	handleSubmit = (e)=>{
 		e.preventDefault()
-		const { socket } = this.props
-		const { nickname } = this.state
-		socket.emit(NEW_ROOM, "jon", "abc123");
+		// const { socket } = this.props
+		// const { nickname } = this.state
+		console.log('hi');
+		console.log(socket);
+		socket.emit(NEW_ROOM, "jobe", "abc123", data => {
+			console.log(data);
+		});
 	}
 
 	handleChange = (e)=>{

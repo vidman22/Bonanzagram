@@ -18,18 +18,18 @@ class LandingPage extends Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		// console.log(this.state);
+		console.log(this.state);
 
-		const bank = "abcdefghijklmnopqrstuvwxyz123456890";
-		var phrase = this.state.name.charAt(0);
+		// const bank = "abcdefghijklmnopqrstuvwxyz123456890";
+		// var phrase = this.state.name.charAt(0);
 
-		for(var i=0; i<7; i++) {
-			let rando = Math.floor((Math.random() * bank.length ));
-			phrase += bank.charAt(rando);
-		}
+		// for(var i=0; i<7; i++) {
+		// 	let rando = Math.floor((Math.random() * bank.length ));
+		// 	phrase += bank.charAt(rando);
+		// }
 
 		// console.log(phrase);
-		window.location = './lobby/' + phrase + '/' + this.state.name;
+		// window.location = './lobby/' + phrase + '/' + this.state.name;
 	}
 	
 	handleChange(event) {
