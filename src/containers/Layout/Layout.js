@@ -8,21 +8,39 @@ import Char from '../components/Char/Char';
 import Aux from '../hoc/Wrap/Wrap';
 import Player from '../components/Player/Player';
 import Buttons from '../components/Buttons/Buttons';
+<<<<<<< HEAD:src/containers/Layout/Layout.js
+=======
+<<<<<<< HEAD
+import axios from 'axios'
+const socketUrl = "http://localhost:3001";
+=======
+>>>>>>> 478c88655be4aa317faa35deabe5f8de3ce671bd:src/containers/Layout.js
 import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Start from '../components/StartModal/StartModal';
 import Finish from '../components/FinishModal/FinishModal';
 import axios from 'axios';
+<<<<<<< HEAD:src/containers/Layout/Layout.js
 
+=======
+>>>>>>> f798737efa29a828fbfe2139caf372df3299bc23
+>>>>>>> 478c88655be4aa317faa35deabe5f8de3ce671bd:src/containers/Layout.js
 
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
 export default class Layout extends Component {
 
+<<<<<<< HEAD
+	componentDidUpdate() {
+	  const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
+	  if ( this.state.callAPI) {
+	     if (this.state.isWord === 'word not challenged') {
+=======
 
 
 	componentDidUpdate() {  
+>>>>>>> f798737efa29a828fbfe2139caf372df3299bc23
 	  
 	     if (this.state.isWord === 'word not challenged') {
 	        if (this.state.wordChallenge !== '') {
@@ -86,7 +104,10 @@ export default class Layout extends Component {
 			   		socket.emit(PLAYER_UNSUCCESSFUL);
 			   	return;
 			   }
+<<<<<<< HEAD:src/containers/Layout/Layout.js
 
+=======
+>>>>>>> 478c88655be4aa317faa35deabe5f8de3ce671bd:src/containers/Layout.js
 			});
 		  }
 		}
@@ -123,7 +144,7 @@ export default class Layout extends Component {
 
 
 
-	/*
+	/* 
 	*	Connect to and initializes the socket.
 	*/
 	initSocket = () => {
