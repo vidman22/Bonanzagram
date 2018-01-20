@@ -33,10 +33,9 @@ class LandingPage extends Component {
                     </nav>
                 </header>
                 
-            	<div className="form-stuff">
-                    <button name="create" onClick={this.handleClick}>A</button>
-                    <button name="join" onClick={this.handleClick}>B</button>
-                </div>
+        <Route path="/create-game" component={CreateGame} />
+        <Route path="/join-game" component={JoinGame} />
+        <Route path="/rules" component={Rules} />
 
 
             </div>
