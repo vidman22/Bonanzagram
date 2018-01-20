@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { VERIFY_USER } from '../../Events'
+import { USER_CONNECTED } from '../../Events'
 
 export default class JoinGame extends Component {
 	constructor(props) {
@@ -7,30 +7,29 @@ export default class JoinGame extends Component {
 	
 	  this.state = {
 	  	nickname:"",
-	  	gamecode:"",
-	  	error:""
+	  	code:"",
+	  	error: ""
 	  };
 	}
 
-	setUser = ({user, isUser})=>{
-
-		if(isUser){
-			this.setError("User name taken")
-		}else{
-			this.setError("")
-			this.props.setUser(user)
-		}
-	}
 
 	handleSubmit = (e)=>{
 		e.preventDefault()
-		const { socket } = this.props
-		const { nickname } = this.state
-		socket.emit(VERIFY_USER, nickname, this.setUser)
+		console.log(this.state);
+		const { nickname } = this.state;
+		const { code } = this.state;
+		this.props.socket.emit(USER_CONNECTED, nickname, this.props.socket.id,code, data => {
+			// if(data === undefined) this.setState({error: "No room found with that phrase"});
+			console.log(data);
+		})
 	}
 
 	handleChange = (e)=>{
-		this.setState({nickname:e.target.value})
+		const name = e.target.name;
+
+		this.setState({
+			[name] :e.target.value
+		})
 	}
 
 	setError = (error)=>{
@@ -38,33 +37,32 @@ export default class JoinGame extends Component {
 	}
 
 	render() {	
-		const { nickname, gamecode, error } = this.state
+		const { nickname, code, error } = this.state
 		return (
 			<div className="login">
+			{this.state.error &&
+				<h3>{this.state.error}</h3>
+			}
 				<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<label htmlFor="nickname">
 						<h2>Add a Name</h2>
 					</label>
 					<input
-						ref={(input)=>{ this.textInput = input }} 
 						type="text"
-						id="nickname"
-						value={nickname}
+						name="nickname"
 						onChange={this.handleChange}
 						placeholder={'Name'}
-						/>
+					/>
 						<h2>Add the Join Code</h2>
 					<input
-						ref={(input)=>{ this.textInput = input }} 
 						type="text"
-						id="code"
-						value={gamecode}
+						name="code"
 						onChange={this.handleChange}
 						placeholder={'Code'}
-						/>
-						<div className="error">{error ? error:null}</div>
-
+					/>
+					<button>Submit</button>
+					<div className="error">{error ? error:null}</div>
 				</form>
 			</div>
 		);

@@ -125,10 +125,10 @@ export default class Layout extends Component {
 		this.setState({socket});
 
 
-		socket.on('USER_CONNECTED', (data) => {
-			console.log('user connected', data)
+		socket.on('USER_CONNECTED', (room, players) => {
+			console.log(room)
 			let players = [...this.state.players];
-			players = data;
+			// players = data;
 			this.setState({players});
 			console.log('players', this.state.players);
 
@@ -287,9 +287,9 @@ export default class Layout extends Component {
 			<Aux>
 			<div className="Layout">
 				{
-					!showPlayers ?	
-					<LoginForm socket={socket} setUser={this.setUser} />
-					:
+					// !showPlayers ?	
+					// <LoginForm socket={socket} setUser={this.setUser} />
+					// :
 					<div>
 					{players}
 					
