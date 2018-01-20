@@ -8,11 +8,11 @@ import Char from '../components/Char/Char';
 import Aux from '../hoc/Wrap/Wrap';
 import Player from '../components/Player/Player';
 import Buttons from '../components/Buttons/Buttons';
-import axios from 'axios'
 import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Start from '../components/StartModal/StartModal';
 import Finish from '../components/FinishModal/FinishModal';
+import axios from 'axios';
 
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
@@ -91,6 +91,7 @@ export default class Layout extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = { 
+	  	room: 'asdfsd',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
@@ -121,7 +122,6 @@ export default class Layout extends Component {
 	*/
 	initSocket = () => {
 
-		const socket = io(socketUrl);
 		this.setState({socket});
 
 
