@@ -8,16 +8,23 @@ import Char from '../components/Char/Char';
 import Aux from '../hoc/Wrap/Wrap';
 import Player from '../components/Player/Player';
 import Buttons from '../components/Buttons/Buttons';
+<<<<<<< HEAD:src/containers/Layout/Layout.js
+=======
 <<<<<<< HEAD
 import axios from 'axios'
 const socketUrl = "http://localhost:3001";
 =======
+>>>>>>> 478c88655be4aa317faa35deabe5f8de3ce671bd:src/containers/Layout.js
 import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Start from '../components/StartModal/StartModal';
 import Finish from '../components/FinishModal/FinishModal';
 import axios from 'axios';
+<<<<<<< HEAD:src/containers/Layout/Layout.js
+
+=======
 >>>>>>> f798737efa29a828fbfe2139caf372df3299bc23
+>>>>>>> 478c88655be4aa317faa35deabe5f8de3ce671bd:src/containers/Layout.js
 
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
@@ -97,6 +104,10 @@ export default class Layout extends Component {
 			   		socket.emit(PLAYER_UNSUCCESSFUL);
 			   	return;
 			   }
+<<<<<<< HEAD:src/containers/Layout/Layout.js
+
+=======
+>>>>>>> 478c88655be4aa317faa35deabe5f8de3ce671bd:src/containers/Layout.js
 			});
 		  }
 		}
@@ -106,6 +117,7 @@ export default class Layout extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = { 
+	  	room: 'asdfsd',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
@@ -137,7 +149,6 @@ export default class Layout extends Component {
 	*/
 	initSocket = () => {
 
-		const socket = io(socketUrl);
 		this.setState({socket});
 
 

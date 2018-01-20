@@ -1,5 +1,16 @@
 const io = require('./index.js').io;
 
+// <<<<<<< HEAD
+// const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL  } = require('../src/Events');
+
+// let connectedUsers = [];
+// let current_turn = 0;
+// let timeOut;
+// let _turn = 0;
+// const MAX_WAITING = 5000;
+
+// let text = [];
+// =======
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM } = require('../src/Events');
 const MAX_WAITING = 5000;
 
@@ -16,7 +27,6 @@ class SessionObject {
 	}
 }
 
-// var myPhrase;
 
 // for(var i=0; i< 4; i++) {
 // 	let tempRoom = new SessionObject();
@@ -29,8 +39,7 @@ class SessionObject {
 
 
 module.exports = function(socket){
-	// console.log('\x1bc'); //clears console
-	// console.log('socket: ', socket);
+
 
 	socket.on(NEW_ROOM, (callback) => {
 		let newRoom = new SessionObject();
@@ -50,8 +59,13 @@ module.exports = function(socket){
 	// });
 
 	//User Connects with username
+
+	// socket.on(USER_CONNECTED, (user)=>{
+	// 	connectedUsers.push(user);
+
 	socket.on(USER_CONNECTED, (user, room_id)=>{
 		var tempSession = sessionSearch(room_id);
+
 
 		io.emit(USER_CONNECTED, tempSession, room_id);
 		// console.log("connectedUsers", connectedUsers);

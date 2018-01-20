@@ -1,6 +1,5 @@
 button {
 	padding: 14px;
-	background-color: #afffdf;
 	border: solid #2ca576 3px;
 	font-size: 80%;
 	color: #3e4a60;
@@ -23,7 +22,7 @@ form > button {
 }
 
 input {
-	background-color: #eafff6;
+	background-color: white;
 	border: solid #2ca576 2px;
 }
 

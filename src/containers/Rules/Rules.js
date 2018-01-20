@@ -10,8 +10,8 @@ class Rules extends Component {
 				</div>
 				<br/>
 				<div className="content">
-					<h4>Header</h4>
-					<p>test test</p>
+		
+					<p>Players will...</p>
 				</div>
 			</div>
 		)
