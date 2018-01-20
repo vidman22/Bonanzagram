@@ -1,28 +1,34 @@
 import React, { Component } from 'react';
-import { USER_CONNECTED } from '../../Events'
-import io from 'socket.io-client';
-
-const socketUrl = "http://localhost:3001";
-const socket = io(socketUrl);
+import { USER_CONNECTED, NEW_ROOM } from '../../Events'
 
 export default class CreateGame extends Component {
 	constructor(props) {
 	  super(props);
 	
 	  this.state = {
-	  	socket:"",
+	  	socket: '',
 	  	nickname:"",
 	  	error:""
 	  };
 	}
 
+	componentDidMount() {
+		// this.myFunction();
+		// console.log(this.props.socket);
+	}
+
+	myFunction = () => {
+		console.log(this.state);
+		console.log(this.props);
+	}
 
 	handleSubmit = (e)=>{
 		e.preventDefault()
-		const sock = this.props.socket;
 		const nickname = this.state.nickname;
-		socket.emit(USER_CONNECTED, nickname , sock )
-		console.log('socket:' + sock);
+		this.props.socket.emit(NEW_ROOM, this.props.socket.id, nickname, data =>{
+			console.log(data);
+		});
+		// console.log('socket:' + sock);
 	}
 
 	// setUser = (user)=>{

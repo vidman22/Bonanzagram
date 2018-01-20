@@ -1,12 +1,32 @@
 import React, { Component } from 'react';
-import { Route, Link, Switch } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 
 import './LandingPage.css';
 import CreateGame from './CreateGame/CreateGame';
 import JoinGame from './JoinGame/JoinGame';
 import Rules from './Rules/Rules';
 
+import {NEW_ROOM} from '../Events';
+import io from 'socket.io-client';
+const socketUrl = "http://localhost:3001";
+const socket = io(socketUrl);
+
 class LandingPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            createGame: true,
+        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(e) {
+        var action = e.target.name;
+        if(action === 'create') this.setState({createGame: true});
+        if(action === 'join') this.setState({createGame: false});
+
+    }
+
     render () {
         return (
             <div className="Blog">
@@ -33,27 +53,25 @@ class LandingPage extends Component {
                     </nav>
                 </header>
                 
-                	<div className ="Links">
-                	<ul>
+            	<div className="form-stuff">
+                    <button name="create" onClick={this.handleClick}>A</button>
+                    <button name="join" onClick={this.handleClick}>B</button>
+                </div>
 
-                            <li><Link to={{
-                                pathname: '/',
-                                hash: '#submit',
-                                search: '?quick-submit=true'
-                            }}>Create Game</Link></li>
-                            <li><Link to={{
-                            	pathname: '/join-game',
-                            	hash: '#submit',
-                            	search: '?quick-submit=true'
-                            }}>Join Game</Link></li>
-                           
-                        </ul>
-                	</div>
-               <Switch>
-                <Route path="/" component={CreateGame} />
-                <Route path="/join-game" component={JoinGame} />
-                <Route path="/rules" component={Rules} />
-               </Switch>
+            { this.state.createGame ?
+                <div>
+                    <CreateGame
+                      socket={socket}
+                    />
+                </div>
+                :                    
+                <div>
+                    <JoinGame
+                      socket={socket}
+                    />
+                </div>
+            }
+
             </div>
         );
     }

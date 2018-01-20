@@ -26,8 +26,12 @@ class SessionObject {
 		this.room = randomString()	
 	}
 
-	addUser(user) {
-		this.connectedUsers.push(user);
+	addUser(n, id) {
+		var tempUser = {
+			name: n,
+			id: id
+		}
+		this.connectedUsers.push(tempUser);
 	}
 }
 
@@ -44,10 +48,9 @@ class SessionObject {
 
 module.exports = function(socket){
 
-
-	socket.on(NEW_ROOM, (room_id, user, callback) => {
+	socket.on(NEW_ROOM, (id, user, callback) => {
 		let newRoom = new SessionObject();
-		newRoom.addUser(user);
+		newRoom.addUser(user, id);
 		sessions.push(newRoom);
 		callback(sessions);
 	});
