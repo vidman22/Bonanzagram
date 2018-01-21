@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter,Switch, Route } from "react-router-dom";
 import './App.css';
 // import Layout from './containers/Layout';
 import LandingPage from'./containers/LandingPage.js';
@@ -12,12 +12,13 @@ import Layout from './containers/Layout/Layout.js';
 class App extends Component {
   render () {
     return (
-    
- 		<BrowserRouter>
- 		
+    <BrowserRouter>
+ 		<Switch>
       <div className="App">
-        <LandingPage />
+        <Route path="/game" component={Lobby}/>
+        <Route path="/" component={LandingPage}/>
       </div>  
+    </Switch>
     </BrowserRouter>
     );
   }

@@ -91,7 +91,6 @@ export default class Layout extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = { 
-	  	room: 'asdfsd',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
@@ -127,7 +126,7 @@ export default class Layout extends Component {
 
 		socket.on('USER_CONNECTED', (room, players) => {
 			console.log(room)
-			let players = [...this.state.players];
+			// let players = [...this.state.players];
 			// players = data;
 			this.setState({players});
 			console.log('players', this.state.players);

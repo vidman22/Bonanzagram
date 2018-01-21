@@ -3,6 +3,17 @@ import {Route} from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import { USER_CONNECTED, NEW_ROOM } from '../../Events'
 
+// const Button = () => (
+//   <Route render={({ history}) => (
+//     <button
+//       type='button'
+//       onClick={() => { history.push('/new-location') }}
+//     >
+//       Click Me!
+//     </button>
+//   )} />
+// )
+
 export default class CreateGame extends Component {
 	constructor(props) {
 	  super(props);
@@ -19,12 +30,9 @@ export default class CreateGame extends Component {
 	componentDidMount() {
 		// this.myFunction();
 		// console.log(this.props.socket);
+
 	}
 
-	myFunction = () => {
-		console.log(this.state);
-		console.log(this.props);
-	}
 
 	handleSubmit = (e)=>{
 		e.preventDefault()
@@ -38,14 +46,6 @@ export default class CreateGame extends Component {
 		});
 	}
 
-	// setUser = (user)=>{
-	// 	const { socket } = this.state;
-	// 	console.log('socket:', user);
-	// 	socket.emit(USER_CONNECTED, user);
-	// 	this.setState({showPlayers: true});
-
-	// }
-
 	handleChange = (e)=>{
 		this.setState({nickname:e.target.value})
 	}
@@ -55,10 +55,21 @@ export default class CreateGame extends Component {
 	}
 
 	render() {	
-		const { nickname, error } = this.state
+		const { nickname, error } = this.state;
+
+		const Button = () => (
+		  <Route render={({ history}) => (
+		    <button
+		      type='button'
+		      onClick={() => { history.push('/game') }}
+		    >Submit</button>
+		  )} />
+		)
+
+
 		return (
 			<div className="login">
-				{!this.state.showLayout ?
+				 {/*!this.state.showLayout ?*/}
 					<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<label htmlFor="nickname">
@@ -73,14 +84,14 @@ export default class CreateGame extends Component {
 						placeholder={'Name'}
 						/>
 						<div className="error">{error ? error:null}</div>
+						{Button()} 
 					</form>
-					:
+					{/* :
 					<div>
 						<Layout room={this.state.room}/>
-					</div>
-				}
+					</div>	*/}
+					
 
-				
 			</div>
 		);
 	}
