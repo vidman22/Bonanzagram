@@ -1,16 +1,4 @@
 const io = require('./index.js').io;
-
-// <<<<<<< HEAD
-// const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL  } = require('../src/Events');
-
-// let connectedUsers = [];
-// let current_turn = 0;
-// let timeOut;
-// let _turn = 0;
-// const MAX_WAITING = 5000;
-
-// let text = [];
-// =======
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM } = require('../src/Events');
 const MAX_WAITING = 5000;
 
@@ -52,7 +40,7 @@ module.exports = function(socket){
 		let newRoom = new SessionObject();
 		newRoom.addUser(user, id);
 		sessions.push(newRoom);
-		callback(sessions, newRoom.room);
+		callback(sessions, newRoom.room, newRoom.connectedUsers);
 	});
 
 	//Verify Username
@@ -191,7 +179,7 @@ function isUser(userList, username){
 function randomString() {
 	const bank = "abcdefghijklmnopqrstuvwxyz123456890";
 	var phrase = '';
-	for(var i=0; i<7; i++) {
+	for(var i=0; i<6; i++) {
 		let rando = Math.floor((Math.random() * bank.length ));
 		phrase += bank.charAt(rando);
 	}

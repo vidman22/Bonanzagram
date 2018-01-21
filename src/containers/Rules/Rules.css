@@ -1,7 +1,7 @@
 body {
 	background-color: #b349ff;
 	padding: 0;
-	width: 75%;
+	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -20,4 +20,6 @@ body {
 	color: #3e4a60;
 	margin: 6px;
 	text-align: center;
+	font-size: 27px;
+	text-align: justify;
 }

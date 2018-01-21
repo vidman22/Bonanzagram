@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
 import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
-import LoginForm from '../../components/LoginForm/LoginForm';
 import WordBuilder from '../../components/WordBuilder/WordBuilder';
 import Char from '../../components/Char/Char';
 import Aux from '../../hoc/Wrap/Wrap';
@@ -17,7 +16,7 @@ import axios from 'axios';
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
-export default class Layout extends Component {
+class Layout extends Component {
 
 	componentDidUpdate() {  
 		if (this.state.isWord === 'word not challenged') {
@@ -87,10 +86,10 @@ export default class Layout extends Component {
 		}
 	}
 	
-	
 	constructor(props) {
 	  super(props);
 	  this.state = { 
+	  	room: '',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
@@ -124,13 +123,17 @@ export default class Layout extends Component {
 		this.setState({socket});
 
 
-		socket.on('USER_CONNECTED', (room, players) => {
-			console.log(room)
-			// let players = [...this.state.players];
-			// players = data;
+		socket.on('USER_CONNECTED', (room, users) => {
+			console.log(room);
+			if (room === this.props.room) {
+			let players = [...this.state.players];
+			players = users;
 			this.setState({players});
 			console.log('players', this.state.players);
-
+		} 
+		  else {
+		  	return;
+		  }
 		});
 
 		socket.on('USER_DISCONNECTED', (data) => {
@@ -281,16 +284,13 @@ export default class Layout extends Component {
             key={index} />;
         });
 	
-		const { socket, showPlayers } = this.state
 		return (
 			<Aux>
 			<div className="Layout">
-				{
-					// !showPlayers ?	
-					// <LoginForm socket={socket} setUser={this.setUser} />
-					// :
+				
 					<div>
 					{players}
+					</div>
 					
 						<div>
 							<h4>{this.state.isWord}</h4>
@@ -302,22 +302,22 @@ export default class Layout extends Component {
 								click={() => this.callAPI()}/> 
 							<WordBuilder />
 						</div> 
-					
+					<div>			
 					{charList}
+					</div>
 					<Modal show={this.state.openModal} value={this.state.userInput} closed={this.closeModal} />
 					{this.state.openModal ? <Backdrop show /> : null}
 					
 					{/*<Start show={this.state.showStart} clicked={this.startGame} closed={this.startGame}/> 
 					{this.state.showBackdrop ? <Backdrop show /> : null*/}
-					
 
 					<Finish show={this.state.showFinish} clicked={this.home} click={this.home}/> 
 					{this.state.showFinish ? <Backdrop show /> : null}
 					
-					</div> 
-				}
+					
 			</div>
 			</Aux>
 		);
 	}
 }
+export default Layout;

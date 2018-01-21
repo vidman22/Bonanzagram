@@ -6,26 +6,10 @@ import CreateGame from './CreateGame/CreateGame';
 import JoinGame from './JoinGame/JoinGame';
 // import Rules from './Rules/Rules';
 
-import {NEW_ROOM} from '../Events';
-import io from 'socket.io-client';
-const socketUrl = "http://localhost:3001";
-const socket = io(socketUrl);
+
 
 class LandingPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            createGame: true,
-        }
-        this.handleClick = this.handleClick.bind(this);
-    }
 
-    handleClick(e) {
-        var action = e.target.name;
-        if(action === 'create') this.setState({createGame: true});
-        if(action === 'join') this.setState({createGame: false});
-
-    }
 
     render () {
         return (
@@ -35,42 +19,25 @@ class LandingPage extends Component {
                         <ul>
                         	<li><h1>BONANAZAGRAM</h1></li>
                             <li><Link to={{
-                                pathname: '/create-game',
-                                hash: '#submit',
-                                search: '?quick-submit=true'
+                                pathname: '/create-game'
+                            
                             }}>Create Game</Link></li>
                             <li><Link to={{
-                            	pathname: '/join-game',
-                            	hash: '#submit',
-                            	search: '?quick-submit=true'
+                            	pathname: '/join-game'
+                            	
                             }}>Join Game</Link></li>
                             <li><Link to={{
-                            	pathname: '/rules',
-                            	hash: '#submit',
-                            	search: '?quick-submit=true'
+                            	pathname: '/rules'
+                            		
                             }}>Rules</Link></li>
                         </ul>
                     </nav>
                 </header>
                 
-            	<div className="form-stuff">
-                    <button name="create" onClick={this.handleClick}>A</button>
-                    <button name="join" onClick={this.handleClick}>B</button>
-                </div>
+        <Route path="/create-game" component={CreateGame} />
+        <Route path="/join-game" component={JoinGame} />
+        <Route path="/rules" component={Rules} />
 
-            { this.state.createGame ?
-                <div>
-                    <CreateGame
-                      socket={socket}
-                    />
-                </div>
-                :                    
-                <div>
-                    <JoinGame
-                      socket={socket}
-                    />
-                </div>
-            }
 
             </div>
         );

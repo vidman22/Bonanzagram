@@ -4,7 +4,6 @@ import './App.css';
 import LandingPage from'./containers/LandingPage.js';
 // import Rules from './containers/Rules';
 import Lobby from './components/Lobby';
-import Test from './components/TestComp/testComponent.js';
 import Layout from './containers/Layout/Layout.js';
 
  

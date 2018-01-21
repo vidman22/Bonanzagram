@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Link} from 'react-router-dom';
 import Layout from '../Layout/Layout';
-import { USER_CONNECTED, NEW_ROOM } from '../../Events'
+import Player from '../../components/Player/Player'
+import { NEW_ROOM } from '../../Events';
+import io from 'socket.io-client';
+const socketUrl = "http://localhost:3001";
+const socket = io(socketUrl);
 
 // const Button = () => (
 //   <Route render={({ history}) => (
@@ -23,13 +27,27 @@ export default class CreateGame extends Component {
 	  	nickname:"",
 	  	error:"",
 	  	showLayout: false,
-	  	room: ""
+	  	room: "",
+	  	players:''
 	  };
 	}
 
 	componentDidMount() {
-		// this.myFunction();
-		// console.log(this.props.socket);
+
+		// this.initSocket();
+	};
+
+
+
+	/* 
+	*	Connect to and initializes the socket.
+	*/
+	// initSocket = () => {
+
+	// 	socket.on('USER_CONNECTED', (room, users) ) => {
+
+	// 	}
+	// }
 
 	}
 
@@ -37,12 +55,16 @@ export default class CreateGame extends Component {
 	handleSubmit = (e)=>{
 		e.preventDefault()
 		const nickname = this.state.nickname;
-		this.props.socket.emit(NEW_ROOM, this.props.socket.id, nickname, (data, room) =>{
+		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users) =>{
 			console.log(data);
 			this.setState({
 				showLayout: true,
-				room: room
+				room: room,
+				players: users
+
 			});
+			console.log('room' + this.state.room);
+			console.log('players: ', this.state.players);
 		});
 	}
 
@@ -55,21 +77,35 @@ export default class CreateGame extends Component {
 	}
 
 	render() {	
-		const { nickname, error } = this.state;
+		let players = null;
+		if (this.state.showLayout) {
+		  players = (
+			<div>
+			  { this.state.players.map((player, index) => {
+				return<div key={index}> <p>
+				{index + 1}. { player.name}
+				
+		        </p>
+		       	<hr></hr>
+		       	</div>
+			  })}
+		    </div>
+		   );
+		}
 
 		const Button = () => (
-		  <Route render={({ history}) => (
-		    <button
-		      type='button'
-		      onClick={() => { history.push('/game') }}
-		    >Submit</button>
-		  )} />
-		)
+          <Route render={({ history}) => (
+            <button
+              type='button'
+              onClick={() => { history.push('/game') }}
+            >Submit</button>
+          )} />
+    	)
 
-
+		const { nickname, error } = this.state;
 		return (
 			<div className="login">
-				 {/*!this.state.showLayout ?*/}
+					{!this.state.showLayout ?
 					<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<label htmlFor="nickname">
@@ -86,12 +122,18 @@ export default class CreateGame extends Component {
 						<div className="error">{error ? error:null}</div>
 						{Button()} 
 					</form>
-					{/* :
+					:
 					<div>
-						<Layout room={this.state.room}/>
-					</div>	*/}
-					
+						<h2>Access Code: {this.state.room}</h2>
+						{Button()}
+                      <ol>{players}</ol>
+                    </div>
+                       
+					}
 
+					 
+				
+>>>>>>> 8d4dc0bb7ccc2a3f7a0412150f1135754e84af22
 			</div>
 		);
 	}
