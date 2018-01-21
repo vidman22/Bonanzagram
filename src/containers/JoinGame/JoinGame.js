@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { USER_CONNECTED } from '../../Events';
+import { USER_CONNECTED, NEW_ROOM } from '../../Events';
 import { Route, Link } from 'react-router-dom';
 import Layout from '../Layout/Layout';
+import Waiting from '../../components/WaitingPage/WaitingPage';
 import io from 'socket.io-client';
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
@@ -11,48 +12,40 @@ export default class JoinGame extends Component {
 	  super(props);
 	
 	  this.state = {
-	  	nickname:"",
+	  	name:"",
+	  	action: 'input',
 	  	code:"",
 	  	error: "",
 	  	showLayout: false,
 	  };
 	}
 
-
 	handleSubmit = (e)=>{
 		e.preventDefault()
 		console.log(this.state);
-		const { nickname } = this.state;
-		const { code } = this.state;
-		socket.emit(USER_CONNECTED, nickname, socket.id, code, data => {
-			// if(data === undefined) this.setState({error: "No room found with that phrase"});
-			console.log(data);
-		})
-		this.setState({showLayout: true});
+		const nickname = this.state.name;
+		const code = this.state.code;
+		socket.emit(USER_CONNECTED, nickname, socket.id, code,(room, players) =>{
+			console.log(room);
+			console.log(players);
+			this.setState({
+				action: 'waiting',
+				room: room,
+				players: players
+
+			});
+		});
 	}
 
-	handleChange = (e)=>{
-		const name = e.target.name;
-
-		this.setState({
-			[name] :e.target.value
-		})
+	startGame = () => {
+		this.setState({action: 'game'})
 	}
 
-	setError = (error)=>{
-		this.setState({error})
-	}
-
-	render() {	
-		const { error } = this.state
-		return (
-			
-			<div className="login">
-			{this.state.error &&
-				<h3>{this.state.error}</h3>
-			}
-			{ !this.state.showLayout ? 
-				<form onSubmit={this.handleSubmit} className="login-form" >
+	addComponent() {
+		switch(this.state.action) {
+			case 'input':
+			  return (
+			  	<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<h2>Add a Join Code</h2>
 					<input
@@ -61,29 +54,52 @@ export default class JoinGame extends Component {
 						onChange={this.handleChange}
 						placeholder={'Code'}
 					/> 
-
 					<label htmlFor="nickname">
 						<h2>Add a Name</h2>
 					</label>
 					<input
+						ref={(input)=>{ this.textInput = input }} 
 						type="text"
-						name="nickname"
+						name="name"
 						onChange={this.handleChange}
 						placeholder={'Name'}
 					/>
-						
-					
-					<div className="error">{error ? error:null}</div>
+					<div className="error">{this.state.error ? this.state.error:null}</div>
 					<button>Submit</button>
 				</form>
+			  )
+			  break;
+			case 'waiting':
+			  return (
+			  	<div>
+			  		<Waiting players={this.state.players} room={this.state.room}/>
+			  		<button onClick={() => this.startGame()}>Play</button>
+			  	</div>
+			  )
+			   
+			  break;
+			case 'game':
+				return <Layout players={this.state.players} room={this.state.room} />
+			  break;
+			default:
+				return null; 
+			  break;
+		}
+	}
 
-				:
-						<Link to={{
-                            	pathname: '/game'	
-                            }}>Play</Link>
-				}
+	handleChange = (e)=>{
+		const name = e.target.name;
+		this.setState({[name]:e.target.value})
+	}
 
-					<Route path="/game" component={Layout} />
+	setError = (error)=>{
+		this.setState({error})
+	}
+
+	render() {	
+		return (
+			<div className="login">
+				{this.addComponent()}
 			</div>
 		);
 	}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
-import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
+import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL, VERIFY_USER } from '../../Events';
 import WordBuilder from '../../components/WordBuilder/WordBuilder';
 import Char from '../../components/Char/Char';
 import Aux from '../../hoc/Wrap/Wrap';
@@ -110,7 +110,7 @@ class Layout extends Component {
 	};
 
 	componentDidMount() {
-		this.initSocket();
+		console.log(this.props);
 	};
 
 
@@ -307,8 +307,10 @@ class Layout extends Component {
 					</div>
 					<Modal show={this.state.openModal} value={this.state.userInput} closed={this.closeModal} />
 					{this.state.openModal ? <Backdrop show /> : null}
+					
 					{/*<Start show={this.state.showStart} clicked={this.startGame} closed={this.startGame}/> 
-										{this.state.showBackdrop ? <Backdrop show /> : null}*/}
+					{this.state.showBackdrop ? <Backdrop show /> : null*/}
+
 					<Finish show={this.state.showFinish} clicked={this.home} click={this.home}/> 
 					{this.state.showFinish ? <Backdrop show /> : null}
 					
