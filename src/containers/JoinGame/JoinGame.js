@@ -14,18 +14,40 @@ export default class JoinGame extends Component {
 	  this.state = {
 	  	name:"",
 	  	action: 'input',
-	  	code:"",
+	  	room:"",
 	  	error: "",
 	  	showLayout: false,
 	  };
 	}
 
+	componentDidMount() {
+
+		this.initSocket();
+	};
+
+
+	/* 	Connect to and initializes the socket. */
+	initSocket = () => {
+		socket.on('USER_CONNECTED', (room, users) => {
+			this.setState({players: users});
+		});
+
+		socket.on('START', (room_id) => {
+			if(this.state.room === room_id) {
+				this.startGame();
+			} else {
+				console.log('no change');
+			}
+		});
+	};
+
+
 	handleSubmit = (e)=>{
 		e.preventDefault()
 		console.log(this.state);
 		const nickname = this.state.name;
-		const code = this.state.code;
-		socket.emit(USER_CONNECTED, nickname, socket.id, code,(room, players) =>{
+		const room = this.state.room;
+		socket.emit(USER_CONNECTED, nickname, socket.id, room,(room, players) =>{
 			console.log(room);
 			console.log(players);
 			this.setState({
@@ -50,7 +72,7 @@ export default class JoinGame extends Component {
 					<h2>Add a Join Code</h2>
 					<input
 						type="text"
-						name="code"
+						name="room"
 						onChange={this.handleChange}
 						placeholder={'Code'}
 					/> 
@@ -73,7 +95,6 @@ export default class JoinGame extends Component {
 			  return (
 			  	<div>
 			  		<Waiting players={this.state.players} room={this.state.room}/>
-			  		<button onClick={() => this.startGame()}>Play</button>
 			  	</div>
 			  )
 			   

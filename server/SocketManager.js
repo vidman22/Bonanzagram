@@ -1,5 +1,5 @@
 const io = require('./index.js').io;
-const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM } = require('../src/Events');
+const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM, START } = require('../src/Events');
 const MAX_WAITING = 5000;
 
 const sessions = [];
@@ -67,6 +67,7 @@ module.exports = function(socket){
 			callback(['not found']);
 		}
 	});
+
 	
 	//User disconnects
 	socket.on('disconnect', ()=>{
@@ -94,10 +95,14 @@ module.exports = function(socket){
 	// 	}
 	// });
 
-	// socket.on('start', () => {
-	// 	next_turn();
-	// })
-	// // Letter is passed through and added to array
+	socket.on(START, (room_id, callback) => {
+		console.log(room_id);
+		var index = sessionSearch(room_id);
+		io.emit(START, sessions[index].room, sessions[index].connectedUsers);
+		callback(room_id);
+	});
+	
+	// Letter is passed through and added to array
 	// socket.on(LETTER_UPDATE, (data)=> {
 	// 	text.push(data);
 	// 	io.emit('LETTER_UPDATE', text);

@@ -4,7 +4,7 @@ import Layout from '../Layout/Layout';
 import Player from '../../components/Player/Player'
 import CreateInput from '../../components/CreateInput/CreateInput';
 import Waiting from '../../components/WaitingPage/WaitingPage'
-import { NEW_ROOM } from '../../Events';
+import { NEW_ROOM, START } from '../../Events';
 import io from 'socket.io-client';
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
@@ -54,7 +54,10 @@ export default class CreateGame extends Component {
 	}
 
 	startGame = () => {
-		this.setState({action: 'game'})
+		this.setState({action: 'game'});
+		socket.emit(START, this.state.room, data => {
+			console.log(data);
+		});
 	}
 
 	addComponent() {
@@ -85,8 +88,7 @@ export default class CreateGame extends Component {
 			  		<Waiting players={this.state.players} room={this.state.room}/>
 			  		<button onClick={() => this.startGame()}>Play</button>
 			  	</div>
-			  )
-			   
+			  )		   
 			  break;
 			case 'game':
 				return <Layout players={this.state.players} room={this.state.room} />
