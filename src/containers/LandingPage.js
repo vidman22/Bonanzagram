@@ -7,6 +7,7 @@ import JoinGame from './JoinGame/JoinGame';
 import Rules from './Rules/Rules';
 
 
+
 class LandingPage extends Component {
 
 
@@ -18,16 +19,16 @@ class LandingPage extends Component {
                         <ul>
                         	<li><h1>BONANAZAGRAM</h1></li>
                             <li><Link to={{
-                                pathname: '/create-game',
-                                hash: '#submit',
+                                pathname: '/create-game'
+                            
                             }}>Create Game</Link></li>
                             <li><Link to={{
-                            	pathname: '/join-game',
-                            	hash: '#submit',
+                            	pathname: '/join-game'
+                            	
                             }}>Join Game</Link></li>
                             <li><Link to={{
-                            	pathname: '/rules',
-                            	hash: '#submit',	
+                            	pathname: '/rules'
+                            		
                             }}>Rules</Link></li>
                         </ul>
                     </nav>

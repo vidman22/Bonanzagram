@@ -20,18 +20,6 @@ const socketUrl = "http://localhost:3001";
     // this.getInput();
   };
 
-  // getInput = () => {
-
-  //   const socket = io(socketUrl);
-
-  //   socket.on('LETTER_UPDATE', (event) => {
-  //     // console.log('received update: ' + event);
-  //     this.setState({userInput: event });
-  //     // console.log('userInput: ' + this.state.userInput);
-  //   });
-  // }
-
-
 
   inputChangedHandler = ( event ) => {
     const socket = io(socketUrl);
