@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter,Switch, Route } from "react-router-dom";
 import './App.css';
-// import Layout from './containers/Layout';
 import LandingPage from'./containers/LandingPage.js';
 // import Rules from './containers/Rules';
 import Lobby from './components/Lobby';
@@ -15,7 +14,7 @@ class App extends Component {
     <BrowserRouter>
  		<Switch>
       <div className="App">
-        <Route path="/game" component={Lobby}/>
+        <Route path="/game" component={Layout}/>
         <Route path="/" component={LandingPage}/>
       </div>  
     </Switch>

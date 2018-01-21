@@ -306,8 +306,11 @@ export default class Layout extends Component {
 					{charList}
 					<Modal show={this.state.openModal} value={this.state.userInput} closed={this.closeModal} />
 					{this.state.openModal ? <Backdrop show /> : null}
-					<Start show={this.state.showStart} clicked={this.startGame} closed={this.startGame}/> 
-					{this.state.showBackdrop ? <Backdrop show /> : null}
+					
+					{/*<Start show={this.state.showStart} clicked={this.startGame} closed={this.startGame}/> 
+					{this.state.showBackdrop ? <Backdrop show /> : null*/}
+					
+
 					<Finish show={this.state.showFinish} clicked={this.home} click={this.home}/> 
 					{this.state.showFinish ? <Backdrop show /> : null}
 					

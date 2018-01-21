@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 
 import './LandingPage.css';
 import CreateGame from './CreateGame/CreateGame';
 import JoinGame from './JoinGame/JoinGame';
-import Rules from './Rules/Rules';
+// import Rules from './Rules/Rules';
 
 import {NEW_ROOM} from '../Events';
 import io from 'socket.io-client';

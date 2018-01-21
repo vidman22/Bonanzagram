@@ -73,11 +73,11 @@ module.exports = function(socket){
 
 	// JOINING SESSION
 	socket.on(USER_CONNECTED, (user_name, user_id, room_id, callback)=>{
-		var location = sessionSearch(room_id);
-		if(location !== undefined ) {
-			sessions[location].addUser(user_name, user_id);
+		var index = sessionSearch(room_id);
+		if(index !== undefined ) {
+			sessions[index].addUser(user_name, user_id);
 			callback(sessions);
-			io.emit(USER_CONNECTED, sessions[location].room, sessions[location].connectedUsers)
+			io.emit(USER_CONNECTED, sessions[index].room, sessions[index].connectedUsers)
 		} else {
 			callback("not found");
 		}
