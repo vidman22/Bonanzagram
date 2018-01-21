@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {Route, Link} from 'react-router-dom';
-import Layout from '../Layout/Layout';
-import Player from '../../components/Player/Player'
+import Layout from '../../containers/Layout/Layout';
 import { NEW_ROOM } from '../../Events';
 import io from 'socket.io-client';
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
-export default class CreateGame extends Component {
+export default class Waiting extends Component {
 	constructor(props) {
 	  super(props);
 	
@@ -22,20 +21,9 @@ export default class CreateGame extends Component {
 	}
 
 	componentDidMount() {
-		// this.initSocket();
-	};
-
-
-
-	/* 
-	*	Connect to and initializes the socket.
-	*/
-	// initSocket = () => {
-
-	// 	socket.on('USER_CONNECTED', (room, users) ) => {
-
-	// 	}
-	// }
+		// this.myFunction();
+		// console.log(this.props.socket);
+	}
 
 	myFunction = () => {
 		console.log(this.state);
@@ -91,44 +79,24 @@ export default class CreateGame extends Component {
 		   );
 		}
 
-		const Button = () => (
-          <Route render={({ history}) => (
-            <button
-              type='button'
-              onClick={() => { history.push('/game') }}
-            >Submit</button>
-          )} />
-    	)
 
 		const { nickname, error } = this.state;
 		return (
 			<div className="login">
-					{!this.state.showLayout ?
-					<form onSubmit={this.handleSubmit} className="login-form" >
-
-					<label htmlFor="nickname">
-						<h2>Add a Name</h2>
-					</label>
-					<input
-						ref={(input)=>{ this.textInput = input }} 
-						type="text"
-						id="nickname"
-						value={nickname}
-						onChange={this.handleChange}
-						placeholder={'Name'}
-						/>
-						<div className="error">{error ? error:null}</div>
-					</form>
-					:
+	
+				
 						<div>
+							<h1>Waiting for Players</h1>
 							<h2>Access Code: {this.state.room}</h2>
-							{Button()}
+							<Link to={{
+	                            	pathname:'/game'	
+	                            }}><h1>Play</h1></Link>
                           <ol>{players}</ol>
                         </div>
-                       
+
 					}
 
-					 
+					<Route path='/game' component={Layout} />
 				
 			</div>
 		);

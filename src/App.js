@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import './App.css';
-import LandingPage from'./containers/LandingPage.js';
-
+import LandingPage from'./containers/LandingPage';
+import Layout from './containers/Layout/Layout';
 
  
 class App extends Component {
@@ -13,6 +13,7 @@ class App extends Component {
  		
       <div className="App">
         <LandingPage />
+        <Route path="/game"  component={Layout} />
       </div>  
     </BrowserRouter>
     );
