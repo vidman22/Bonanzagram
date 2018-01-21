@@ -7,6 +7,7 @@ import JoinGame from './JoinGame/JoinGame';
 import Rules from './Rules/Rules';
 
 
+
 class LandingPage extends Component {
 
 

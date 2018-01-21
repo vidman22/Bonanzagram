@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { USER_CONNECTED } from '../../Events'
+import { USER_CONNECTED } from '../../Events';
+import io from 'socket.io-client';
+const socketUrl = "http://localhost:3001";
+const socket = io(socketUrl);
 
 export default class JoinGame extends Component {
 	constructor(props) {
@@ -18,7 +21,7 @@ export default class JoinGame extends Component {
 		console.log(this.state);
 		const { nickname } = this.state;
 		const { code } = this.state;
-		this.props.socket.emit(USER_CONNECTED, nickname, this.props.socket.id,code, data => {
+		socket.emit(USER_CONNECTED, nickname, socket.id, code, data => {
 			// if(data === undefined) this.setState({error: "No room found with that phrase"});
 			console.log(data);
 		})
@@ -37,7 +40,7 @@ export default class JoinGame extends Component {
 	}
 
 	render() {	
-		const { nickname, code, error } = this.state
+		const { error } = this.state
 		return (
 			<div className="login">
 			{this.state.error &&

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import {Route} from 'react-router-dom';
 import Layout from '../Layout/Layout';
-import { USER_CONNECTED, NEW_ROOM } from '../../Events'
+import { USER_CONNECTED, NEW_ROOM } from '../../Events';
+import io from 'socket.io-client';
+const socketUrl = "http://localhost:3001";
+const socket = io(socketUrl);
 
 export default class CreateGame extends Component {
 	constructor(props) {
@@ -29,12 +32,13 @@ export default class CreateGame extends Component {
 	handleSubmit = (e)=>{
 		e.preventDefault()
 		const nickname = this.state.nickname;
-		this.props.socket.emit(NEW_ROOM, this.props.socket.id, nickname, (data, room) =>{
+		socket.emit(NEW_ROOM, socket.id, nickname, (data, room) =>{
 			console.log(data);
 			this.setState({
 				showLayout: true,
 				room: room
 			});
+			console.log('room' + this.state.room);
 		});
 	}
 
@@ -75,9 +79,9 @@ export default class CreateGame extends Component {
 						<div className="error">{error ? error:null}</div>
 					</form>
 					:
-					<div>
+					
 						<Layout room={this.state.room}/>
-					</div>
+	
 				}
 
 				

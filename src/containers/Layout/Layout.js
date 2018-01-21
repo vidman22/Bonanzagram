@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
 import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
-import LoginForm from '../../components/LoginForm/LoginForm';
 import WordBuilder from '../../components/WordBuilder/WordBuilder';
 import Char from '../../components/Char/Char';
 import Aux from '../../hoc/Wrap/Wrap';
@@ -125,10 +124,10 @@ export default class Layout extends Component {
 		this.setState({socket});
 
 
-		socket.on('USER_CONNECTED', (room, players) => {
+		socket.on('USER_CONNECTED', (room, users) => {
 			console.log(room)
 			let players = [...this.state.players];
-			// players = data;
+			players = users;
 			this.setState({players});
 			console.log('players', this.state.players);
 
@@ -282,14 +281,10 @@ export default class Layout extends Component {
             key={index} />;
         });
 	
-		const { socket, showPlayers } = this.state
 		return (
 			<Aux>
 			<div className="Layout">
 				{
-					// !showPlayers ?	
-					// <LoginForm socket={socket} setUser={this.setUser} />
-					// :
 					<div>
 					{players}
 					
