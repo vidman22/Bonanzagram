@@ -3,8 +3,11 @@ import { BrowserRouter,Switch, Route } from "react-router-dom";
 import './App.css';
 import LandingPage from'./containers/LandingPage.js';
 // import Rules from './containers/Rules';
-import Lobby from './components/Lobby';
 import Layout from './containers/Layout/Layout.js';
+
+// import CreateGame from '.src//CreateGame/CreateGame';
+// import JoinGame from './JoinGame/JoinGame';
+// import Rules from './Rules/Rules';
 
  
 class App extends Component {
@@ -13,7 +16,7 @@ class App extends Component {
     <BrowserRouter>
  		<Switch>
       <div className="App">
-        <Route path="/game" component={Layout}/>
+        {/*<Route path="/game/:num" component={Layout}/>*/}
         <Route path="/" component={LandingPage}/>
       </div>  
     </Switch>

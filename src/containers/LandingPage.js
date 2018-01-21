@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {Link } from 'react-router-dom';
+import {Link, Route, Switch} from 'react-router-dom';
 
 import './LandingPage.css';
 import CreateGame from './CreateGame/CreateGame';
 import JoinGame from './JoinGame/JoinGame';
-// import Rules from './Rules/Rules';
+import Rules from './Rules/Rules';
 
 
 
@@ -33,12 +33,11 @@ class LandingPage extends Component {
                         </ul>
                     </nav>
                 </header>
-                
-        <Route path="/create-game" component={CreateGame} />
-        <Route path="/join-game" component={JoinGame} />
-        <Route path="/rules" component={Rules} />
-
-
+            
+            <Route exact path="/create-game" component={CreateGame}/>
+            <Route path="/join-game" component={JoinGame} />
+            <Route path="/rules" component={Rules} />
+            
             </div>
         );
     }

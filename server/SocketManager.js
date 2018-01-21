@@ -44,30 +44,27 @@ module.exports = function(socket){
 	});
 
 	//Verify Username
-	// socket.on(VERIFY_USER, (nickname, callback)=>{
-	// 	if(isUser(connectedUsers, nickname)){
-	// 		callback({ isUser:true, user:null })
-	// 	}else{
-	// 		callback({ isUser:false, user:{ id:socket.id,
-	// 	name: nickname}
-	//       })
-	//    }
-	// });
-
-	//User Connects with username
-
-	// socket.on(USER_CONNECTED, (user)=>{
-	// 	connectedUsers.push(user);
+	socket.on(VERIFY_USER, (data, callback)=>{
+		// if(isUser(connectedUsers, nickname)){
+		// 	callback({ isUser:true, user:null })
+		// }else{
+		// 	callback({ isUser:false, user:{ id:socket.id,
+		// name: nickname}
+	 //      })
+	 //   } 
+		console.log(data);
+		callback(data);
+	});
 
 	// JOINING SESSION
 	socket.on(USER_CONNECTED, (user_name, user_id, room_id, callback)=>{
 		var index = sessionSearch(room_id);
 		if(index !== undefined ) {
 			sessions[index].addUser(user_name, user_id);
-			callback(sessions);
+			callback(sessions[index].room, sessions[index].connectedUsers);
 			io.emit(USER_CONNECTED, sessions[index].room, sessions[index].connectedUsers)
 		} else {
-			callback("not found");
+			callback(['not found']);
 		}
 	});
 	
