@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
-import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL, VERIFY_USER } from '../../Events';
+import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
 import WordBuilder from '../../components/WordBuilder/WordBuilder';
 import Char from '../../components/Char/Char';
 import Aux from '../../hoc/Wrap/Wrap';
@@ -9,7 +9,7 @@ import Player from '../../components/Player/Player';
 import Buttons from '../../components/Buttons/Buttons';
 import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
-import Start from '../../components/StartModal/StartModal';
+// import Start from '../../components/StartModal/StartModal';
 import Finish from '../../components/FinishModal/FinishModal';
 import axios from 'axios';
 

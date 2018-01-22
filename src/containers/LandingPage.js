@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link, Route, Switch} from 'react-router-dom';
+import {Link, Route } from 'react-router-dom';
 
 import './LandingPage.css';
 import CreateGame from './CreateGame/CreateGame';

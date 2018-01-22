@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {Route, Link} from 'react-router-dom';
 import Layout from '../Layout/Layout';
-import Player from '../../components/Player/Player'
-import CreateInput from '../../components/CreateInput/CreateInput';
 import Waiting from '../../components/WaitingPage/WaitingPage'
 import { NEW_ROOM } from '../../Events';
 import io from 'socket.io-client';
@@ -92,7 +89,7 @@ export default class CreateGame extends Component {
 				return <Layout players={this.state.players} room={this.state.room} />
 			  break;
 			default:
-				return test; 
+				return null; 
 			  break;
 		}
 	}

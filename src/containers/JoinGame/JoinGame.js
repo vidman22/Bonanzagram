@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { USER_CONNECTED, NEW_ROOM } from '../../Events';
-import { Route, Link } from 'react-router-dom';
+import { USER_CONNECTED } from '../../Events';
 import Layout from '../Layout/Layout';
 import Waiting from '../../components/WaitingPage/WaitingPage';
 import io from 'socket.io-client';
