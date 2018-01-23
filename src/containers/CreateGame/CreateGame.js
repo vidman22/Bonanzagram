@@ -54,7 +54,7 @@ export default class CreateGame extends Component {
 	}
 
 	startGame = () => {
-		this.setState({action: 'game'});
+		this.setState({action: 'game'}); 
 		socket.emit(START, this.state.room, data => {
 			console.log(data);
 		});

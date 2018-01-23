@@ -8,9 +8,9 @@ module.exports = function(app, passport, db, path) {
 	// 	res.sendFile(__dirname + "/loginTest.html");
 	// }); 
 
-	app.get("/users", (req,res) => {
-		db.User.find().then(user => {
-			res.json(user);
+	app.get("/words", (req,res) => {
+		db.Word.find().then(data => {
+			res.send(data);
 		}).catch(err => {
 			console.log(err);
 		}); 

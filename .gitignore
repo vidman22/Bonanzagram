@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+WORD.LST
 
 # production
 /build
