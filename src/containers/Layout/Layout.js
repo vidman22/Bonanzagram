@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
-import { USER_CONNECTED, LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL, VERIFY_USER, START } from '../../Events';
+import { LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
 import WordBuilder from '../../components/WordBuilder/WordBuilder';
 import Char from '../../components/Char/Char';
 import Aux from '../../hoc/Wrap/Wrap';
@@ -9,7 +9,7 @@ import Player from '../../components/Player/Player';
 import Buttons from '../../components/Buttons/Buttons';
 import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
-import Start from '../../components/StartModal/StartModal';
+// import Start from '../../components/StartModal/StartModal';
 import Finish from '../../components/FinishModal/FinishModal';
 import axios from 'axios';
 
@@ -19,25 +19,26 @@ const socket = io(socketUrl);
 class Layout extends Component {
 
 	componentDidUpdate() {  
+		const socket = this.props.player;
 		if (this.state.isWord === 'word not challenged') {
 	        if (this.state.wordChallenge !== '') {
 	     		const word = this.state.wordChallenge;
 	  			const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
 				axios.get(url + word)
 					.then(response => {
-			   		console.log(response.data.def);
-			   		let length = this.state.userInput.length;
-			   		let firstWordPart = word.slice(0, length);
-			   		console.log("word challenged: " + word);
+				   		console.log(response.data.def);
+				   		let length = this.state.userInput.length;
+				   		let firstWordPart = word.slice(0, length);
+				   		console.log("word challenged: " + word);
 			   		if (response.data.def[0] && firstWordPart === this.state.userInput ) {
-					this.setState(prevState => ({
-				    isWord: !prevState.isWord
-					}));
-					this.setState(prevState => ({
-				    wordChallenge: !prevState.wordChallenge
-					}));
-					console.log("successful challenge");
-					socket.emit(PLAYER_SUCCESSFUL);
+						this.setState(prevState => ({
+					    isWord: !prevState.isWord
+						}));
+						this.setState(prevState => ({
+					    wordChallenge: !prevState.wordChallenge
+						}));
+						console.log("successful challenge");
+						socket.emit(PLAYER_SUCCESSFUL);
 					return;
 				   }
 			    else {
@@ -100,7 +101,7 @@ class Layout extends Component {
 	  	checkCompletion: false,
 	  	openModal: false,
 	  	checkChallenge: false,
-	  	showPlayers: false,
+	  	showPlayers: true,
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
@@ -108,9 +109,11 @@ class Layout extends Component {
 	  };
 
 	};
-
+	
 	componentDidMount() {
 		console.log(this.props);
+		this.initSocket();
+		
 	};
 
 
@@ -121,33 +124,20 @@ class Layout extends Component {
 	initSocket = () => {
 
 		this.setState({socket});
-
-
-		socket.on('USER_CONNECTED', (room, users) => {
-			console.log(room);
-			if (room === this.props.room) {
-			let players = [...this.state.players];
-			players = users;
-			this.setState({players});
-			console.log('players', this.state.players);
-		} 
-		  else {
-		  	return;
-		  }
-		});
+		console.log('socket', socket.id);
 
 		socket.on('USER_DISCONNECTED', (data) => {
+
 			this.setState({players: data});
 			console.log("players after disconnect: ", this.state.players);
 		});
 
 
 		socket.on('YOUR_TURN', (data) => {
-			if (this.state.socket.id === data) {
+			if (this.props.player === data) {
 				console.log("your turn");
 				this.setState({showBackdrop: false});
 				this.setState({turn: 'Your Turn!'})
-				this.setState({showStart: false});
 			// this.triggerTimer();
 		} 
 			else {
@@ -160,26 +150,27 @@ class Layout extends Component {
 		});
 
 		socket.on('WORD_CHALLENGED', (data) => {
+
 			this.setState({wordChallenge: data});
 			console.log(data);
 		});
 
 		socket.on('SEND_MODAL', (data) => {
-			if (this.state.socket.id === data) {
+			if (this.props.player === data) {
 				this.openModal();
 			} 
 			else return; 
 		});
 
 		socket.on('LETTER_UPDATE', (event) => {
-           // let userInput = this.state.userInput;
+           
            event = event.join('').toLowerCase();
            console.log('joined input: ' + event);
            this.setState({userInput: event });
           });
 
 		socket.on('lost_points', (data) => {
-			if (this.state.socket.id === data) {
+			if (this.props.player === data) {
 				let points = this.state.userInput.length;
 				console.log('you lost ' + points + ' points :(');
 				let score = this.state.score - points;
@@ -193,27 +184,15 @@ class Layout extends Component {
 	});
   }
 
-	/*
-	* 	Sets the user property in state 
-	*	@param user {id:number, name:string}
-	*/	
-	setUser = (user)=>{
-		const { socket } = this.state;
-		console.log('socket:', user);
-		socket.emit(USER_CONNECTED, user);
-		this.setState({showPlayers: true});
+	
 
-	}
 
 	/*
 	*	Sets the user property in state to null.
 	*/
 	logout = () => {
-		const { socket } = this.state;
+		const socket = this.props.player;
 		socket.emit(LOGOUT);
-		const players = [...this.state.players];
-		players.splice(0, 1);
-		this.setState({ players: players });
 
 	}
 
@@ -234,12 +213,13 @@ class Layout extends Component {
  	
 
  	startGame = () => {
- 		
+ 		const socket = this.props.player;
  		socket.emit('start');
  		this.setState({showStart: false});
  	}
 
  	sendModal = () => {
+ 		const socket = this.props.player;
  		socket.emit(SEND_MODAL);
  	}
 
@@ -266,12 +246,11 @@ class Layout extends Component {
 		if (this.state.showPlayers) {
 		  players = (
 			<div>
-			  { this.state.players.map((player, index) => {
+			  { this.props.players.map((player, index) => {
 				return <Player 
-				score={this.state.score}
+				score={player.score}
 				key={player.id}
 				name={player.name}
-				time={this.state.time}
 		        />
 			  })}
 		    </div>
@@ -300,7 +279,7 @@ class Layout extends Component {
 							<Buttons 
 								clicked={() => this.sendModal()}
 								click={() => this.callAPI()}/> 
-							<WordBuilder />
+							<WordBuilder player={this.props.player} room={this.props.room}/>
 						</div> 
 					<div>			
 					{charList}

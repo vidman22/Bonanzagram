@@ -23,9 +23,8 @@ const socketUrl = "http://localhost:3001";
 
   inputChangedHandler = ( event ) => {
     const socket = io(socketUrl);
-    socket.emit(LETTER_UPDATE, event.toUpperCase());
-    socket.emit('pass_turn');
-    // console.log('keyboard input: ' + event);
+    socket.emit(LETTER_UPDATE, event.toUpperCase(), this.props.room, this.props.player);
+   
   }
 
   render () {

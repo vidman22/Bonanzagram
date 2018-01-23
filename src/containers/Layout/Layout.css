@@ -1,8 +1,10 @@
 .Layout {
+	display: block;
+	float: left;
+	
 	text-align: center;
 	font-family: Helvetica;
-	color: orangered;
-	height: 900px;
+	color: #2c3e50;
 
 }
 
@@ -19,4 +21,13 @@
 
 .Start:hover {
 	cursor: pointer;
+}
+
+p {
+	color: white;
+	text-align: center;
+	font-size: 37px;
+	padding-top: 11px;
+	margin: 0px;
+	
 }

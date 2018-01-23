@@ -31,7 +31,7 @@ server.listen(PORT, () => {
 require('./passport.js')(passport);
 require('./routes.js')(app, passport, db, path);
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/bana_blitz", {
+mongoose.connect("mongodb://localhost/banana_spell", {
 	useMongoClient: true
 });
 
