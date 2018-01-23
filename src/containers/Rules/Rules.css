@@ -1,5 +1,4 @@
 body {
-	background-color: #b349ff;
 	padding: 0;
 	width: 60%;
 	margin-left: auto;
@@ -17,8 +16,7 @@ body {
 }
 
 .content > h4, p {
-	color: #3e4a60;
-	margin: 6px;
+		margin: 6px;
 	text-align: center;
 	font-size: 27px;
 	text-align: justify;

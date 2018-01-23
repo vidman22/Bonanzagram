@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { USER_CONNECTED, NEW_ROOM } from '../../Events';
-import { Route, Link } from 'react-router-dom';
+import { USER_CONNECTED } from '../../Events';
 import Layout from '../Layout/Layout';
 import Waiting from '../../components/WaitingPage/WaitingPage';
 import io from 'socket.io-client';
@@ -17,6 +16,8 @@ export default class JoinGame extends Component {
 	  	room:"",
 	  	error: "",
 	  	showLayout: false,
+	  	players: null,
+	  	activePlayer: ''
 	  };
 	}
 
@@ -35,6 +36,7 @@ export default class JoinGame extends Component {
 		socket.on('START', (room_id) => {
 			if(this.state.room === room_id) {
 				this.startGame();
+				console.log('room id: ' + room_id);
 			} else {
 				console.log('no change');
 			}
@@ -53,7 +55,8 @@ export default class JoinGame extends Component {
 			this.setState({
 				action: 'waiting',
 				room: room,
-				players: players
+				players: players,
+				activePlayer: socket.id
 
 			});
 		});
@@ -64,9 +67,11 @@ export default class JoinGame extends Component {
 	}
 
 	addComponent() {
+		var result;
 		switch(this.state.action) {
+
 			case 'input':
-			  return (
+			  result = (
 			  	<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<h2>Add a Join Code</h2>
@@ -92,20 +97,22 @@ export default class JoinGame extends Component {
 			  )
 			  break;
 			case 'waiting':
-			  return (
-			  	<div>
-			  		<Waiting players={this.state.players} room={this.state.room}/>
-			  	</div>
+			  result = (
+				  	<div>
+				  		<Waiting players={this.state.players} room={this.state.room}/>
+				  	</div>
+
 			  )
 			   
 			  break;
 			case 'game':
-				return <Layout players={this.state.players} room={this.state.room} />
+				result = <Layout players={this.state.players} room={this.state.room} player={this.state.activePlayer} />
 			  break;
 			default:
-				return null; 
+				result = <h1>Something went wrong. Try something else.</h1>  
 			  break;
 		}
+		return result;
 	}
 
 	handleChange = (e)=>{

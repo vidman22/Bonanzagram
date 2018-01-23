@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {Route, Link} from 'react-router-dom';
 import Layout from '../Layout/Layout';
-import Player from '../../components/Player/Player'
-import CreateInput from '../../components/CreateInput/CreateInput';
 import Waiting from '../../components/WaitingPage/WaitingPage'
 import { NEW_ROOM, START } from '../../Events';
 import io from 'socket.io-client';
@@ -19,7 +16,8 @@ export default class CreateGame extends Component {
 	  	error:"",
 	  	action: 'input',
 	  	room: "",
-	  	players:''
+	  	players: null,
+	  	activePlayer: ''
 	  };
 
 	  this.addComponent = this.addComponent.bind(this);
@@ -47,7 +45,8 @@ export default class CreateGame extends Component {
 			this.setState({
 				action: 'waiting',
 				room: room,
-				players: users
+				players: users,
+				activePlayer: socket.id
 
 			});
 		});
@@ -61,9 +60,10 @@ export default class CreateGame extends Component {
 	}
 
 	addComponent() {
+		let result;
 		switch(this.state.action) {
 			case 'input':
-			  return (
+			  result = (
 			  	<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<label htmlFor="nickname">
@@ -83,7 +83,7 @@ export default class CreateGame extends Component {
 			  )
 			  break;
 			case 'waiting':
-			  return (
+			  result = (
 			  	<div>
 			  		<Waiting players={this.state.players} room={this.state.room}/>
 			  		<button onClick={() => this.startGame()}>Play</button>
@@ -91,12 +91,13 @@ export default class CreateGame extends Component {
 			  )		   
 			  break;
 			case 'game':
-				return <Layout players={this.state.players} room={this.state.room} />
+				result = <Layout players={this.state.players} room={this.state.room} player={this.state.activePlayer}/>
 			  break;
 			default:
-				return test; 
+				result = <h1>Something went wrong. Try something else.</h1> 
 			  break;
 		}
+			return result;
 	}
 
 	handleChange = (e)=>{
