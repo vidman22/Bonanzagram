@@ -1,10 +1,15 @@
 import React, {Component} from "react";
 import './Rules.css';
-
+import Mongo from '../../utils/Mongo';
 
 
 class Rules extends Component {
-	
+	componentDidMount() {
+		Mongo.search().then(data => {
+			console.log(data);
+		}).catch(err => console.log(err))
+	}
+
 	render() {
 		return (
 			<div>
