@@ -22,9 +22,10 @@ const socketUrl = "http://localhost:3001";
 
 
   inputChangedHandler = ( event ) => {
+    this.refs.btn.setAttribute("disabled", "disabled");
     const socket = io(socketUrl);
     socket.emit(LETTER_UPDATE, event.toUpperCase(), this.props.room, this.props.player);
-   
+    this.refs.btn.removeAttribute("disabled");
   }
 
   render () {

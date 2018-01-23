@@ -116,14 +116,14 @@ module.exports = function(socket){
 			io.emit('LETTER_UPDATE', text);
 			console.log(text);
 
-			activePlayer = sessions[index].connectedUsers[sessions[index]._turn++];
-			console.log('users ln 120: ', sessions[index].connectedUsers[sessions[index]._turn]);
+			activePlayer = sessions[index].connectedUsers[sessions[index].turn].name;
+			console.log('users ln 120: ', sessions[index].connectedUsers[sessions[index].turn]);
 			console.log('users turn: ', activePlayer);
 		
-		if (activePlayer) {
+		// if (activePlayer) {
 			resetTimout(room);
 			next_turn(room);
-		}
+		
 	});
 
 	// socket.on(PLAYER_SUCCESSFUL, () => {
@@ -170,10 +170,10 @@ module.exports = function(socket){
 // Game Functionality
 function next_turn(room){
 	var index = sessionSearch(room);
-	let turn = sessions[index]._turn;
+	let turn = sessions[index].turn;
 	turn = sessions[index].current_turn++ % sessions[index].connectedUsers.length;
-	console.log('turn ln 174: ' + sessions[index]._turn);
-	console.log( sessions[index].connectedUsers[turn].name + ' turn');
+	console.log('turn ln 174: ' + sessions[index].turn);
+	console.log( sessions[index].connectedUsers[turn].name + "'s turn");
 	io.emit(YOUR_TURN, sessions[index].connectedUsers[turn].id);
 	triggerTimout(index);
 }

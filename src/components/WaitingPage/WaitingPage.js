@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client';
-// const socketUrl = "http://localhost:3001";
-// const socket = io(socketUrl);
 
 export default class Waiting extends Component {
 	constructor(props) {
