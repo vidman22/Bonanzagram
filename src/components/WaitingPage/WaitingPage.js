@@ -9,7 +9,7 @@ export default class Waiting extends Component {
 	
 	  this.state = {
 	  	room: "",
-	  	players:''
+	  	players: null
 	  };
 	}
 
