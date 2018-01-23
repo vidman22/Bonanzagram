@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client';
-const socketUrl = "http://localhost:3001";
-const socket = io(socketUrl);
+// const socketUrl = "http://localhost:3001";
+// const socket = io(socketUrl);
 
 export default class Waiting extends Component {
 	constructor(props) {
@@ -14,19 +14,20 @@ export default class Waiting extends Component {
 	}
 
 	componentDidMount() {
-		this.initSocket();
+	
 		console.log(this.props);
+		console.log(this.props.players[0].name)
 	}
 
 
 
-	initSocket = () => {
+	// initSocket = () => {
 
-		socket.on('USER_CONNECTED', (room, users)  => {
-			this.setState({players: users});
-			this.setState({room: room});
-		})
-	};
+	// 	socket.on('USER_CONNECTED', (room, users)  => {
+	// 		this.setState({players: users});
+	// 		this.setState({room: room});
+	// 	})
+	// };
 
 
 	render() {	
@@ -49,7 +50,7 @@ export default class Waiting extends Component {
 				<div>
 					<h1>Waiting for Players</h1>
 					<h2>Access Code: {this.props.room}</h2>
-                  <ol>{players}</ol>
+                   {players}
                 </div>
 				
 			</div>

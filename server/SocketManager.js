@@ -1,5 +1,5 @@
 const io = require('./index.js').io;
-const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM } = require('../src/Events');
+const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM, START } = require('../src/Events');
 const MAX_WAITING = 5000;
 
 const sessions = [];
@@ -17,7 +17,8 @@ class SessionObject {
 	addUser(n, id) {
 		var tempUser = {
 			name: n,
-			id: id
+			id: id,
+			score: 10
 		}
 		this.connectedUsers.push(tempUser);
 	}
@@ -67,6 +68,7 @@ module.exports = function(socket){
 			callback(['not found']);
 		}
 	});
+
 	
 	//User disconnects
 	socket.on('disconnect', ()=>{
@@ -85,24 +87,44 @@ module.exports = function(socket){
 	  // }	
 	});
 
-	// socket.on('pass_turn', () => {
-	// 	console.log('users turn: ', connectedUsers[_turn]);
-	// 	if (connectedUsers[_turn].id) {
-	// 		resetTimout();
-	// 		next_turn();
+	
+
+	socket.on(START, (room_id, callback) => {
+		console.log(room_id);
+		var index = sessionSearch(room_id);
+		io.emit('START', sessions[index].room, sessions[index].connectedUsers);
+		callback(room_id);
+		next_turn(room_id);
+	});
+
+	// socket.on('pass_turn', (room, player) => {
+	// 	const index = sessionSearch(room);
+	// 	activePlayer = sessions[index].connectedUsers[sessions[index]._turn];
+	// 	console.log('users turn: ', activePlayer);
+	// 	if (activePlayer) {
+	// 		resetTimout(room);
+	// 		next_turn(room);
 			
 	// 	}
 	// });
+	
+	//Letter is passed through and added to array
+	socket.on(LETTER_UPDATE, (data, room, player)=> {
+		const index = sessionSearch(room);
+		const text = sessions[index].text
+			text.push(data);
+			io.emit('LETTER_UPDATE', text);
+			console.log(text);
 
-	// socket.on('start', () => {
-	// 	next_turn();
-	// })
-	// // Letter is passed through and added to array
-	// socket.on(LETTER_UPDATE, (data)=> {
-	// 	text.push(data);
-	// 	io.emit('LETTER_UPDATE', text);
-	// 	console.log(text);
-	// });
+			activePlayer = sessions[index].connectedUsers[sessions[index]._turn++];
+			console.log('users ln 120: ', sessions[index].connectedUsers[sessions[index]._turn]);
+			console.log('users turn: ', activePlayer);
+		
+		if (activePlayer) {
+			resetTimout(room);
+			next_turn(room);
+		}
+	});
 
 	// socket.on(PLAYER_SUCCESSFUL, () => {
 	// 	console.log('player_successful');
@@ -146,25 +168,28 @@ module.exports = function(socket){
 }
 
 // Game Functionality
-function next_turn(){
-	_turn = current_turn++ % connectedUsers.length;
-	console.log('turn: ' + _turn);
-	console.log('line 89: ' + connectedUsers[_turn].id);
-	io.emit(YOUR_TURN, connectedUsers[_turn].id);
-	console.log("next turn triggered ", _turn);
-	triggerTimout();
+function next_turn(room){
+	var index = sessionSearch(room);
+	let turn = sessions[index]._turn;
+	turn = sessions[index].current_turn++ % sessions[index].connectedUsers.length;
+	console.log('turn ln 174: ' + sessions[index]._turn);
+	console.log( sessions[index].connectedUsers[turn].name + ' turn');
+	io.emit(YOUR_TURN, sessions[index].connectedUsers[turn].id);
+	triggerTimout(index);
 }
 
-function triggerTimout() {
-	timeOut = setTimeout(()=>{
-		next_turn();
+function triggerTimout(index) {
+
+	sessions[index].timeOut = setTimeout(()=>{
+		next_turn(sessions[index].room);
 	}, MAX_WAITING);
 }
 
-function resetTimout(){
-	if(typeof timeOut === 'object'){
+function resetTimout(room){
+	const index = sessionSearch(room);
+	if(typeof sessions[index].timeOut === 'object'){
 		console.log("timemout reset");
-		clearTimeout(timeOut);
+		clearTimeout(sessions[index].timeOut);
 	}
 }
 

@@ -13,24 +13,50 @@ export default class JoinGame extends Component {
 	  this.state = {
 	  	name:"",
 	  	action: 'input',
-	  	code:"",
+	  	room:"",
 	  	error: "",
 	  	showLayout: false,
+	  	players: null,
+	  	activePlayer: ''
 	  };
 	}
+
+	componentDidMount() {
+
+		this.initSocket();
+	};
+
+
+	/* 	Connect to and initializes the socket. */
+	initSocket = () => {
+		socket.on('USER_CONNECTED', (room, users) => {
+			this.setState({players: users});
+		});
+
+		socket.on('START', (room_id) => {
+			if(this.state.room === room_id) {
+				this.startGame();
+				console.log('room id: ' + room_id);
+			} else {
+				console.log('no change');
+			}
+		});
+	};
+
 
 	handleSubmit = (e)=>{
 		e.preventDefault()
 		console.log(this.state);
 		const nickname = this.state.name;
-		const code = this.state.code;
-		socket.emit(USER_CONNECTED, nickname, socket.id, code,(room, players) =>{
+		const room = this.state.room;
+		socket.emit(USER_CONNECTED, nickname, socket.id, room,(room, players) =>{
 			console.log(room);
 			console.log(players);
 			this.setState({
 				action: 'waiting',
 				room: room,
-				players: players
+				players: players,
+				activePlayer: socket.id
 
 			});
 		});
@@ -41,15 +67,17 @@ export default class JoinGame extends Component {
 	}
 
 	addComponent() {
+		var result;
 		switch(this.state.action) {
+
 			case 'input':
-			  return (
+			  result = (
 			  	<form onSubmit={this.handleSubmit} className="login-form" >
 
 					<h2>Add a Join Code</h2>
 					<input
 						type="text"
-						name="code"
+						name="room"
 						onChange={this.handleChange}
 						placeholder={'Code'}
 					/> 
@@ -69,21 +97,22 @@ export default class JoinGame extends Component {
 			  )
 			  break;
 			case 'waiting':
-			  return (
-			  	<div>
-			  		<Waiting players={this.state.players} room={this.state.room}/>
-			  		<button onClick={() => this.startGame()}>Play</button>
-			  	</div>
+			  result = (
+				  	<div>
+				  		<Waiting players={this.state.players} room={this.state.room}/>
+				  	</div>
+
 			  )
 			   
 			  break;
 			case 'game':
-				return <Layout players={this.state.players} room={this.state.room} />
+				result = <Layout players={this.state.players} room={this.state.room} player={this.state.activePlayer} />
 			  break;
 			default:
-				return null; 
+				result = <h1>Something went wrong. Try something else.</h1>  
 			  break;
 		}
+		return result;
 	}
 
 	handleChange = (e)=>{
