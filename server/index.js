@@ -7,7 +7,7 @@ const server = http.createServer(app)
 const bodyParser = require('body-parser')
 const socketIo= require('socket.io')
 const io = module.exports.io = socketIo(server)
-const SocketManager = require('./SocketManager')
+const SocketManager = require('./testSocket')
 const passport = require('passport')
 const flash = require('connect-flash')
 const mongoose = require('mongoose');
