@@ -47,9 +47,9 @@ export default class CreateGame extends Component {
 		e.preventDefault()
 		console.log(this.state);
 		const nickname = this.state.nickname;
-		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users) =>{
+		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users, words) =>{
 			console.log(data);
-			
+			console.log(words);
 			this.setState({
 				action: 'waiting',
 				room: room,

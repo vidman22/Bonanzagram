@@ -1,7 +1,7 @@
 const io = require('./index.js').io;
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM, START } = require('../src/Events');
 const MAX_WAITING = 5000;
-
+const db = require('./models')
 const sessions = [];
 
 class SessionObject {
@@ -34,14 +34,18 @@ class SessionObject {
 
 // console.log(sessionSearch(myPhrase));
 
-
 module.exports = function(socket){
 
 	socket.on(NEW_ROOM, (id, user, callback) => {
 		let newRoom = new SessionObject();
 		newRoom.addUser(user, id);
 		sessions.push(newRoom);
-		callback(sessions, newRoom.room, newRoom.connectedUsers);
+		db.Word.find({"word": 'apple'},(err, data) => {
+			if(err) console.log(err);
+			console.log(data.length)
+			callback(sessions, newRoom.room, newRoom.connectedUsers, data);
+		})
+		
 	});
 
 	//Verify Username

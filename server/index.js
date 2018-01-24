@@ -29,6 +29,7 @@ server.listen(PORT, () => {
 	console.log("On port: " + PORT);
 });
 
+
 require('./passport.js')(passport);
 require('./routes.js')(app, passport, db, path);
 mongoose.Promise = Promise;

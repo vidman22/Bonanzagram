@@ -4,27 +4,29 @@ import axios from "axios";
 
 
 class Rules extends Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		time : 30
-	// 	}
-	// }
+	constructor(props) {
+		super(props);
+		// this.state = {
+		// 	time : 30
+		// }
+		// this.timer = this.timer.bind(this);
+	}
 
 	componentDidMount() {
-		// axios.get('/words').then(data => {
-		// 	console.log(data);
-		// });
-		// axios.get('/words/apple').then(data => {
-		// 	console.log(data);
-		// });
-
-		// setInterval(function() {
-		// 	var time = this.state.time;
-		// 	time--;
-		// 	console.log(time);
-		// }, 1000);
+		axios.get('/words').then(data => {
+			console.log(data);
+		});
+		axios.get('/words/money').then(data => {
+			console.log(data);
+		});
+		// this.timer();
 	}
+
+	// timer() {
+	// 	setInterval(function() {
+	// 		console.log(this.state)
+	// 	}, 1000);
+	// }
 
 	render() {
 		return (
