@@ -1,6 +1,6 @@
 .Buttons button {
 	display: inline-block;
-	width: 250px;
+	width: 270px;
 	height: 70px;
 	border-radius: 10px;
 	background-color: red;
@@ -13,14 +13,19 @@
 	cursor: pointer;
 }
 
+.Buttons button:disabled {
+	background-color: #d58282;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 500px) {
     .Buttons button {
 	display: inline-block;
-	width: 205px;
+	width: 240px;
 	height: 45px;
+	margin: 0 4px 9px 4px;
 	border-radius: 5px;
 	background-color: red;
-	font-size: 23px;
+	font-size: 24px;
 }
 
 
@@ -29,7 +34,7 @@
 @media only screen and (min-width: 500px) and (max-width: 700px) {
      .Buttons button {
 	display: inline-block;
-	width: 250px;
+	width: 270px;
 	height: 70px;
 	margin: 0 4px 9px 4px;
 	border-radius: 10px;

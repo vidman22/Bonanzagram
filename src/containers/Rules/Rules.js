@@ -1,30 +1,10 @@
 import React, {Component} from "react";
 import './Rules.css';
-import axios from "axios";
 
 
 class Rules extends Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
-	// 		time : 30
-	// 	}
-	// }
+	
 
-	componentDidMount() {
-		// axios.get('/words').then(data => {
-		// 	console.log(data);
-		// });
-		// axios.get('/words/apple').then(data => {
-		// 	console.log(data);
-		// });
-
-		// setInterval(function() {
-		// 	var time = this.state.time;
-		// 	time--;
-		// 	console.log(time);
-		// }, 1000);
-	}
 
 	render() {
 		return (
