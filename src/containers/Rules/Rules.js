@@ -1,13 +1,29 @@
 import React, {Component} from "react";
 import './Rules.css';
-import Mongo from '../../utils/Mongo';
+import axios from "axios";
 
 
 class Rules extends Component {
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		time : 30
+	// 	}
+	// }
+
 	componentDidMount() {
-		Mongo.search().then(data => {
-			console.log(data);
-		}).catch(err => console.log(err))
+		// axios.get('/words').then(data => {
+		// 	console.log(data);
+		// });
+		// axios.get('/words/apple').then(data => {
+		// 	console.log(data);
+		// });
+
+		// setInterval(function() {
+		// 	var time = this.state.time;
+		// 	time--;
+		// 	console.log(time);
+		// }, 1000);
 	}
 
 	render() {
