@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import io from 'socket.io-client';
 
 export default class Waiting extends Component {
 	constructor(props) {
@@ -16,16 +15,6 @@ export default class Waiting extends Component {
 		console.log(this.props);
 		console.log(this.props.players[0].name)
 	}
-
-
-
-	// initSocket = () => {
-
-	// 	socket.on('USER_CONNECTED', (room, users)  => {
-	// 		this.setState({players: users});
-	// 		this.setState({room: room});
-	// 	})
-	// };
 
 
 	render() {	
@@ -46,7 +35,7 @@ export default class Waiting extends Component {
 		return (
 			<div className="login">
 				<div>
-					<h1>Waiting for Players</h1>
+					<h1>{this.props.waiting}</h1>
 					<h2>Access Code: {this.props.room}</h2>
                    {players}
                 </div>

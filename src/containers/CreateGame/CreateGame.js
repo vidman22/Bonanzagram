@@ -14,10 +14,12 @@ export default class CreateGame extends Component {
 	  	socket: "",
 	  	nickname:"",
 	  	error:"",
+	  	waiting:"Waiting for Players...",
 	  	action: 'input',
 	  	room: "",
 	  	players: null,
-	  	activePlayer: ''
+	  	activePlayer: '',
+	  	disableButton: true
 	  };
 
 	  this.addComponent = this.addComponent.bind(this);
@@ -33,6 +35,11 @@ export default class CreateGame extends Component {
 	initSocket = () => {
 		socket.on('USER_CONNECTED', (room, users) => {
 			this.setState({players: users});
+			if (users.length >= 3) {
+
+				this.setState({disableButton: false});
+				this.setState({waiting:"Enough Players to Start"})
+			}
 		}
 	)}
 
@@ -42,6 +49,7 @@ export default class CreateGame extends Component {
 		const nickname = this.state.nickname;
 		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users) =>{
 			console.log(data);
+			
 			this.setState({
 				action: 'waiting',
 				room: room,
@@ -85,8 +93,8 @@ export default class CreateGame extends Component {
 			case 'waiting':
 			  result = (
 			  	<div>
-			  		<Waiting players={this.state.players} room={this.state.room}/>
-			  		<button onClick={() => this.startGame()}>Play</button>
+			  		<Waiting players={this.state.players} waiting={this.state.waiting} room={this.state.room}/>
+			  		<button disabled={this.state.disableButton} onClick={() => this.startGame()}>Play</button>
 			  	</div>
 			  )		   
 			  break;

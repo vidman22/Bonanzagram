@@ -37,9 +37,7 @@ export default class JoinGame extends Component {
 			if(this.state.room === room_id) {
 				this.startGame();
 				console.log('room id: ' + room_id);
-			} else {
-				console.log('no change');
-			}
+			} else return;
 		});
 	};
 
