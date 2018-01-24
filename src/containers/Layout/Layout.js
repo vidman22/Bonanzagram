@@ -131,7 +131,7 @@ class Layout extends Component {
 	
 
 	callAPI = () => {
-		socket.emit(WORD_CHALLENGED, this.state.userInput, this.props.room, completed );
+		socket.emit(WORD_CHALLENGED, this.state.userInput, this.props.room, 'completed' );
 	}
 
 	openModal = () => {

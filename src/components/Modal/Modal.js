@@ -27,7 +27,7 @@ export default class modal extends Component {
     handleSubmit = (e) => {
     	e.preventDefault();
     	const word = this.state.word;
-    	socket.emit(WORD_CHALLENGED, word, this.props.room, spell);
+    	socket.emit(WORD_CHALLENGED, word, this.props.room, 'spell');
 
     }
 
