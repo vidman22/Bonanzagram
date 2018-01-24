@@ -35,7 +35,7 @@ export default class CreateGame extends Component {
 	initSocket = () => {
 		socket.on('USER_CONNECTED', (room, users) => {
 			this.setState({players: users});
-			if (users.length >= 3) {
+			if (users.length >= 2) {
 
 				this.setState({disableButton: false});
 				this.setState({waiting:"Enough Players to Start"})

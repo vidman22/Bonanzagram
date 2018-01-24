@@ -18,18 +18,24 @@ class LandingPage extends Component {
                     <nav>
                         <ul>
                         	<li><h1>BONANAZAGRAM</h1></li>
+                        </ul>
+                    </nav>
+                </header>
+                <header>
+                    <nav>
+                        <ul>
                             <li><Link to={{
                                 pathname: '/create-game'
                             
-                            }}>Create Game</Link></li>
+                            }}><h3>Create Game</h3></Link></li>
                             <li><Link to={{
-                            	pathname: '/join-game'
-                            	
-                            }}>Join Game</Link></li>
+                                pathname: '/join-game'
+                                
+                            }}><h3>Join Game</h3></Link></li>
                             <li><Link to={{
-                            	pathname: '/rules'
-                            		
-                            }}>Rules</Link></li>
+                                pathname: '/rules'
+                                    
+                            }}><h3>Rules</h3></Link></li>
                         </ul>
                     </nav>
                 </header>

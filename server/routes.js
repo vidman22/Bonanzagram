@@ -9,11 +9,17 @@ module.exports = function(app, passport, db, path) {
 	// }); 
 
 	app.get("/words", (req,res) => {
-		db.Word.find().then(data => {
-			res.send(data);
-		}).catch(err => {
-			console.log(err);
-		}); 
+		db.Word.find((err, data) => {
+			if(err) console.log(err);
+			res.json(data);
+		})
+	});
+
+	app.get("/words/:str", (req,res) => {
+		db.Word.find({"word": req.params.str}, (err, data) => {
+			if(err) console.log(err);
+			res.json(data);
+		})
 	});
 
 	app.post("/signup", passport.authenticate('signup', {
