@@ -13,6 +13,7 @@ const socketUrl = "http://localhost:3001";
       lineTwo: ['a','s','d','f','g','h','j','k','l'],
       lineThree: ['z','x','c','v','b','n','m'],
       userInput: [],
+      disabled: false
     };
    }
 
@@ -22,9 +23,10 @@ const socketUrl = "http://localhost:3001";
 
 
   inputChangedHandler = ( event ) => {
+    this.setState({disabled: true});
     const socket = io(socketUrl);
     socket.emit(LETTER_UPDATE, event.toUpperCase(), this.props.room, this.props.player);
-   
+    this.setState({disabled: false});
   }
 
   render () {
@@ -32,6 +34,7 @@ const socketUrl = "http://localhost:3001";
 
     const line_one = this.state.lineOne.map((ch, index) => {
       return <Keyboard
+          disabled={this.state.disabled}
           letter={ch.toUpperCase()}
           clicked={() => this.inputChangedHandler(ch)}
           key={index} />;
@@ -39,6 +42,7 @@ const socketUrl = "http://localhost:3001";
 
     const line_two = this.state.lineTwo.map((ch, index) => {
       return <Keyboard
+          disabled={this.state.disabled}
           letter={ch.toUpperCase()}
           clicked={() => this.inputChangedHandler(ch)}
           key={index} />;
@@ -46,6 +50,7 @@ const socketUrl = "http://localhost:3001";
 
     const line_three = this.state.lineThree.map((ch, index) => {
       return <Keyboard
+          disabled={this.state.disabled}
           letter={ch.toUpperCase()}
           clicked={() => this.inputChangedHandler(ch)}
           key={index} />;
