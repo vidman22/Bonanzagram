@@ -13,7 +13,7 @@ class LandingPage extends Component {
 
     render () {
         return (
-            <div className="Blog">
+            <div className="Home">
                 <header>
                     <nav>
                         <ul>

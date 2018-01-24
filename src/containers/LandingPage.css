@@ -1,4 +1,4 @@
-.Blog ul {
+.Home ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -6,17 +6,18 @@
     text-align: center;
 }
 
-.Blog li {
+.Home li {
     display: inline-block;
+    
     margin: 20px;
 }
 
-.Blog a {
+.Home a {
     text-decoration: none;
     color: black;
 }
 
-.Blog a:hover,
-.Blog a:active {
-    color: #00e019;
+.Home a:hover,
+.Home a:active {
+    color: #d58282;
 }
