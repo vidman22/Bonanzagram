@@ -73,18 +73,20 @@ module.exports = function(socket){
 	//User disconnects
 	socket.on('disconnect', ()=>{
 
-		// for (var i = 0; i < connectedUsers.length; i ++ ) {
-		// 	if (connectedUsers[i].id === socket.id) {
-		// 		console.log('found user disconnected: ' + connectedUsers[i].id);
+		for (var i = 0; i < sessions.length; i ++ ) {
+			for ( var j = 0; j < sessions[i].connectedUsers.length; j++) {
+				if (sessions[i].connectedUsers[j].id === socket.id) {
+					console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
 
-		// 		const id = connectedUsers[i].id;
+					const id = sessions[i].connectedUsers[j].id;
 
-		// 		connectedUsers = connectedUsers.filter((user) => user.id !== id);
+					sessions[i].connectedUsers = sessions[i].connectedUsers.filter((user) => user.id !== id);
 
-		// 	io.emit(USER_DISCONNECTED, connectedUsers);
-		// 	console.log("Disconnect", connectedUsers);
-		// }
-	  // }	
+			io.emit(USER_DISCONNECTED, sessions[i].connectedUsers , sessions[i].room );
+			console.log("Disconnect", sessions[i].connectedUsers);
+		}
+	  }	
+	 }
 	});
 
 	
@@ -97,16 +99,6 @@ module.exports = function(socket){
 		next_turn(room_id);
 	});
 
-	// socket.on('pass_turn', (room, player) => {
-	// 	const index = sessionSearch(room);
-	// 	activePlayer = sessions[index].connectedUsers[sessions[index]._turn];
-	// 	console.log('users turn: ', activePlayer);
-	// 	if (activePlayer) {
-	// 		resetTimout(room);
-	// 		next_turn(room);
-			
-	// 	}
-	// });
 	
 	//Letter is passed through and added to array
 	socket.on(LETTER_UPDATE, (data, room )=> {
@@ -119,7 +111,7 @@ module.exports = function(socket){
 			activePlayer = sessions[index].connectedUsers[sessions[index].turn].name;
 			console.log( activePlayer + ' went');
 		
-		// if (activePlayer) {
+		
 			resetTimout(room);
 			next_turn(room);
 		
@@ -144,15 +136,15 @@ module.exports = function(socket){
 
 	socket.on(PLAYER_SUCCESSFUL, (room) => {
 		const index = sessionSearch(room);
-			console.log('player_successful');
+		let turn = sessions[index].current_turn-2 % sessions[index].connectedUsers.length;
+		const player = sessions[index].connectedUsers[turn];
+		let points = sessions[index].text.length;
 
-			let turn = sessions[index].current_turn-- % sessions[index].connectedUsers.length;
-			const player = sessions[index].connectedUsers[turn];
-			
-			let points = sessions[index].text.length;
 			sessions[index].connectedUsers[turn].score - points;
 
-			console.log(player.name + 'lost ' + points + ' points ' );
+
+
+			console.log(player.name + ' has ' + sessions[index].connectedUsers[turn].score + ' points' );
 
 			io.emit('lost_points', sessions[index].connectedUsers);
 			clearTimeout(sessions[index].timeOut);
@@ -163,15 +155,15 @@ module.exports = function(socket){
 	socket.on(PLAYER_UNSUCCESSFUL, (room) => {
 		console.log('player_unsuccessful');
 		const index = sessionSearch(room);
-		let turn = sessions[index].current_turn % sessions[index].connectedUsers.length;
+		let turn = sessions[index].current_turn-- % sessions[index].connectedUsers.length;
 		const player = sessions[index].connectedUsers[turn];
 		let points = sessions[index].text.length;
 
 			sessions[index].connectedUsers[turn].score - points;
 
-			console.log(player.name + 'lost ' + points + ' points ' );
+			console.log(player.name + ' has ' + sessions[index].connectedUsers[turn].score + ' points' );
 			
-			io.emit('lost_points', sessions[index].connectedUsers);
+			io.emit('lost_points', sessions[index].connectedUsers, room);
 			clearTimeout(sessions[index].timeOut);
 			sessions[index].text = '';
 			next_turn(room);
