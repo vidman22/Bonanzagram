@@ -109,54 +109,78 @@ module.exports = function(socket){
 	// });
 	
 	//Letter is passed through and added to array
-	socket.on(LETTER_UPDATE, (data, room, player)=> {
+	socket.on(LETTER_UPDATE, (data, room )=> {
 		const index = sessionSearch(room);
 		const text = sessions[index].text
 			text.push(data);
-			io.emit('LETTER_UPDATE', text);
+			io.emit('LETTER_UPDATE', text, room);
 			console.log(text);
 
-			activePlayer = sessions[index].connectedUsers[sessions[index]._turn++];
-			console.log('users ln 120: ', sessions[index].connectedUsers[sessions[index]._turn]);
-			console.log('users turn: ', activePlayer);
+			activePlayer = sessions[index].connectedUsers[sessions[index].turn].name;
+			console.log( activePlayer + ' went');
 		
-		if (activePlayer) {
+		// if (activePlayer) {
 			resetTimout(room);
 			next_turn(room);
-		}
+		
 	});
 
-	// socket.on(PLAYER_SUCCESSFUL, () => {
-	// 	console.log('player_successful');
-	// 	let _turn = current_turn-- % connectedUsers.length;
-	// 	console.log('lost points ' + connectedUsers[_turn].id);
-	// 	io.emit('lost_points', connectedUsers[_turn].id);
-	// 	clearTimeout(timeOut);
-	// 	text.length = 0
-	// })
+	socket.on(SEND_MODAL, (room) => {
+		const index = sessionSearch(room);
+		console.log(sessions[index].current_turn);
+		let challengedPlayerIndex = (sessions[index].current_turn-2) % sessions[index].connectedUsers.length;
+		let challengedPlayer = sessions[index].connectedUsers[challengedPlayerIndex];
+			console.log('modal sent to ' + challengedPlayer.name);
+			io.emit('SEND_MODAL', challengedPlayer.id);
+			clearTimeout(sessions[index].timeOut);
 
-	// socket.on(PLAYER_UNSUCCESSFUL, () => {
-	// 	console.log('player_unsuccessful');
-	// 	let _turn = current_turn % connectedUsers.length;
-	// 	console.log('lost_points ' + connectedUsers[_turn].id);
-	// 	io.emit('lost_points', connectedUsers[_turn].id);
-	// 	clearTimeout(timeOut);
-	// 	text.length = 0
+	});
 
-	// })
-
-	// socket.on(WORD_CHALLENGED, (data) => {
+	socket.on(WORD_CHALLENGED, (data, room, player) => {
 		
-	// 	io.emit('WORD_CHALLENGED', data);
-	// })
+			console.log('challenged word: ' + data);
+			io.emit('WORD_CHALLENGED', data, room, player);
+	});
 
-	// socket.on(SEND_MODAL, () => {
-	// 	let _turn = current_turn-- % connectedUsers.length;
-	// 	console.log('modal sent to ' + connectedUsers[_turn].id);
-	// 	io.emit('SEND_MODAL', connectedUsers[_turn].id);
-	// 	clearTimeout(timeOut);
-	// 	text.length = 0;
-	// })
+	socket.on(PLAYER_SUCCESSFUL, (room) => {
+		const index = sessionSearch(room);
+			console.log('player_successful');
+
+			let turn = sessions[index].current_turn-- % sessions[index].connectedUsers.length;
+			const player = sessions[index].connectedUsers[turn];
+			
+			let points = sessions[index].text.length;
+			sessions[index].connectedUsers[turn].score - points;
+
+			console.log(player.name + 'lost ' + points + ' points ' );
+
+			io.emit('lost_points', sessions[index].connectedUsers);
+			clearTimeout(sessions[index].timeOut);
+			sessions[index].text= '';
+			next_turn(room);
+	});
+
+	socket.on(PLAYER_UNSUCCESSFUL, (room) => {
+		console.log('player_unsuccessful');
+		const index = sessionSearch(room);
+		let turn = sessions[index].current_turn % sessions[index].connectedUsers.length;
+		const player = sessions[index].connectedUsers[turn];
+		let points = sessions[index].text.length;
+
+			sessions[index].connectedUsers[turn].score - points;
+
+			console.log(player.name + 'lost ' + points + ' points ' );
+			
+			io.emit('lost_points', sessions[index].connectedUsers);
+			clearTimeout(sessions[index].timeOut);
+			sessions[index].text = '';
+			next_turn(room);
+
+	})
+
+	
+
+	
 
 	// //User logsout
 	// socket.on(LOGOUT, ()=>{
@@ -170,11 +194,9 @@ module.exports = function(socket){
 // Game Functionality
 function next_turn(room){
 	var index = sessionSearch(room);
-	let turn = sessions[index]._turn;
-	turn = sessions[index].current_turn++ % sessions[index].connectedUsers.length;
-	console.log('turn ln 174: ' + sessions[index]._turn);
-	console.log( sessions[index].connectedUsers[turn].name + ' turn');
-	io.emit(YOUR_TURN, sessions[index].connectedUsers[turn].id);
+	sessions[index].turn = sessions[index].current_turn++ % sessions[index].connectedUsers.length;
+	console.log( sessions[index].connectedUsers[sessions[index].turn].name + "'s turn");
+	io.emit(YOUR_TURN, sessions[index].connectedUsers[sessions[index].turn].id);
 	triggerTimout(index);
 }
 

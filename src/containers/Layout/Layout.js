@@ -19,8 +19,8 @@ const socket = io(socketUrl);
 class Layout extends Component {
 
 	componentDidUpdate() {  
-		const socket = this.props.player;
-		if (this.state.isWord === 'word not challenged') {
+		
+		if (this.state.isWord === 'Word not Challenged') {
 	        if (this.state.wordChallenge !== '') {
 	     		const word = this.state.wordChallenge;
 	  			const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
@@ -31,31 +31,27 @@ class Layout extends Component {
 				   		let firstWordPart = word.slice(0, length);
 				   		console.log("word challenged: " + word);
 			   		if (response.data.def[0] && firstWordPart === this.state.userInput ) {
-						this.setState(prevState => ({
-					    isWord: !prevState.isWord
-						}));
+						this.setState({isWord: 'Word Challenged!'});
 						this.setState(prevState => ({
 					    wordChallenge: !prevState.wordChallenge
 						}));
 						console.log("successful challenge");
-						socket.emit(PLAYER_SUCCESSFUL);
+						socket.emit(PLAYER_SUCCESSFUL, this.props.room);
 					return;
 				   }
 			    else {
-			   		this.setState(prevState => ({
-				    isWord: !prevState.isWord
-					}));
+			   		this.setState({isWord: 'Word Challenged!'});
 					this.setState(prevState => ({
 				    wordChallenge: !prevState.wordChallenge
 					}));
-			   		socket.emit(PLAYER_UNSUCCESSFUL);
+			   		socket.emit(PLAYER_UNSUCCESSFUL, this.props.room);
 			   	return;
 			   }
 			});
 		}
 	}
 
-		if (this.state.isWord === 'word not challenged') {
+		if (this.state.isWord === 'Word not Challenged') {
 	     	if ( this.state.checkCompletion) {
 	     	  const word = this.state.userInput;
 	  		  const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
@@ -63,23 +59,19 @@ class Layout extends Component {
 					.then(response => {
 			   		console.log(response.data.def);
 			   		if (response.data.def[0]) {
-					this.setState(prevState => ({
-				    isWord: !prevState.isWord
-					}));
+					this.setState({isWord: 'Word Challenged!'});
 					this.setState(prevState => ({
 				    checkCompletion: !prevState.checkCompletion
 					}));
-					socket.emit(PLAYER_SUCCESSFUL);
+					socket.emit(PLAYER_SUCCESSFUL, this.props.room);
 					return;
 				   }
 			    else {
-			   		this.setState(prevState => ({
-				    isWord: !prevState.isWord
-					}));
+			   		this.setState({isWord: 'Word Challenged!'});
 					this.setState(prevState => ({
 				    checkCompletion: !prevState.checkCompletion
 					}));
-			   		socket.emit(PLAYER_UNSUCCESSFUL);
+			   		socket.emit(PLAYER_UNSUCCESSFUL, this.props.room);
 			   	return;
 			   }
 			});
@@ -90,12 +82,10 @@ class Layout extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = { 
-	  	room: '',
 	  	userInput: '',
 	  	wordChallenge: '',
 	  	socket:null,
 	  	players: [],
-	  	score : 2,
 	  	time: 5,
 	  	turn: 'Not Your Turn',
 	  	checkCompletion: false,
@@ -105,7 +95,7 @@ class Layout extends Component {
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
-	  	isWord: 'word not challenged'
+	  	isWord: 'Word not Challenged'
 	  };
 
 	};
@@ -122,9 +112,6 @@ class Layout extends Component {
 	*	Connect to and initializes the socket.
 	*/
 	initSocket = () => {
-
-		this.setState({socket});
-		console.log('socket', socket.id);
 
 		socket.on('USER_DISCONNECTED', (data) => {
 
@@ -144,15 +131,14 @@ class Layout extends Component {
 				this.setState({showBackdrop: true});
 				this.setState({turn: 'not your turn'});
 		}
-			// if (this.state.showStart === false) {
-			// 	this.setState({showStart: true});
-			//} 
+			
 		});
 
-		socket.on('WORD_CHALLENGED', (data) => {
-
+		socket.on('WORD_CHALLENGED', (data, room, player) => {
+			if (this.props.room === room && this.props.player === player) {
 			this.setState({wordChallenge: data});
-			console.log(data);
+			console.log('word received :' + data);
+		} else return;
 		});
 
 		socket.on('SEND_MODAL', (data) => {
@@ -162,26 +148,24 @@ class Layout extends Component {
 			else return; 
 		});
 
-		socket.on('LETTER_UPDATE', (event) => {
-           
-           event = event.join('').toLowerCase();
-           console.log('joined input: ' + event);
-           this.setState({userInput: event });
+		socket.on('LETTER_UPDATE', (text, room) => {
+           if (this.props.room === room) {
+	           text = text.join('').toLowerCase();
+	           console.log('joined input: ' + text);
+	           this.setState({userInput: text });	
+       } else return;
           });
 
-		socket.on('lost_points', (data) => {
-			if (this.props.player === data) {
-				let points = this.state.userInput.length;
-				console.log('you lost ' + points + ' points :(');
-				let score = this.state.score - points;
-				this.setState({score: score});
+		socket.on('lost_points', (players) => {
+			this.setState({players});
+			console.log(this.state.players);
 
 				if (this.state.score <= 0) {
 					this.setState({showFinish: true});
 					socket.emit('player_lost');
 				}
-		  }
-	});
+		 
+		});
   }
 
 	
@@ -200,6 +184,7 @@ class Layout extends Component {
 	
 
 	callAPI = () => {
+		this.setState({isWord: 'Word not Challenged'});
 		this.setState({checkCompletion: true});
 	}
 
@@ -213,14 +198,13 @@ class Layout extends Component {
  	
 
  	startGame = () => {
- 		const socket = this.props.player;
- 		socket.emit('start');
+ 		
  		this.setState({showStart: false});
  	}
 
  	sendModal = () => {
- 		const socket = this.props.player;
- 		socket.emit(SEND_MODAL);
+ 		
+ 		socket.emit(SEND_MODAL, this.props.room);
  	}
 
  	triggerTimer = () => {
@@ -284,11 +268,11 @@ class Layout extends Component {
 					<div>			
 					{charList}
 					</div>
-					<Modal show={this.state.openModal} value={this.state.userInput} closed={this.closeModal} />
+					<Modal show={this.state.openModal} room={this.props.room} player={this.props.player} value={this.state.userInput} closed={this.closeModal} />
 					{this.state.openModal ? <Backdrop show /> : null}
 					
-					{/*<Start show={this.state.showStart} clicked={this.startGame} closed={this.startGame}/> 
-					{this.state.showBackdrop ? <Backdrop show /> : null*/}
+			
+					{this.state.showBackdrop ? <Backdrop show /> : null}
 
 					<Finish show={this.state.showFinish} clicked={this.home} click={this.home}/> 
 					{this.state.showFinish ? <Backdrop show /> : null}
