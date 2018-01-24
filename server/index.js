@@ -7,15 +7,14 @@ const server = http.createServer(app)
 const bodyParser = require('body-parser')
 const socketIo= require('socket.io')
 const io = module.exports.io = socketIo(server)
-const SocketManager = require('./SocketManager')
-const passport = require('passport')
+const SocketManager = require('./SocketManager');
 const flash = require('connect-flash')
+var passport = require('passport');
 const mongoose = require('mongoose');
 const db = require('./models')
 const PORT = 3001;
 
 const fs = require('fs')
-const LineByLine = require('line-by-line')
 /////////////////////////////
 
 
@@ -28,14 +27,6 @@ io.on('connection', SocketManager)
 
 server.listen(PORT, () => {
 	console.log("On port: " + PORT);
-	// starts seeding of words
-	// DONT UNCOMMENT
-	// seedWords();
-
-	// Query database
-	// db.Word.find((err, data) => {
-	// 	console.log(data);
-	// })
 });
 
 require('./passport.js')(passport);
@@ -65,13 +56,14 @@ function seedWords() {
 		setTimeout( function() {
 			allTheWords.push(line);	
 			console.log(allTheWords.length);
-			if(allTheWords.length !== 3000) {
-				lr.resume();
-			} else {
+			if(allTheWords.length === 30000) {
+				console.log(allTheWords);
 				closingFunction(allTheWords);
-				lr.close();
+			} else {
+				
+				lr.resume();
 			}
-		}, 5);
+		}, .1);
 	});
 
 	lr.on('error', function(err) {
@@ -79,7 +71,7 @@ function seedWords() {
 	});
 
 	lr.on('end', function() {
-		
+		console.log('done on emitted function');
 	})
 }
 
@@ -90,5 +82,5 @@ function closingFunction(arr) {
 		var newWord = new db.Word({word: wrd});
 		newWord.save();
 	}
-	console.log('done');
+	console.log('done done done');
 }
