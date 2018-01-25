@@ -6,11 +6,10 @@ import axios from "axios";
 class Rules extends Component {
 	constructor(props) {
 		super(props);
-		// this.state = {
-		// 	time : 30
-		// }
-		// this.timer = this.timer.bind(this);
+		this.timer = this.timer.bind(this);
+		this.endTimer = this.endTimer.bind(this);
 	}
+
 
 	componentDidMount() {
 		axios.get('/words').then(data => {
@@ -19,14 +18,23 @@ class Rules extends Component {
 		axios.get('/words/money').then(data => {
 			console.log(data);
 		});
-		// this.timer();
+		this.timer();
 	}
 
-	// timer() {
-	// 	setInterval(function() {
-	// 		console.log(this.state)
-	// 	}, 1000);
-	// }
+	endTimer(t) {
+		clearInterval(this.timerId);
+	}
+
+	timer(t) {
+		// var num = 20;
+		// if(!this.timerId) {
+		// 	this.timerId = setInterval(() => {
+		// 		console.log(num)
+		// 		num--;
+		// 	}, 1000);	
+		// }
+		console.log('in time');
+	}
 
 	render() {
 		return (

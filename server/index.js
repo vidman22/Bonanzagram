@@ -14,9 +14,6 @@ const mongoose = require('mongoose');
 const db = require('./models')
 const PORT = 3001;
 
-const fs = require('fs')
-/////////////////////////////
-
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(passport.initialize());
@@ -29,13 +26,18 @@ server.listen(PORT, () => {
 	console.log("On port: " + PORT);
 });
 
-
 require('./passport.js')(passport);
 require('./routes.js')(app, passport, db, path);
+
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/banana_spell", {
-	useMongoClient: true
+
+// var MONGODB_URI = 'mongodb://<>:<>@ds213338.mlab.com:13338/heroku_7gln3b0z';
+var MONGODB_URI = process.env.MONGODB_URI; //|| "mongodb://localhost/banana_spell";
+mongoose.connect(MONGODB_URI, function (error) {
+    if (error) console.error(error);
+    else console.log('mongo connected');
 });
+
 
 // var morgan = require('morgan');
 // var cookieParser = require('cookie-parser');
@@ -44,44 +46,3 @@ mongoose.connect("mongodb://localhost/banana_spell", {
 // app.use(cookieParser());
 
 // app.use(flash());
-
-
-function seedWords() {
-	console.log('starting seed');
-	var allTheWords = [];
-	var lr = new LineByLine('../WORD.LST');
-
-	lr.on('line', function (line) {
-		lr.pause();
-		
-		setTimeout( function() {
-			allTheWords.push(line);	
-			console.log(allTheWords.length);
-			if(allTheWords.length === 30000) {
-				console.log(allTheWords);
-				closingFunction(allTheWords);
-			} else {
-				
-				lr.resume();
-			}
-		}, .1);
-	});
-
-	lr.on('error', function(err) {
-		console.log(err);
-	});
-
-	lr.on('end', function() {
-		console.log('done on emitted function');
-	})
-}
-
-function closingFunction(arr) {
-
-	console.log('end function')
-	for(wrd of arr) {
-		var newWord = new db.Word({word: wrd});
-		newWord.save();
-	}
-	console.log('done done done');
-}

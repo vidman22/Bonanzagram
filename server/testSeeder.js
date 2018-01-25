@@ -1,12 +1,23 @@
 const mongoose = require('mongoose');
-var fs = require('fs');
-const Word = require('./models/Word.js')
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/banana_spell", {
-	useMongoClient: true
+const fs = require('fs');
+const Word = require('./models/Word.js')
+
+var uri = process.env.MONGODB_URI || "mongodb://localhost/banana_spell";
+// var uri = 'mongodb://<<>>:<<>>@ds213338.mlab.com:13338/heroku_7gln3b0z';
+
+mongoose.connect(uri);
+
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function callback () {
+	seed();
 });
 
-fs.readFile('../WORD.LST', 'utf8', function(err,data) {
+function seed() {
+	fs.readFile('../WORD.LST', 'utf8', function(err,data) {
 	if(err) console.log(err);
 	var array = data.split("\n");
 
@@ -23,6 +34,8 @@ fs.readFile('../WORD.LST', 'utf8', function(err,data) {
 	})
 	.then(() => {
 		console.log('done');
+		console.log('done done')
 	})
 	.catch(e => console.log(e));
-});
+	});
+}
