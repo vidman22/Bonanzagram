@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import './Rules.css';
-import axios from "axios";
 
 
 class Rules extends Component {
@@ -10,7 +9,7 @@ class Rules extends Component {
 			intervalId: null,
 			currentTime: 20
 		}
-		this.timer = this.timer.bind(this);
+		// this.timer = this.timer.bind(this);
 	}
 	
 	componentDidMount() {
@@ -20,23 +19,24 @@ class Rules extends Component {
 		// axios.get('/words/money').then(data => {
 		// 	console.log(data);
 		// });
-		var intervalId = setInterval(this.timer, 1000);
-		this.setState({intervalId: intervalId});
+		
+		// var intervalId = setInterval(this.timer, 1000);
+		// this.setState({intervalId: intervalId});
 	}
 	
-	componentWillUnmount() {
-		clearInterval(this.state.intervalId);
-	}
+	// componentWillUnmount() {
+	// 	clearInterval(this.state.intervalId);
+	// }
 	
 
-	timer() {
-		console.log(this.state);
-		var newTime = this.state.currentTime - 1;
-		if(newTime >= 0) {
-			this.setState({currentTime: newTime});
-		} else clearInterval(this.state.intervalId);
+	// timer() {
+	// 	console.log(this.state);
+	// 	var newTime = this.state.currentTime - 1;
+	// 	if(newTime >= 0) {
+	// 		this.setState({currentTime: newTime});
+	// 	} else clearInterval(this.state.intervalId);
 		
-	}
+	// }
 
 	render() {
 		return (

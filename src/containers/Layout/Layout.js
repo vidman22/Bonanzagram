@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
-import { LOGOUT, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, SEND_MODAL } from '../../Events';
+import { LOGOUT, USER_DISCONNECTED, SEND_MODAL, WORD_CHALLENGED } from '../../Events';
 import WordBuilder from '../../components/WordBuilder/WordBuilder';
 import Char from '../../components/Char/Char';
 import Aux from '../../hoc/Wrap/Wrap';
@@ -11,74 +11,13 @@ import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
 // import Start from '../../components/StartModal/StartModal';
 import Finish from '../../components/FinishModal/FinishModal';
-import axios from 'axios';
+// import axios from 'axios';
 
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
 class Layout extends Component {
 
-	componentDidUpdate() {  
-		
-		if (this.state.isWord === 'Word not Challenged') {
-	        if (this.state.wordChallenge !== '') {
-	     		const word = this.state.wordChallenge;
-	  			const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
-				axios.get(url + word)
-					.then(response => {
-				   		console.log(response.data.def);
-				   		let length = this.state.userInput.length;
-				   		let firstWordPart = word.slice(0, length);
-				   		console.log("word challenged: " + word);
-			   		if (response.data.def[0] && firstWordPart === this.state.userInput ) {
-						this.setState({isWord: 'Word Challenged!'});
-						this.setState(prevState => ({
-					    wordChallenge: !prevState.wordChallenge
-						}));
-						console.log("successful challenge");
-						socket.emit(PLAYER_SUCCESSFUL, this.props.room);
-					return;
-				   }
-			    else {
-			   		this.setState({isWord: 'Word Challenged!'});
-					this.setState(prevState => ({
-				    wordChallenge: !prevState.wordChallenge
-					}));
-			   		socket.emit(PLAYER_UNSUCCESSFUL, this.props.room);
-			   	return;
-			   }
-			});
-		}
-	}
-
-		if (this.state.isWord === 'Word not Challenged') {
-	     	if ( this.state.checkCompletion) {
-	     	  const word = this.state.userInput;
-	  		  const url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20180115T021350Z.fd03fe3226cb1646.0c50c80f349bb8470b6527ff51dcb13c2d5d97f3&lang=en-ru&text=';
-				axios.get(url + word)
-					.then(response => {
-			   		console.log(response.data.def);
-			   		if (response.data.def[0]) {
-					this.setState({isWord: 'Word Challenged!'});
-					this.setState(prevState => ({
-				    checkCompletion: !prevState.checkCompletion
-					}));
-					socket.emit(PLAYER_SUCCESSFUL, this.props.room);
-					return;
-				   }
-			    else {
-			   		this.setState({isWord: 'Word Challenged!'});
-					this.setState(prevState => ({
-				    checkCompletion: !prevState.checkCompletion
-					}));
-			   		socket.emit(PLAYER_UNSUCCESSFUL, this.props.room);
-			   	return;
-			   }
-			});
-		  }
-		}
-	}
-	
 	constructor(props) {
 	  super(props);
 	  this.state = { 
@@ -99,6 +38,8 @@ class Layout extends Component {
 	  };
 
 	};
+		
+
 	
 	componentDidMount() {
 		console.log(this.props);
@@ -113,23 +54,28 @@ class Layout extends Component {
 	*/
 	initSocket = () => {
 
-		socket.on('USER_DISCONNECTED', (data) => {
-
-			this.setState({players: data});
-			console.log("players after disconnect: ", this.state.players);
+		socket.on(USER_DISCONNECTED, (players, room) => {
+			if (this.props.room === room) {
+			this.setState({players: players});
+			
+		  }
 		});
 
 
 		socket.on('YOUR_TURN', (data) => {
 			if (this.props.player === data) {
 				console.log("your turn");
-				this.setState({showBackdrop: false});
-				this.setState({turn: 'Your Turn!'})
+				this.setState({
+					showBackdrop: false,
+					turn: 'Your Turn!'
+				});
 			// this.triggerTimer();
 		} 
 			else {
-				this.setState({showBackdrop: true});
-				this.setState({turn: 'not your turn'});
+				this.setState({
+					showBackdrop: true,
+					turn: 'not your turn'
+				});
 		}
 			
 		});
@@ -156,10 +102,11 @@ class Layout extends Component {
        } else return;
           });
 
-		socket.on('lost_points', (players) => {
+		socket.on('lost_points', (players, room) => {
+			if (this.props.room === room){
 			this.setState({players});
 			console.log(this.state.players);
-
+		}
 				if (this.state.score <= 0) {
 					this.setState({showFinish: true});
 					socket.emit('player_lost');
@@ -184,8 +131,7 @@ class Layout extends Component {
 	
 
 	callAPI = () => {
-		this.setState({isWord: 'Word not Challenged'});
-		this.setState({checkCompletion: true});
+		socket.emit(WORD_CHALLENGED, this.state.userInput, this.props.room, 'completed' );
 	}
 
 	openModal = () => {
@@ -225,21 +171,19 @@ class Layout extends Component {
 	}
 		
 	render() {
-		let players = null;
-
-		if (this.state.showPlayers) {
-		  players = (
-			<div>
-			  { this.props.players.map((player, index) => {
-				return <Player 
-				score={player.score}
-				key={player.id}
-				name={player.name}
-		        />
-			  })}
-		    </div>
-	       );
-	    }
+		console.log(this.state.players);
+		 //  players = (
+			// <div>
+			//   { this.props.players.map((player, index) => {
+			// 	return <Player 
+			// 	score={player.score}
+			// 	key={player.id}
+			// 	name={player.name}
+		 //        />
+			//   })}
+		 //    </div>
+	  //      );
+	    
 	    
 		const charList = this.state.userInput.toUpperCase().split('').map((ch, index) => {
           return <Char 
@@ -249,11 +193,17 @@ class Layout extends Component {
 	
 		return (
 			<Aux>
-			<div className="Layout">
-				
-					<div>
-					{players}
-					</div>
+			<div className="Layout">	
+				<div>
+					{/*JSON.stringify(this.props.players) + ' ' + this.props.players.length*/}
+				  {this.props.players.map((player, index) => {
+					return <Player 
+					score={player.score}
+					key={player.id}
+					name={player.name}
+			        />
+				  })}
+				</div>
 					
 						<div>
 							<h4>{this.state.isWord}</h4>
