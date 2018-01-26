@@ -7,8 +7,6 @@
 /coverage
 WORD.LST
 
-# production
-/build
 
 # misc
 .DS_Store
