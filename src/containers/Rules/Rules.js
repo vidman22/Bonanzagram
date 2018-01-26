@@ -24,9 +24,9 @@ class Rules extends Component {
 		this.setState({intervalId: intervalId});
 	}
 	
-	// componentWillUnmount() {
-	// 	clearInterval(this.state.intervalId);
-	// }
+	componentWillUnmount() {
+		clearInterval(this.state.intervalId);
+	}
 	
 
 	timer() {
