@@ -32,7 +32,7 @@ require('./routes.js')(app, passport, db, path);
 mongoose.Promise = Promise;
 
 // var MONGODB_URI = 'mongodb://<>:<>@ds213338.mlab.com:13338/heroku_7gln3b0z';
-var MONGODB_URI = process.env.MONGODB_URI; //|| "mongodb://localhost/banana_spell";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/banana_spell";
 mongoose.connect(MONGODB_URI, function (error) {
     if (error) console.error(error);
     else console.log('mongo connected');

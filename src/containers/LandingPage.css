@@ -113,12 +113,12 @@
             color: black;
             top: 0px;
         }
-   /* 50% {  
-            color: #d58282;
-            top: -30px;
-        }*/
-    100% {  
+    50% {  
             color: #4970bd;
+            top: -30px;
+        }
+    100% {  
+            color: black;
             top: 0px;
         }
 }
@@ -128,13 +128,13 @@
             color: black;
             top: 0px;
         }
-    /*50% {  
-            color: #d58282;
+    50% {  
+            color: #4970bd;
             top: -30px;
-        }*/
+        }
 
     100% {  
-            color: #4970bd;
+            color: black;
             top: 0px;
         }
 }
