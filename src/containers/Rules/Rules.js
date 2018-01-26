@@ -3,14 +3,47 @@ import './Rules.css';
 
 
 class Rules extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			intervalId: null,
+			currentTime: 20
+		}
+		// this.timer = this.timer.bind(this);
+	}
+	
+	componentDidMount() {
+		// axios.get('/words').then(data => {
+		// 	console.log(data);
+		// });
+		// axios.get('/words/money').then(data => {
+		// 	console.log(data);
+		// });
+		
+		// var intervalId = setInterval(this.timer, 1000);
+		// this.setState({intervalId: intervalId});
+	}
+	
+	// componentWillUnmount() {
+	// 	clearInterval(this.state.intervalId);
+	// }
 	
 
+	// timer() {
+	// 	console.log(this.state);
+	// 	var newTime = this.state.currentTime - 1;
+	// 	if(newTime >= 0) {
+	// 		this.setState({currentTime: newTime});
+	// 	} else clearInterval(this.state.intervalId);
+		
+	// }
 
 	render() {
 		return (
 			<div>
 				<div className="header">
 					<h2>Bonanzagram Rules!</h2>
+					<h2>{this.state.currentTime}</h2>
 				</div>
 				<br/>
 				<div className="content">
