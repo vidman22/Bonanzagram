@@ -4,12 +4,27 @@
     padding: 0;
     width: 100%;
     text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
 }
 
 .Home li {
     display: inline-block;
-    
     margin: 20px;
+    padding: 0 12px 0 12px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    border-radius: 10px;
+
+}
+
+.Home li:hover {
+    border: 1px solid #eee;
+    box-shadow: 0 4px 5px #ccc;
 }
 
 .Home a {
@@ -28,6 +43,8 @@
     display: -webkit-flex;
     -webkit-justify-content: space-around;
     margin-top: 40px;
+    
+
 }
 
 
@@ -68,27 +85,27 @@
 .text-B {
     animation-delay:250ms;
   }.text-O {
-    animation-delay:350ms;
+    animation-delay:500ms;
   }.text-N {
-    animation-delay:450ms;
-  }.text-A {
-    animation-delay:550ms;
-  }.text-N2 {
-    animation-delay:650ms;
-  }.text-Z {
     animation-delay:750ms;
-  }.text-A2 {
-    animation-delay:850ms;
-  }.text-G {
-    animation-delay:950ms;
-  }.text-R {
-    animation-delay:1050ms;
-  }.text-A3 {
-    animation-delay:1150ms;
-  }.text-M {
+  }.text-A {
+    animation-delay:1s;
+  }.text-N2 {
     animation-delay:1250ms;
+  }.text-Z {
+    animation-delay:1500ms;
+  }.text-A2 {
+    animation-delay:1750ms;
+  }.text-G {
+    animation-delay:2000ms;
+  }.text-R {
+    animation-delay:2250ms;
+  }.text-A3 {
+    animation-delay:2500ms;
+  }.text-M {
+    animation-delay:2750ms;
   }.text-! {
-    animation-delay:1350ms;
+    animation-delay:3000ms;
   }
 
 @keyframes jump {
@@ -96,10 +113,10 @@
             color: black;
             top: 0px;
         }
-    50% {  
+   /* 50% {  
             color: #d58282;
             top: -30px;
-        }
+        }*/
     100% {  
             color: #4970bd;
             top: 0px;
@@ -111,10 +128,10 @@
             color: black;
             top: 0px;
         }
-    50% {  
+    /*50% {  
             color: #d58282;
             top: -30px;
-        }
+        }*/
 
     100% {  
             color: #4970bd;

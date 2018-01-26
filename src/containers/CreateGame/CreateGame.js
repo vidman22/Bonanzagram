@@ -94,7 +94,7 @@ export default class CreateGame extends Component {
 			  result = (
 			  	<div>
 			  		<Waiting players={this.state.players} waiting={this.state.waiting} room={this.state.room}/>
-			  		<button disabled={this.state.disableButton} onClick={() => this.startGame()}>Play</button>
+			  		<button className="Play" disabled={this.state.disableButton} onClick={() => this.startGame()}>Play</button>
 			  	</div>
 			  )		   
 			  break;
