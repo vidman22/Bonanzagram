@@ -117,6 +117,7 @@ export default class CreateGame extends Component {
 	}
 
 	render() {	
+		
 		return (
 			<div className="login">
 				{this.addComponent()}

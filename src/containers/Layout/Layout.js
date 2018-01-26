@@ -30,7 +30,7 @@ class Layout extends Component {
 	  	checkCompletion: false,
 	  	openModal: false,
 	  	checkChallenge: false,
-	  	showPlayers: true,
+	 	disabled: true,
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
@@ -98,7 +98,10 @@ class Layout extends Component {
            if (this.props.room === room) {
 	           text = text.join('').toLowerCase();
 	           console.log('joined input: ' + text);
-	           this.setState({userInput: text });	
+	           this.setState({userInput: text });
+	        if (this.state.userInput.length >= 3) {
+	        	this.setState({disabled: false});
+	        }	
        } else return;
           });
 
@@ -204,20 +207,17 @@ class Layout extends Component {
 			        />
 				  })}
 				</div>
-					
 						<div>
-							<h4>{this.state.isWord}</h4>
 							<h4>{this.state.turn}</h4>
-						</div>
-						<div>
+							{charList}
 							<Buttons 
+								disabled={this.state.disabled}
 								clicked={() => this.sendModal()}
 								click={() => this.callAPI()}/> 
+					
+							
 							<WordBuilder player={this.props.player} room={this.props.room}/>
 						</div> 
-					<div>			
-					{charList}
-					</div>
 					<Modal show={this.state.openModal} room={this.props.room} player={this.props.player} value={this.state.userInput} closed={this.closeModal} />
 					{this.state.openModal ? <Backdrop show /> : null}
 					

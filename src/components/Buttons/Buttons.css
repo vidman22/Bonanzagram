@@ -6,7 +6,7 @@
 	background-color: red;
 	color: white;
 	font-size: 30px;
-	margin-bottom: 9px;
+	margin: 0 4px 9px 4px;
 }
 
 .Buttons button:hover {
