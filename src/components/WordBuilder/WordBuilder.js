@@ -25,8 +25,8 @@ const socketUrl = "http://localhost:3001";
   inputChangedHandler = ( event ) => {
     this.setState({disabled: true});
     const socket = io(socketUrl);
-    socket.emit(LETTER_UPDATE, event.toUpperCase(), this.props.room, this.props.player);
-    this.setState({disabled: false});
+      socket.emit(LETTER_UPDATE, event.toUpperCase(), this.props.room);
+      this.setState({disabled: false});
   }
 
   render () {

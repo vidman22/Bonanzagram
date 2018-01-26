@@ -2,6 +2,7 @@ const io = require('./index.js').io;
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM, START } = require('../src/Events');
 const MAX_WAITING = 5000;
 const db = require('./models')
+
 const sessions = [];
 
 class SessionObject {
@@ -22,17 +23,68 @@ class SessionObject {
 		}
 		this.connectedUsers.push(tempUser);
 	}
+
+	next_turn(){
+
+		this.turn = this.current_turn++ % this.connectedUsers.length;
+		console.log( this.connectedUsers[this.turn].name + "'s turn");
+		io.emit(YOUR_TURN, this.connectedUsers[this.turn].id);
+		this.triggerTimout();
+	}
+
+	triggerTimout() {
+	
+	this.timeOut = setTimeout(()=>{
+		this.currentPlayerLoss();
+	}, MAX_WAITING);
+   }
+
+   resetTimout(){
+	if(typeof this.timeOut === 'object'){
+		console.log("timemout reset");
+		clearTimeout(this.timeOut);
+	}
+   }
+
+    currentPlayerLoss(room) {
+		
+		let turn = (this.current_turn--) % this.connectedUsers.length;
+		const player = this.connectedUsers[turn];
+		let points = this.text.length;
+
+			this.connectedUsers[turn].score - points;
+
+			console.log(player.name + ' has ' + this.connectedUsers[turn].score + ' points' );
+				
+			io.emit('lost_points', this.connectedUsers, room);
+			clearTimeout(this.timeOut);
+			this.text = '';
+			this.next_turn();
+	}
+
+	prevPlayerLoss(room) {
+		
+		let turn = (this.current_turn-2) % this.connectedUsers.length;
+		const player = this.connectedUsers[turn];
+		let points = this.text.length;
+			
+			this.connectedUsers[turn].score - points;
+
+			console.log(player.name + ' has ' + player.score + ' points' );
+			console.log(this.connectedUsers[turn].score);
+			io.emit('lost_points', this.connectedUsers, room);
+			clearTimeout(this.timeOut);
+			this.text= '';
+			this.next_turn();
+
+			if (player.score <= 0) {
+				io.emit('player_lost', player.id);
+		}
+
+	}
+
+
 }
-
-
-// for(var i=0; i< 4; i++) {
-// 	let tempRoom = new SessionObject();
-// 	if(i === 2) myPhrase = tempRoom.room;
-// 	sessions.push(tempRoom);
-// }
-// console.log(sessions);
-
-// console.log(sessionSearch(myPhrase));
 
 module.exports = function(socket){
 
@@ -77,18 +129,20 @@ module.exports = function(socket){
 	//User disconnects
 	socket.on('disconnect', ()=>{
 
-		// for (var i = 0; i < connectedUsers.length; i ++ ) {
-		// 	if (connectedUsers[i].id === socket.id) {
-		// 		console.log('found user disconnected: ' + connectedUsers[i].id);
+		for (var i = 0; i < sessions.length; i ++ ) {
+			for ( var j = 0; j < sessions[i].connectedUsers.length; j++) {
+				if (sessions[i].connectedUsers[j].id === socket.id) {
+					console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
 
-		// 		const id = connectedUsers[i].id;
+					const id = sessions[i].connectedUsers[j].id;
 
-		// 		connectedUsers = connectedUsers.filter((user) => user.id !== id);
+					sessions[i].connectedUsers = sessions[i].connectedUsers.filter((user) => user.id !== id);
 
-		// 	io.emit(USER_DISCONNECTED, connectedUsers);
-		// 	console.log("Disconnect", connectedUsers);
-		// }
-	  // }	
+			io.emit(USER_DISCONNECTED, sessions[i].connectedUsers , sessions[i].room );
+			console.log("Disconnect", sessions[i].connectedUsers);
+		}
+	  }	
+	 }
 	});
 
 	
@@ -98,24 +152,15 @@ module.exports = function(socket){
 		var index = sessionSearch(room_id);
 		io.emit('START', sessions[index].room, sessions[index].connectedUsers);
 		callback(room_id);
-		next_turn(room_id);
+		sessions[index].next_turn(room_id);
 	});
 
-	// socket.on('pass_turn', (room, player) => {
-	// 	const index = sessionSearch(room);
-	// 	activePlayer = sessions[index].connectedUsers[sessions[index]._turn];
-	// 	console.log('users turn: ', activePlayer);
-	// 	if (activePlayer) {
-	// 		resetTimout(room);
-	// 		next_turn(room);
-			
-	// 	}
-	// });
 	
 	//Letter is passed through and added to array
 	socket.on(LETTER_UPDATE, (data, room )=> {
 		const index = sessionSearch(room);
 		const text = sessions[index].text
+		console.log('text:' + text);
 			text.push(data);
 			io.emit('LETTER_UPDATE', text, room);
 			console.log(text);
@@ -123,9 +168,9 @@ module.exports = function(socket){
 			activePlayer = sessions[index].connectedUsers[sessions[index].turn].name;
 			console.log( activePlayer + ' went');
 		
-		// if (activePlayer) {
-			resetTimout(room);
-			next_turn(room);
+		
+			sessions[index].resetTimout(room);
+			sessions[index].next_turn(room);
 		
 	});
 
@@ -140,52 +185,22 @@ module.exports = function(socket){
 
 	});
 
-	socket.on(WORD_CHALLENGED, (data, room, player) => {
-		
-			console.log('challenged word: ' + data);
-			io.emit('WORD_CHALLENGED', data, room, player);
+	socket.on(WORD_CHALLENGED, (data, room, type) => {
+		var check = checkWord(data);
+		var index = sessionSearch(room);
+			if ( (check && type=== 'spell') || (!check && type === 'completed') ){
+				console.log('challenged word: ' + data);
+				sessions[index].currentPlayerLoss();
+				
+			} if ((check && type=== 'completed') || (!check && type=== 'spell')){
+				sessions[index].prevPlayerLoss();
+
+			} else {
+				console.log("error");
+			}
 	});
 
-	socket.on(PLAYER_SUCCESSFUL, (room) => {
-		const index = sessionSearch(room);
-			console.log('player_successful');
-
-			let turn = sessions[index].current_turn-- % sessions[index].connectedUsers.length;
-			const player = sessions[index].connectedUsers[turn];
-			
-			let points = sessions[index].text.length;
-			sessions[index].connectedUsers[turn].score - points;
-
-			console.log(player.name + 'lost ' + points + ' points ' );
-
-			io.emit('lost_points', sessions[index].connectedUsers);
-			clearTimeout(sessions[index].timeOut);
-			sessions[index].text= '';
-			next_turn(room);
-	});
-
-	socket.on(PLAYER_UNSUCCESSFUL, (room) => {
-		console.log('player_unsuccessful');
-		const index = sessionSearch(room);
-		let turn = sessions[index].current_turn % sessions[index].connectedUsers.length;
-		const player = sessions[index].connectedUsers[turn];
-		let points = sessions[index].text.length;
-
-			sessions[index].connectedUsers[turn].score - points;
-
-			console.log(player.name + 'lost ' + points + ' points ' );
-			
-			io.emit('lost_points', sessions[index].connectedUsers);
-			clearTimeout(sessions[index].timeOut);
-			sessions[index].text = '';
-			next_turn(room);
-
-	})
-
 	
-
-	
-
 	// //User logsout
 	// socket.on(LOGOUT, ()=>{
 	// 	connectedUsers = connectedUsers.splice(0,1);
@@ -195,29 +210,22 @@ module.exports = function(socket){
 	// });
 }
 
-// Game Functionality
-function next_turn(room){
-	var index = sessionSearch(room);
-	sessions[index].turn = sessions[index].current_turn++ % sessions[index].connectedUsers.length;
-	console.log( sessions[index].connectedUsers[sessions[index].turn].name + "'s turn");
-	io.emit(YOUR_TURN, sessions[index].connectedUsers[sessions[index].turn].id);
-	triggerTimout(index);
+
+// Database query ============================================================================
+function checkWord(word){
+	console.log('word: ' + word);
+	db.Word.find({"word": word}, (err, data) => {
+		if(err) console.log(err);
+		console.log(data);
+		return data.length 
+
+
+	})
 }
 
-function triggerTimout(index) {
+// Game Functionality ========================================================================
 
-	sessions[index].timeOut = setTimeout(()=>{
-		next_turn(sessions[index].room);
-	}, MAX_WAITING);
-}
 
-function resetTimout(room){
-	const index = sessionSearch(room);
-	if(typeof sessions[index].timeOut === 'object'){
-		console.log("timemout reset");
-		clearTimeout(sessions[index].timeOut);
-	}
-}
 
 // Check to see if username is not already taken
 function isUser(userList, username){

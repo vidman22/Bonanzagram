@@ -12,6 +12,7 @@ class App extends Component {
     <BrowserRouter>
       <div className="App">
         <Route path="/" component={LandingPage}/>
+        <Route path="/new" component={LandingPage}/>
         <br/>
       </div>  
 

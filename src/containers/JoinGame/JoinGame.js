@@ -64,6 +64,8 @@ export default class JoinGame extends Component {
 		this.setState({action: 'game'})
 	}
 
+
+
 	addComponent() {
 		var result;
 		switch(this.state.action) {
@@ -90,7 +92,7 @@ export default class JoinGame extends Component {
 						placeholder={'Name'}
 					/>
 					<div className="error">{this.state.error ? this.state.error:null}</div>
-					<button>Submit</button>
+					<button >Submit</button>
 				</form>
 			  )
 			  break;
@@ -123,6 +125,7 @@ export default class JoinGame extends Component {
 	}
 
 	render() {	
+
 		return (
 			<div className="login">
 				{this.addComponent()}

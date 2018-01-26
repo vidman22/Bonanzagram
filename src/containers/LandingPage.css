@@ -1,22 +1,142 @@
-.Blog ul {
+.Home ul {
     list-style: none;
     margin: 0;
     padding: 0;
     width: 100%;
     text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
 }
 
-.Blog li {
+.Home li {
     display: inline-block;
     margin: 20px;
+    padding: 0 12px 0 12px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    border-radius: 10px;
+
 }
 
-.Blog a {
+.Home li:hover {
+    border: 1px solid #eee;
+    box-shadow: 0 4px 5px #ccc;
+}
+
+.Home a {
     text-decoration: none;
     color: black;
 }
 
-.Blog a:hover,
-.Blog a:active {
-    color: #00e019;
+.Home a:hover,
+.Home a:active {
+    color: #d58282;
 }
+
+.title {
+    display: flex;
+    justify-content: space-around;
+    display: -webkit-flex;
+    -webkit-justify-content: space-around;
+    margin-top: 40px;
+    
+
+}
+
+
+.text {
+  color: black;
+  font-size: 65px;
+  font-weight: 650;
+  font-family: Helvetica;
+  position: relative;
+  -webkit-animation: jump 1.5s ease-out infinite ;
+  animation: jump 1.5s ease-out infinite; 
+  
+}
+
+@media only screen and (min-width: 320px) and (max-width: 500px) {
+   .text {
+      color: black;
+      font-size: 35px;
+      font-weight: 650;
+      -webkit-animation: jump 1.5s ease-out infinite ;
+      animation: jump 1.5s ease-out infinite; 
+  
+  } 
+
+}
+
+@media only screen and (min-width: 500px) and (max-width: 700px) {
+    .text {
+      color: black;
+      font-size: 45px;
+      font-weight: 650;
+      -webkit-animation: jump 1.5s ease-out infinite ;
+      animation: jump 1.5s ease-out infinite; 
+  
+ }
+}
+
+.text-B {
+    animation-delay:250ms;
+  }.text-O {
+    animation-delay:500ms;
+  }.text-N {
+    animation-delay:750ms;
+  }.text-A {
+    animation-delay:1s;
+  }.text-N2 {
+    animation-delay:1250ms;
+  }.text-Z {
+    animation-delay:1500ms;
+  }.text-A2 {
+    animation-delay:1750ms;
+  }.text-G {
+    animation-delay:2000ms;
+  }.text-R {
+    animation-delay:2250ms;
+  }.text-A3 {
+    animation-delay:2500ms;
+  }.text-M {
+    animation-delay:2750ms;
+  }.text-! {
+    animation-delay:3000ms;
+  }
+
+@keyframes jump {
+    0% {
+            color: black;
+            top: 0px;
+        }
+    50% {  
+            color: #4970bd;
+            top: -30px;
+        }
+    100% {  
+            color: black;
+            top: 0px;
+        }
+}
+
+@-webkit-keyframes jump {
+     0% {
+            color: black;
+            top: 0px;
+        }
+    50% {  
+            color: #4970bd;
+            top: -30px;
+        }
+
+    100% {  
+            color: black;
+            top: 0px;
+        }
+}
+
+

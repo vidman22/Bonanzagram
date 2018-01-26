@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import './Rules.css';
-import axios from "axios";
-
+import axios from 'axios';
 
 class Rules extends Component {
 	constructor(props) {
@@ -10,18 +9,19 @@ class Rules extends Component {
 			intervalId: null,
 			currentTime: 20
 		}
-		this.timer = this.timer.bind(this);
+		// this.timer = this.timer.bind(this);
 	}
 	
 	componentDidMount() {
-		// axios.get('/words').then(data => {
-		// 	console.log(data);
-		// });
-		// axios.get('/words/money').then(data => {
-		// 	console.log(data);
-		// });
-		var intervalId = setInterval(this.timer, 1000);
-		this.setState({intervalId: intervalId});
+		axios.get('/words').then(data => {
+			console.log(data);
+		});
+		axios.get('/words/money').then(data => {
+			console.log(data);
+		});
+		
+		// var intervalId = setInterval(this.timer, 1000);
+		// this.setState({intervalId: intervalId});
 	}
 	
 	// componentWillUnmount() {
@@ -29,14 +29,14 @@ class Rules extends Component {
 	// }
 	
 
-	timer() {
-		console.log(this.state);
-		var newTime = this.state.currentTime - 1;
-		if(newTime >= 0) {
-			this.setState({currentTime: newTime});
-		} else clearInterval(this.state.intervalId);
+	// timer() {
+	// 	console.log(this.state);
+	// 	var newTime = this.state.currentTime - 1;
+	// 	if(newTime >= 0) {
+	// 		this.setState({currentTime: newTime});
+	// 	} else clearInterval(this.state.intervalId);
 		
-	}
+	// }
 
 	render() {
 		return (
@@ -48,13 +48,13 @@ class Rules extends Component {
 				<br/>
 				<div className="content">
 		
-					<p>The goal of the game is to continue spelling a word without any errors and without ending a word.</p>
+					<p>	   The goal of the game is to continue spelling a word without any errors and without ending a word.</p>
 					<p>If you complete a word, then the next player can declare your word completed and you will be docked points 
 					equivalent to the number of letters in the word. If they prematurely declared your word compelted, they will 
 					be docked the points.</p>
-					<p>If you spell a word incorrectly, the subsequent player can challenge your spelling and you must prove 
+					<p>    If you spell a word incorrectly, the subsequent player can challenge your spelling and you must prove 
 					that you were spelling an actual word.</p>
-					<p>If you've successfully entered the word you had been spelling, the challenger will be docked points equivalent to the number of 
+					<p>    If you've successfully entered the word you had been spelling, the challenger will be docked points equivalent to the number of 
 					letters in the word. If your word was incorrect, then you will lose the points.</p>
 					
 					<p>Happy Spelling!</p>
