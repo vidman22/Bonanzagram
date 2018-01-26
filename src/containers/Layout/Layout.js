@@ -174,18 +174,7 @@ class Layout extends Component {
 	}
 		
 	render() {
-		console.log(this.state.players);
-		 //  players = (
-			// <div>
-			//   { this.props.players.map((player, index) => {
-			// 	return <Player 
-			// 	score={player.score}
-			// 	key={player.id}
-			// 	name={player.name}
-		 //        />
-			//   })}
-		 //    </div>
-	  //      );
+		console.log(this.props.players);
 	    
 	    
 		const charList = this.state.userInput.toUpperCase().split('').map((ch, index) => {

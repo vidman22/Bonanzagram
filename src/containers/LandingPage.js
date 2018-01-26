@@ -28,7 +28,7 @@ class LandingPage extends Component {
                             <div className="text text-R">R</div>
                             <div className="text text-A3">A</div>
                             <div className="text text-M">M</div>
-                            <div className="text text-!">!</div>
+                
                         </div>
                         
                    

@@ -53,7 +53,7 @@ class SessionObject {
 		let points = this.text.length;
 
 			this.connectedUsers[turn].score - points;
-
+			console.log(this.connectedUsers[turn] );
 			console.log(player.name + ' has ' + this.connectedUsers[turn].score + ' points' );
 				
 			io.emit('lost_points', this.connectedUsers, room);
@@ -92,11 +92,11 @@ module.exports = function(socket){
 		let newRoom = new SessionObject();
 		newRoom.addUser(user, id);
 		sessions.push(newRoom);
-		db.Word.find({"word": 'apple'},(err, data) => {
-			if(err) console.log(err);
-			console.log(data.length)
-			callback(sessions, newRoom.room, newRoom.connectedUsers, data);
-		})
+		// db.Word.find({"word": 'apple'},(err, data) => {
+		// 	if(err) console.log(err);
+		// 	console.log(data.length)
+		// 	callback(sessions, newRoom.room, newRoom.connectedUsers, data);
+		// })
 		
 	});
 
@@ -188,12 +188,14 @@ module.exports = function(socket){
 	socket.on(WORD_CHALLENGED, (data, room, type) => {
 		var check = checkWord(data);
 		var index = sessionSearch(room);
-			if ( (check && type=== 'spell') || (!check && type === 'completed') ){
-				console.log('challenged word: ' + data);
+			console.log('challenged word: ' + data);
+			if ((check && type=== 'spell') || (!check && type === 'completed') ){
+				
 				sessions[index].currentPlayerLoss();
 				
 			} if ((check && type=== 'completed') || (!check && type=== 'spell')){
 				sessions[index].prevPlayerLoss();
+
 
 			} else {
 				console.log("error");
@@ -215,10 +217,9 @@ module.exports = function(socket){
 function checkWord(word){
 	console.log('word: ' + word);
 	db.Word.find({"word": word}, (err, data) => {
-		if(err) console.log(err);
+		if(err) return console.log(err);
 		console.log(data);
 		return data.length 
-
 
 	})
 }
