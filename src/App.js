@@ -10,6 +10,7 @@ class App extends Component {
   render () {
     return (
     <BrowserRouter>
+      <div>Test</div>
       <div className="App">
         <Route path="/" component={LandingPage}/>
         <br/>
