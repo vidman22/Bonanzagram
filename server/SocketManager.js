@@ -1,12 +1,8 @@
 const io = require('./index.js').io;
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM, START } = require('../src/Events');
 const MAX_WAITING = 5000;
-<<<<<<< HEAD
 const db = require('./models')
-=======
-const db = require('./models');
 
->>>>>>> 0021400a35cf1c4df714f610b65b2e8d46ffc79a
 const sessions = [];
 
 class SessionObject {
@@ -52,7 +48,7 @@ class SessionObject {
 
     currentPlayerLoss(room) {
 		
-		let turn = this.current_turn-- % this.connectedUsers.length;
+		let turn = (this.current_turn--) % this.connectedUsers.length;
 		const player = this.connectedUsers[turn];
 		let points = this.text.length;
 
@@ -68,18 +64,18 @@ class SessionObject {
 
 	prevPlayerLoss(room) {
 		
-		let turn = this.current_turn-2 % this.connectedUsers.length;
+		let turn = (this.current_turn-2) % this.connectedUsers.length;
 		const player = this.connectedUsers[turn];
 		let points = this.text.length;
-
+			
 			this.connectedUsers[turn].score - points;
 
 			console.log(player.name + ' has ' + player.score + ' points' );
-
+			console.log(this.connectedUsers[turn].score);
 			io.emit('lost_points', this.connectedUsers, room);
 			clearTimeout(this.timeOut);
 			this.text= '';
-			next_turn();
+			this.next_turn();
 
 			if (player.score <= 0) {
 				io.emit('player_lost', player.id);
@@ -90,19 +86,6 @@ class SessionObject {
 
 }
 
-
-<<<<<<< HEAD
-// for(var i=0; i< 4; i++) {
-// 	let tempRoom = new SessionObject();
-// 	if(i === 2) myPhrase = tempRoom.room;
-// 	sessions.push(tempRoom);
-// }
-// console.log(sessions);
-
-// console.log(sessionSearch(myPhrase));
-
-=======
->>>>>>> 0021400a35cf1c4df714f610b65b2e8d46ffc79a
 module.exports = function(socket){
 
 	socket.on(NEW_ROOM, (id, user, callback) => {
@@ -177,6 +160,7 @@ module.exports = function(socket){
 	socket.on(LETTER_UPDATE, (data, room )=> {
 		const index = sessionSearch(room);
 		const text = sessions[index].text
+		console.log('text:' + text);
 			text.push(data);
 			io.emit('LETTER_UPDATE', text, room);
 			console.log(text);
@@ -202,13 +186,14 @@ module.exports = function(socket){
 	});
 
 	socket.on(WORD_CHALLENGED, (data, room, type) => {
-		var check = checkWord(word);
-			if ( (check && type=== spell) || (!check && type === completed) ){
+		var check = checkWord(data);
+		var index = sessionSearch(room);
+			if ( (check && type=== 'spell') || (!check && type === 'completed') ){
 				console.log('challenged word: ' + data);
-				sessions[index].currentPlayerLoss(room);
+				sessions[index].currentPlayerLoss();
 				
-			} if ((check && type=== completed) || (!check && type=== spell)){
-				sessions[index].prevPlayerLoss(room);
+			} if ((check && type=== 'completed') || (!check && type=== 'spell')){
+				sessions[index].prevPlayerLoss();
 
 			} else {
 				console.log("error");
@@ -228,9 +213,12 @@ module.exports = function(socket){
 
 // Database query ============================================================================
 function checkWord(word){
+	console.log('word: ' + word);
 	db.Word.find({"word": word}, (err, data) => {
 		if(err) console.log(err);
-		return data.length;
+		console.log(data);
+		return data.length 
+
 
 	})
 }
