@@ -34,7 +34,9 @@ class Layout extends Component {
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
-	  	isWord: 'Word not Challenged'
+	  	isWord: 'Word not Challenged',
+	  	intervalId: null,
+		currentTime: 20
 	  };
 
 	};
@@ -44,9 +46,13 @@ class Layout extends Component {
 	componentDidMount() {
 		console.log(this.props);
 		this.initSocket();
-		
+		var intervalId = setInterval(this.triggerTimer(), 1000);
+		this.setState({intervalId: intervalId});
 	};
 
+	componentWillUnmount() {
+		clearInterval(this.state.intervalId);
+	}
 
 
 	/* 
@@ -69,15 +75,14 @@ class Layout extends Component {
 					showBackdrop: false,
 					turn: 'Your Turn!'
 				});
-			// this.triggerTimer();
-		} 
-			else {
+				//// this.triggerTimer();
+				
+			} else {
 				this.setState({
 					showBackdrop: true,
 					turn: 'not your turn'
 				});
-		}
-			
+			}
 		});
 
 		socket.on('WORD_CHALLENGED', (data, room, player) => {
@@ -157,21 +162,22 @@ class Layout extends Component {
  	}
 
  	triggerTimer = () => {
-	console.log("triggered");
- 	  	let time = 5;
- 	  let interval = setInterval(trigger(), 1000);
-	  function trigger() {
-	 		if (time === 0) {
-	 			clearInterval(interval);
-	 			this.setState({time: 5});
-			 	} else {
-			 		
-			 		time--;
-			 		console.log(time);
-					this.setState({time: time});
-			 	}
-		}
+		console.log(this.state.currentTime);
+		var newTime = this.state.currentTime - 1;
+		if(newTime >= 0) {
+			this.setState({currentTime: newTime});
+		} else clearInterval(this.state.intervalId);
 	}
+
+	// timer() {
+	// 	console.log(this.state);
+	// 	var newTime = this.state.currentTime - 1;
+	// 	if(newTime >= 0) {
+	// 		this.setState({currentTime: newTime});
+	// 	} else clearInterval(this.state.intervalId);
+		
+	// }
+
 		
 	render() {
 		console.log(this.state.players);
