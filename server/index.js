@@ -14,7 +14,7 @@ const bodyParser = require('body-parser')
 
 
 const io = require('socket.io');
-const socket = io({
+const socket = io("https://frozen-caverns-17261.herokuapp.com",{
 	"transports": ["xhr-polling"], 
 	"polling duration": 10
 })
@@ -22,8 +22,6 @@ const socketServer = module.exports.io = io(server);
 
 // const io = module.exports.io = socketIo(server)
 
-
-// internet help
 // io.configure(function () { 
 //   io.set("transports", ["xhr-polling"]); 
 //   io.set("polling duration", 10); 
