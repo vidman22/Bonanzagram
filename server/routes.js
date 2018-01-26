@@ -11,6 +11,7 @@ module.exports = function(app, passport, db, path) {
 	app.get("/words", (req,res) => {
 		db.Word.find((err, data) => {
 			if(err) console.log(err);
+			console.log(data)
 			res.json(data);
 		})
 	});

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import './Rules.css';
-
+import axios from 'axios';
 
 class Rules extends Component {
 	constructor(props) {
@@ -13,12 +13,12 @@ class Rules extends Component {
 	}
 	
 	componentDidMount() {
-		// axios.get('/words').then(data => {
-		// 	console.log(data);
-		// });
-		// axios.get('/words/money').then(data => {
-		// 	console.log(data);
-		// });
+		axios.get('/words').then(data => {
+			console.log(data);
+		});
+		axios.get('/words/money').then(data => {
+			console.log(data);
+		});
 		
 		// var intervalId = setInterval(this.timer, 1000);
 		// this.setState({intervalId: intervalId});
