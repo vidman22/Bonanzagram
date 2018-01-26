@@ -5,8 +5,31 @@ const path = require('path')
 const http = require('http')
 const server = http.createServer(app)
 const bodyParser = require('body-parser')
-const socketIo= require('socket.io')
-const io = module.exports.io = socketIo(server)
+
+// old way
+// const socketIo= require('socket.io')({
+// 	'transports' : ['xhr-polling'],
+// 	'polling duration': 10
+// })
+
+
+const io = require('socket.io');
+const socket = io({
+	"transports": ["xhr-polling"], 
+	"polling duration": 10
+})
+const socketServer = module.exports.io = io(server);
+
+// const io = module.exports.io = socketIo(server)
+
+
+// internet help
+// io.configure(function () { 
+//   io.set("transports", ["xhr-polling"]); 
+//   io.set("polling duration", 10); 
+// });
+
+
 const SocketManager = require('./SocketManager');
 const flash = require('connect-flash')
 var passport = require('passport');
@@ -20,7 +43,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, '../build/')));
 
-io.on('connection', SocketManager)
+
+socketServer.on('connection', SocketManager)
 
 server.listen(PORT, () => {
 	console.log("On port: " + PORT);
