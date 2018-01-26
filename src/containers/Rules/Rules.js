@@ -15,9 +15,15 @@ class Rules extends Component {
 	componentDidMount() {
 		axios.get('/words').then(data => {
 			console.log(data);
+		})
+		.catch((err) =>{
+			console.log(err)
 		});
 		axios.get('/words/money').then(data => {
 			console.log(data);
+		})
+		.catch((err) =>{
+			console.log(err)
 		});
 		
 		// var intervalId = setInterval(this.timer, 1000);
