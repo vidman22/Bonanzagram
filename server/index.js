@@ -15,6 +15,7 @@ const bodyParser = require('body-parser')
 
 const io = require('socket.io');
 const socket = io("https://frozen-caverns-17261.herokuapp.com",{
+	path: "/nodejs/socket.io",
 	"transports": ["xhr-polling"], 
 	"polling duration": 10
 })
