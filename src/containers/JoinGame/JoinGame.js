@@ -3,7 +3,7 @@ import { USER_CONNECTED } from '../../Events';
 import Layout from '../Layout/Layout';
 import Waiting from '../../components/WaitingPage/WaitingPage';
 import io from 'socket.io-client';
-const socketUrl = "http://localhost:3001";
+const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 const socket = io(socketUrl);
 
 export default class JoinGame extends Component {

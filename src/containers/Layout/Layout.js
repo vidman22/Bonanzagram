@@ -13,7 +13,7 @@ import Backdrop from '../../components/Backdrop/Backdrop';
 import Finish from '../../components/FinishModal/FinishModal';
 // import axios from 'axios';
 
-const socketUrl = "http://localhost:3001";
+const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 const socket = io(socketUrl);
 
 class Layout extends Component {

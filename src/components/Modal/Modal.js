@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import { WORD_CHALLENGED } from '../../Events'
 import './Modal.css'
 
-const socketUrl = "http://localhost:3001";
+const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 const socket = io(socketUrl);
 const animationTiming = {
     enter: 400,

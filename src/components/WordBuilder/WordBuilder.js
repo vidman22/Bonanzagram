@@ -3,7 +3,7 @@ import Keyboard from '../../components/Keyboard/Keyboard';
 import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
-const socketUrl = "http://localhost:3001";
+const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
   
  export default class WordBuilder extends Component {
   constructor(props) {
