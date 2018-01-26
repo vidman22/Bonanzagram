@@ -8,6 +8,10 @@
 
 }
 
+.Layout h4 {
+	margin: 7px 0 7px 0;
+}
+
 .Start {
 	display: inline-block;
 	width: 250px;
@@ -30,3 +34,4 @@ p {
 	margin: 0px;
 	
 }
+

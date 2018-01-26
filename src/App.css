@@ -6,14 +6,25 @@
 }
 
 * {
-	font-family: 'Raleway', sans-serif;
-	font-size: 104%;
+	background: linear-gradient (right to, blue, red);	
 }
 
 body,#root{margin:0;padding:0;font-family:sans-serif;height:100%;background: white}input,textarea{font-family:Arial}.login{width:100%;height:100%;display:flex;justify-content:center;align-items:center; margin-top: 15px}.login-form{display:flex;justify-content:center;flex-direction:column;}.login-form input{max-width:100%;border-top:none;border-left:none;border-right:none;height:20px;line-height:20px;font-size:20px;margin-top: 15px;border-bottom:solid 2px #b3b2ca;transition:all .23s ease-in}.login-form input:focus{border-bottom:solid 2px #5d5d8a;outline:none}.login-form .error{text-align:center;margin:5px 0;padding:5px 10px;color:#c92c43}
 
-button {
-	padding: 3px 4px;
+
+.login-form button {
+	width: 300px; 
+	height: 40px; 
+	border-radius: 10px;
+	background-color: #4970bd;
+	font-size: 30px;
+	color: white;
+
+} 
+
+.login-form button:hover {
+	cursor: pointer;
+	background-color: #d58282;
 }
 
 @media only screen and (max-width: 480px) {

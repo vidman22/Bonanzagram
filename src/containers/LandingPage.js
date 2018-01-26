@@ -14,14 +14,26 @@ class LandingPage extends Component {
     render () {
         return (
             <div className="Home">
-                <header>
-                    <nav>
-                        <ul>
-                        	<li><h1>BONANAZAGRAM</h1></li>
-                        </ul>
-                    </nav>
-                </header>
-                <header>
+                
+                
+                        <div className="title">
+                        	<div className="text text-B">B</div>
+                            <div className="text text-O">O</div>
+                            <div className="text text-N">N</div>
+                            <div className="text text-A">A</div>
+                            <div className="text text-N2">N</div>
+                            <div className="text text-Z">Z</div>
+                            <div className="text text-A2">A</div>
+                            <div className="text text-G">G</div>
+                            <div className="text text-R">R</div>
+                            <div className="text text-A3">A</div>
+                            <div className="text text-M">M</div>
+                            <div className="text text-!">!</div>
+                        </div>
+                        
+                   
+               
+                
                     <nav>
                         <ul>
                             <li><Link to={{
@@ -38,7 +50,7 @@ class LandingPage extends Component {
                             }}><h3>Rules</h3></Link></li>
                         </ul>
                     </nav>
-                </header>
+                
             
             <Route exact path="/create-game" component={CreateGame}/>
             <Route path="/join-game" component={JoinGame} />

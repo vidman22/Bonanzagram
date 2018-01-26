@@ -4,8 +4,8 @@ import './Buttons.css'
 const buttons = ( props ) => {
     return (
     	<div className="Buttons">
-        <button onClick= {props.clicked} >Challenge Spelling</button>
-        <button onClick = {props.click} >Word Completed</button>
+	        <button disabled={props.disabled} onClick= {props.clicked} >Challenge Spelling</button>
+	        <button disabled={props.disabled} onClick = {props.click} >Word Completed</button>
         </div>
     )
 };
