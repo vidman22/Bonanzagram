@@ -70,7 +70,7 @@ export default class modal extends Component {
 		            	onChange={this.handleChange}
 		            	placeholder={this.props.value}
 		            	 />
-		            <button className="Submit" onSubmit={this.handleChange} onClick={this.props.closed}>
+		            <button onSubmit={this.handleChange} onClick={this.props.closed}>
 		              Submit
 		            </button>
 					</form>
