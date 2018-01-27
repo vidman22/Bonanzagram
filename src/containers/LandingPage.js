@@ -50,13 +50,14 @@ class LandingPage extends Component {
                             }}><h3>Rules</h3></Link></li>
                         </ul>
                     </nav>
+
                 
             
             <Route exact path="/create-game" component={CreateGame}/>
             <Route path="/join-game" component={JoinGame} />
             <Route path="/rules" component={Rules} />
-            
             </div>
+
         );
     }
 }

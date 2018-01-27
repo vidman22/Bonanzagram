@@ -3,6 +3,11 @@ import { USER_CONNECTED } from '../../Events';
 import Layout from '../Layout/Layout';
 import Waiting from '../../components/WaitingPage/WaitingPage';
 import io from 'socket.io-client';
+<<<<<<< HEAD
+import './JoinGame.css'
+const socketUrl = "http://localhost:3001";
+const socket = io(socketUrl);
+=======
 // const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 // const socket = io();
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
@@ -12,6 +17,7 @@ const socket = io({
 });
 // const socket = io.connect('http://localhost:3001');
 // const socket = io.connect();
+>>>>>>> 8d2a14b20d7feb64f339fb3c2e6905eaf20a5426
 
 export default class JoinGame extends Component {
 	constructor(props) {
@@ -46,6 +52,7 @@ export default class JoinGame extends Component {
 				console.log('room id: ' + room_id);
 			} else return;
 		});
+
 	};
 
 
@@ -107,6 +114,7 @@ export default class JoinGame extends Component {
 			  result = (
 				  	<div>
 				  		<Waiting players={this.state.players} room={this.state.room}/>
+				
 				  	</div>
 
 			  )

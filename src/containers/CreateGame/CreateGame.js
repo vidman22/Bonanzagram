@@ -54,8 +54,8 @@ export default class CreateGame extends Component {
 					waiting:"Enough Players to Start"
 				})
 			}
-		}
-	)}
+		});
+	}
 
 	handleSubmit = (e)=>{
 		e.preventDefault()
@@ -78,6 +78,10 @@ export default class CreateGame extends Component {
 		socket.emit(START, this.state.room, data => {
 			console.log(data);
 		});
+	}
+
+	back = () => {
+		this.setState({action: 'input'});
 	}
 
 	addComponent() {
@@ -108,6 +112,7 @@ export default class CreateGame extends Component {
 			  	<div className="login-form">
 			  		<Waiting players={this.state.players} waiting={this.state.waiting} room={this.state.room}/>
 			  		<button disabled={this.state.disableButton} onClick={() => this.startGame()}>Play</button>
+			  		<button onClick={() => this.back()}>Back</button>
 			  	</div>
 			  )		   
 			  break;

@@ -4,8 +4,8 @@
 	font-family: Helvetica;
 	border-radius: 20px;
 	background: #4970bd;
-	height: 64px;
-	width: 64px;
+	height: 60px;
+	width: 60px;
 	margin: 5px;
 	box-shadow: 0 2px 3px #ccc;
 	-webkit-transition: width .1s, height .1s;
@@ -16,7 +16,7 @@
 	color: white;
 	text-align: center;
 	font-size: 37px;
-	padding-top: 11px;
+	padding-top: 10px;
 	margin: 0px;
 	
 }

@@ -9,7 +9,7 @@ import Player from '../../components/Player/Player';
 import Buttons from '../../components/Buttons/Buttons';
 import Modal from '../../components/Modal/Modal';
 import Backdrop from '../../components/Backdrop/Backdrop';
-// import Start from '../../components/StartModal/StartModal';
+import WordModal from '../../components/WordModal/StartModal';
 import Finish from '../../components/FinishModal/FinishModal';
 // import axios from 'axios';
 
@@ -36,17 +36,16 @@ class Layout extends Component {
 	  	players: [],
 	  	time: 5,
 	  	turn: 'Not Your Turn',
-	  	checkCompletion: false,
 	  	openModal: false,
-	  	checkChallenge: false,
+	  	wordModal: false,
 	 	disabled: true,
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
-
+	  	showPlayers: false,
 	  	endGame: '',
-	  	isWord: 'Word not Challenged',
-	  	score: '3'
+	  	isWord: '',
+	  	score: '10'
 
 	  };
 
@@ -57,8 +56,6 @@ class Layout extends Component {
 	componentDidMount() {
 		console.log(this.props);
 		this.initSocket();
-		var intervalId = setInterval(this.triggerTimer(), 1000);
-		this.setState({intervalId: intervalId});
 	};
 
 
@@ -69,12 +66,24 @@ class Layout extends Component {
 	*/
 	initSocket = () => {
 
-		socket.on(USER_DISCONNECTED, (players, room) => {
+		socket.on('USER_DISCONNECTED', (players, room) => {
 			if (this.props.room === room) {
-			this.setState({players: players});
+			let newPlayers = players;
+			newPlayers.push(players);
+			this.setState({
+					players: newPlayers,
+					showPlayers: true});
 			
 		  }
 		});
+
+		socket.on('winner', (player) => {
+			if (this.props.player === player) {
+				this.setState({
+					showFinish: true,
+					endGame: 'You Won!'})
+			}
+		})
 
 
 		socket.on('YOUR_TURN', (data) => {
@@ -89,7 +98,6 @@ class Layout extends Component {
 				this.triggerTimer();
 		} 
 			else {
-
 				this.setState({
 					showBackdrop: true,
 					turn: 'Not Your Turn'
@@ -122,25 +130,58 @@ class Layout extends Component {
        } else return;
           });
 
-		socket.on('lost_points', (player, points) => {
-			
+		socket.on('lost_points', (player, players, room, points) => {
+			if (this.props.room === room) {
+				let newPlayers = players;
+				this.setState({
+					userInput: '',
+					players: newPlayers,
+					showPlayers: true
+				});
+			}
 			if (this.props.player === player){
-			let score = this.state.score;
-			let newScore = score - points;
-			this.setState({score: newScore,
-							turn: 'you lost points'});
-			console.log("lost points received");
+				let score = this.state.score;
+				let newScore = score - points;
+				this.setState({
+						score: newScore,
+						turn: 'you lost points',
+						
+							});
+				console.log("lost points received");
 		}
 				if (this.state.score <= 0) {
 					this.setState({
 						showFinish: true,
 						endGame: 'You Lost',
-						score: 0
+						score: '0'
 					});
-					socket.emit('player_lost');
+					socket.emit(USER_DISCONNECTED, (this.props.player));
 				}
 		 
 		});
+
+		socket.on('word_spelled', (word, room) => {
+			console.log(word);
+			if (this.props.room === room) {
+				this.setState({
+					isWord: 'The word was spelled was ' + word,
+					wordModal: true
+				 });
+
+				this.wordModal();
+			}
+		});
+
+		socket.on('wrong_word', (word, room ) => {
+			if (this.props.room === room) {
+				this.setState({
+					isWord: 'There is no such word as ' + word,
+					wrongModal: true
+				})
+
+				this.wrongModal();
+			}
+		})
   }
 
 	
@@ -150,7 +191,6 @@ class Layout extends Component {
 	*	Sets the user property in state to null.
 	*/
 	logout = () => {
-		const socket = this.props.player;
 		socket.emit(LOGOUT);
 
 	}
@@ -171,7 +211,8 @@ class Layout extends Component {
 	}
  	
  	closeFinish = () => {
- 		this.setState({showFinish:false});
+ 		this.setState({showFinish:false,
+ 					showBackdrop:false });
  	}
 
  	startGame = () => {
@@ -182,6 +223,10 @@ class Layout extends Component {
  	sendModal = () => {
  		
  		socket.emit(SEND_MODAL, this.props.room);
+ 	}
+
+ 	wordModal = () => {
+ 		setTimeout(this.setState({wordModal: false}), 7000);
  	}
  	// Timer functions ======================================================
 
@@ -200,21 +245,30 @@ class Layout extends Component {
 
 	clearTimer() {
 		this.setState({time: 5});
-		clearInterval(this.timer);
 	}
 
 	// ==================================================================================
 
 		
 	render() {
-		let players = 
-			this.props.players.map((player, index) => {
+		let players= null; 
+			if (!this.state.showPlayers) {
+			players = this.props.players.map((player, index) => {
+					return <Player
+					score={player.score} 
+					key={player.id}
+					name={player.name}
+			        />
+			});
+		} else {
+			players = this.state.players.map((player, index) => {
 					return <Player 
 					score={player.score}
 					key={player.id}
 					name={player.name}
 			        />
-			})
+			});
+		}
 
 	    
 	    
@@ -228,8 +282,10 @@ class Layout extends Component {
 			<Aux>
 			<div className="Layout">	
 				<div>
-					{/*JSON.stringify(this.props.players) + ' ' + this.props.players.length*/}
+				{/*JSON.stringify(this.props.players) + ' ' + this.props.players.length*/}
+					<div>
 				  {players}
+				  </div>
 				  <h3>Score: {this.state.score}</h3>
 				  <h3>Time Left: {this.state.time}</h3>
 				  <h3>{this.state.turn}</h3>
@@ -248,10 +304,10 @@ class Layout extends Component {
 					<Modal show={this.state.openModal} room={this.props.room} player={this.props.player} value={this.state.userInput} closed={this.closeModal} />
 					{this.state.openModal ? <Backdrop show /> : null}
 					
-			
+					<WordModal show={this.state.wordModal} word={this.state.isWord}  />
 					{this.state.showBackdrop ? <Backdrop show /> : null}
 
-					<Finish show={this.state.showFinish} message={this.state.endGame} closed={this.closeFinish} /> 
+					<Finish show={this.state.showFinish} message={this.state.endGame}  closed={this.closeFinish} /> 
 					{this.state.showFinish ? <Backdrop show /> : null}
 					
 					
