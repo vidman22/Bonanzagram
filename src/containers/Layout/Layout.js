@@ -16,14 +16,12 @@ import Finish from '../../components/FinishModal/FinishModal';
 // const socket = io.connect('http://localhost:3001');
 
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
-
-// const socket = io();
-
-const socket = io("http://frozen-caverns-17261.herokuapp.com",{
- path: "/socket.io",
- "transports": ["xhr-polling"], 
- "polling duration": 10
-})
+const socket = io({transports: ['websocket']});
+// const socket = io("http://localhost:3001",{
+//  path: "/socket.io",
+//  "transports": ["xhr-polling"], 
+//  "polling duration": 10
+// })
 
 class Layout extends Component {
 
