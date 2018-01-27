@@ -54,8 +54,8 @@
   font-weight: 650;
   font-family: Helvetica;
   position: relative;
-  -webkit-animation: jump 1.5s ease-out infinite ;
-  animation: jump 1.5s ease-out infinite; 
+  -webkit-animation: jump 2.5s ease-out infinite ;
+  animation: jump 2.5s ease-out infinite; 
   
 }
 
@@ -76,8 +76,8 @@
       color: black;
       font-size: 45px;
       font-weight: 650;
-      -webkit-animation: jump 1s ease-out infinite ;
-      animation: jump 1s ease-out infinite; 
+      -webkit-animation: jump 1.5s ease-out infinite ;
+      animation: jump 1.5s ease-out infinite; 
  }
 }
 
@@ -112,10 +112,21 @@
             color: black;
             top: 0px;
         }
+    25% {
+          top: 0px;
+    }
     50% {  
-            color: #4970bd;
-            top: -30px;
+            
+            top: 0px;
         }
+    75% {
+          top: 0px;
+    }
+
+    90% {
+          color: #4970bd;
+          top: -30px;
+    }
     100% {  
             color: black;
             top: 0px;
