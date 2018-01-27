@@ -14,12 +14,12 @@ import Finish from '../../components/FinishModal/FinishModal';
 // import axios from 'axios';
 
 // const socket = io.connect('http://localhost:3001');
-
+const socket = io.connect();
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
-const socket = io({
-	transports: ['websocket'],
-	path: '/'
-});
+// const socket = io({
+// 	transports: ['websocket'],
+// 	path: '/'
+// });
 // const socket = io("http://localhost:3001",{
 //  path: "/socket.io",
 //  "transports": ["xhr-polling"], 

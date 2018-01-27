@@ -2,11 +2,10 @@
 const path = require('path')
 const express = require('express')
 const app = express()
-const http = require('http')
-const server = http.createServer(app)
+const server = require('http').createServer(app)
 const bodyParser = require('body-parser')
 
-// old way
+
 const io = module.exports = require('socket.io').listen(server);
 
 // const io = require('socket.io');
@@ -33,7 +32,8 @@ app.use(express.static(path.join(__dirname, '../build/')));
 
 
 io.on('connection', function(socket) {
-	SocketManager(socket);
+	//* SocketManager(socket);
+	console.log('connected to io');
 })
 
 server.listen(PORT, () => {

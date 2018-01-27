@@ -6,18 +6,13 @@ import io from 'socket.io-client';
 // const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 // const socket = io();
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
-// const socket = io("http://localhost:3001",{
-//  path: "/socket.io",
-//  "transports": ["xhr-polling"], 
-//  "polling duration": 10
-// })
 
-const socket = io({
-	transports: ['websocket'],
-	path: '/'
-});
+// const socket = io({
+// 	transports: ['websocket'],
+// 	path: '/'
+// });
 // const socket = io.connect('http://localhost:3001');
-
+const socket = io.connect();
 
 export default class JoinGame extends Component {
 	constructor(props) {

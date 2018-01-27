@@ -13,10 +13,12 @@ import io from 'socket.io-client';
 //  "transports": ["xhr-polling"], 
 //  "polling duration": 10
 // })
-const socket = io({
-	transports: ['websocket'],
-	path: '/'
-});
+
+const socket = io.connect();
+// const socket = io({
+// 	transports: ['websocket'],
+// 	path: '/'
+// });
 export default class CreateGame extends Component {
 	constructor(props) {
 	  super(props);
