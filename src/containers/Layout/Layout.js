@@ -14,8 +14,8 @@ import Finish from '../../components/FinishModal/FinishModal';
 // import axios from 'axios';
 
 // const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
-const socket = io('https://frozen-caverns-17261.herokuapp.com');
-
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
+const socket = io();
 class Layout extends Component {
 
 	constructor(props) {

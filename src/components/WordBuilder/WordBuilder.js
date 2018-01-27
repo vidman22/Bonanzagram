@@ -4,7 +4,8 @@ import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
 // const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
-const socket = io('https://frozen-caverns-17261.herokuapp.com');
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
+const socket = io();
 
  export default class WordBuilder extends Component {
   constructor(props) {

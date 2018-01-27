@@ -5,8 +5,8 @@ import { WORD_CHALLENGED } from '../../Events'
 import './Modal.css'
 
 // const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
-// const socket = io();
-const socket = io('https://frozen-caverns-17261.herokuapp.com');
+const socket = io();
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
 
 const animationTiming = {
     enter: 400,

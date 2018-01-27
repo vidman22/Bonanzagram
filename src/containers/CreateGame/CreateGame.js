@@ -6,8 +6,8 @@ import io from 'socket.io-client';
 // const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 // const socketUrl = "localhost:3001";
 
-const socket = io('https://frozen-caverns-17261.herokuapp.com');
-// const socket = io();
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
+const socket = io();
 
 export default class CreateGame extends Component {
 	constructor(props) {
