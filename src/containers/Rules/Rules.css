@@ -9,9 +9,9 @@ body {
 	margin: 0;
 } 
 
-.header > h2 {
-	color: #3e4a60;
-	margin: 0;
+.header > h1 {
+	color: black;
+	margin-top: 22px;
 	text-align: center;
 }
 
