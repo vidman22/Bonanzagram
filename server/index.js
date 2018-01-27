@@ -7,33 +7,23 @@ const server = http.createServer(app)
 const bodyParser = require('body-parser')
 
 // old way
-// const socketIo= require('socket.io')({
-// 	'transports' : ['xhr-polling'],
-// 	'polling duration': 10
+const io = module.exports = require('socket.io').listen(server);
+
+// const io = require('socket.io');
+// const socket = io("http://frozen-caverns-17261.herokuapp.com",{
+// 	path: "/socket.io",
+// 	"transports": ["xhr-polling"], 
+// 	"polling duration": 10
 // })
 
-
-const io = require('socket.io');
-const socket = io("http://frozen-caverns-17261.herokuapp.com",{
-	"transports": ["xhr-polling"], 
-	"polling duration": 10
-})
-const socketServer = module.exports.io = io(server);
-
 // const io = module.exports.io = socketIo(server)
-
-// io.configure(function () { 
-//   io.set("transports", ["xhr-polling"]); 
-//   io.set("polling duration", 10); 
-// });
-
 
 const SocketManager = require('./SocketManager');
 const flash = require('connect-flash')
 var passport = require('passport');
 const mongoose = require('mongoose');
 const db = require('./models')
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 
 app.use(bodyParser.urlencoded({extended: false}))
@@ -42,7 +32,9 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, '../build/')));
 
 
-socketServer.on('connection', SocketManager)
+io.on('connection', function(socket) {
+	SocketManager(socket);
+})
 
 server.listen(PORT, () => {
 	console.log("On port: " + PORT);

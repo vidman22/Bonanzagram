@@ -3,8 +3,11 @@ import Layout from '../Layout/Layout';
 import Waiting from '../../components/WaitingPage/WaitingPage'
 import { NEW_ROOM, START } from '../../Events';
 import io from 'socket.io-client';
-const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
-const socket = io(socketUrl);
+// const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
+// const socketUrl = "localhost:3001";
+
+const socket = io('https://frozen-caverns-17261.herokuapp.com');
+// const socket = io();
 
 export default class CreateGame extends Component {
 	constructor(props) {
@@ -47,9 +50,8 @@ export default class CreateGame extends Component {
 		e.preventDefault()
 		console.log(this.state);
 		const nickname = this.state.nickname;
-		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users, words) =>{
+		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users) =>{
 			console.log(data);
-			console.log(words);
 			this.setState({
 				action: 'waiting',
 				room: room,
