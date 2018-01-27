@@ -3,6 +3,7 @@ import { USER_CONNECTED } from '../../Events';
 import Layout from '../Layout/Layout';
 import Waiting from '../../components/WaitingPage/WaitingPage';
 import io from 'socket.io-client';
+import './JoinGame.css'
 const socketUrl = "http://localhost:3001";
 const socket = io(socketUrl);
 
@@ -39,6 +40,7 @@ export default class JoinGame extends Component {
 				console.log('room id: ' + room_id);
 			} else return;
 		});
+
 	};
 
 
@@ -100,6 +102,7 @@ export default class JoinGame extends Component {
 			  result = (
 				  	<div>
 				  		<Waiting players={this.state.players} room={this.state.room}/>
+				
 				  	</div>
 
 			  )

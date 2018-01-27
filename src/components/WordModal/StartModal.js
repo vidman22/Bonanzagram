@@ -1,15 +1,14 @@
-import React  from "react";
+import React from "react";
 import CSSTransition from "react-transition-group/CSSTransition";
 
-import "./FinishModal.css";
-
+import "./StartModal.css";
 
 const animationTiming = {
     enter: 400,
     exit: 1000
 };
 
-const finish = props => {
+const WordModal = props => {
   return (
     <CSSTransition 
         mountOnEnter 
@@ -23,13 +22,10 @@ const finish = props => {
             exitActive: 'ModalClosed'
         }}>
           <div className="Modal">
-            <h1>{props.message}</h1>
-            <button onClick={props.closed}>
-              Close
-            </button>
+            <h1>{props.word}</h1>
           </div>
     </CSSTransition>
   );
 };
 
-export default finish;
+export default WordModal;
