@@ -3,8 +3,12 @@ import Keyboard from '../../components/Keyboard/Keyboard';
 import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
-const socketUrl = "http://localhost:3001";
-  
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
+// const socket = io();
+const socket = io({
+ transports: ["websocket"]
+})
+
  export default class WordBuilder extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +28,6 @@ const socketUrl = "http://localhost:3001";
 
   inputChangedHandler = ( event ) => {
     this.setState({disabled: true});
-    const socket = io(socketUrl);
       socket.emit(LETTER_UPDATE, event.toUpperCase(), this.props.room);
       this.setState({disabled: false});
   }

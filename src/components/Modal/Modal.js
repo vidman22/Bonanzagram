@@ -4,8 +4,19 @@ import io from 'socket.io-client';
 import { WORD_CHALLENGED } from '../../Events'
 import './Modal.css'
 
-const socketUrl = "http://localhost:3001";
-const socket = io(socketUrl);
+// const socket = io.connect('http://localhost:3001');
+// const socket = io();
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
+// const socket = io("http://localhost:3001",{
+//  path: "/socket.io",
+//  "transports": ["xhr-polling"], 
+//  "polling duration": 10
+// })
+// const socket = io.connect();
+const socket = io({
+	transports: ['websocket']
+});
+
 const animationTiming = {
     enter: 400,
     exit: 1000
