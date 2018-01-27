@@ -34,9 +34,11 @@ class Layout extends Component {
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
+
 	  	endGame: '',
 	  	isWord: 'Word not Challenged',
 	  	score: '3'
+
 	  };
 
 	};
@@ -46,10 +48,11 @@ class Layout extends Component {
 	componentDidMount() {
 		console.log(this.props);
 		this.initSocket();
-		
+		var intervalId = setInterval(this.triggerTimer(), 1000);
+		this.setState({intervalId: intervalId});
 	};
 
-	
+
 
 
 	/* 
@@ -72,16 +75,17 @@ class Layout extends Component {
 					showBackdrop: false,
 					turn: 'Your Turn!'
 				});
+
 				this.clearTimer();
 				this.triggerTimer();
 		} 
 			else {
+
 				this.setState({
 					showBackdrop: true,
 					turn: 'Not Your Turn'
 				});
-		}
-			
+			}
 		});
 
 		socket.on('WORD_CHALLENGED', (data, room, player) => {
@@ -172,6 +176,7 @@ class Layout extends Component {
  	}
  	// Timer functions ======================================================
 
+
  	tick() {
 		this.setState({time:(this.state.time-1)})
 		if (this.state.time === 0) {
@@ -190,6 +195,7 @@ class Layout extends Component {
 	}
 
 	// ==================================================================================
+
 		
 	render() {
 		let players = 
