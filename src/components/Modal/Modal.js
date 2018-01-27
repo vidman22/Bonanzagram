@@ -12,11 +12,10 @@ import './Modal.css'
 //  "transports": ["xhr-polling"], 
 //  "polling duration": 10
 // })
-const socket = io.connect();
-// const socket = io({
-// 	transports: ['websocket'],
-// 	path: '/'
-// });
+// const socket = io.connect();
+const socket = io({
+	transports: ['websocket']
+});
 
 const animationTiming = {
     enter: 400,

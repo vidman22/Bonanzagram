@@ -3,14 +3,11 @@ import Keyboard from '../../components/Keyboard/Keyboard';
 import {LETTER_UPDATE} from '../../Events.js';
 import io from 'socket.io-client';
 
-// const socketUrl = "https://frozen-caverns-17261.herokuapp.com";
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
-const socket = io.connect();
-// const socket = io("http://localhost:3001",{
-//  path: "/socket.io",
-//  "transports": ["xhr-polling"], 
-//  "polling duration": 10
-// })
+// const socket = io();
+const socket = io({
+ transports: ["websocket"]
+})
 
  export default class WordBuilder extends Component {
   constructor(props) {

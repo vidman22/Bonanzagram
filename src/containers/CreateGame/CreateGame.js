@@ -14,11 +14,10 @@ import io from 'socket.io-client';
 //  "polling duration": 10
 // })
 
-const socket = io.connect();
-// const socket = io({
-// 	transports: ['websocket'],
-// 	path: '/'
-// });
+// const socket = io.connect();
+const socket = io({
+	transports: ['websocket']
+});
 export default class CreateGame extends Component {
 	constructor(props) {
 	  super(props);

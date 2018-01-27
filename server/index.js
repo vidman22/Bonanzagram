@@ -5,17 +5,7 @@ const app = express()
 const server = require('http').createServer(app)
 const bodyParser = require('body-parser')
 
-
-const io = module.exports = require('socket.io').listen(server);
-
-// const io = require('socket.io');
-// const socket = io("http://frozen-caverns-17261.herokuapp.com",{
-// 	path: "/socket.io",
-// 	"transports": ["xhr-polling"], 
-// 	"polling duration": 10
-// })
-
-// const io = module.exports.io = socketIo(server)
+const io = module.exports = require('socket.io')(server);
 
 const SocketManager = require('./SocketManager');
 const flash = require('connect-flash')
@@ -44,18 +34,8 @@ require('./routes.js')(app, passport, db, path);
 
 mongoose.Promise = Promise;
 
-// var MONGODB_URI = 'mongodb://<>:<>@ds213338.mlab.com:13338/heroku_7gln3b0z';
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/banana_spell";
 mongoose.connect(MONGODB_URI, function (error) {
     if (error) console.error(error);
     else console.log('mongo connected');
 });
-
-
-// var morgan = require('morgan');
-// var cookieParser = require('cookie-parser');
-
-// app.use(morgan('combined'));
-// app.use(cookieParser());
-
-// app.use(flash());
