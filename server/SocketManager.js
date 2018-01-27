@@ -60,7 +60,7 @@ class SessionObject {
 				
 				
 				
-				io.emit('lost_points', this.connectedUsers[turn].id, this.connectedUsers, this.room, points);
+				setTimeout(io.emit('lost_points', this.connectedUsers[turn].id, this.connectedUsers, this.room, points), 6000);
 				clearTimeout(this.timeOut);
 				this.text = [];
 				this.next_turn();
@@ -79,7 +79,7 @@ class SessionObject {
 		}
 			
 			
-			io.emit('lost_points', this.connectedUsers[turn].id, this.connectedUsers, this.room, points);
+			setTimeout(io.emit('lost_points', this.connectedUsers[turn].id, this.connectedUsers, this.room, points), 6000);
 			clearTimeout(this.timeOut);
 			this.text= [];
 			this.next_turn();
@@ -88,7 +88,6 @@ class SessionObject {
 	}
 
 
-}
 
 module.exports = function(socket){
 
@@ -138,7 +137,7 @@ module.exports = function(socket){
 				if (sessions[i].connectedUsers[j].id === socket.id) {
 					if (sessions[i].connectedUsers.length === 1) {
 						clearTimeout(sessions[i].timeOut);
-						io.emit('winner', sessions[i].connectedUser[0].id);
+						// 	
 					}
 					// console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
 

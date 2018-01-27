@@ -231,7 +231,7 @@ class Layout extends Component {
  	}
 
  	wordModal = () => {
- 		setTimeout(this.setState({wordModal: false}), 70000);
+ 		setTimeout(this.setState({wordModal: false}), 4000);
  	}
  	// Timer functions ======================================================
 
@@ -239,7 +239,7 @@ class Layout extends Component {
  	tick() {
 		this.setState({time:(this.state.time-1)})
 		if (this.state.time === 0) {
-			this.setState({time: 5});
+			this.setState({time: 15});
 		}
 	}
 
@@ -249,7 +249,7 @@ class Layout extends Component {
 	}
 
 	clearTimer() {
-		this.setState({time: 5});
+		this.setState({time: 15});
 	}
 
 	// ==================================================================================
