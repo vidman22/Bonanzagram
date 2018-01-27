@@ -32,8 +32,7 @@ app.use(express.static(path.join(__dirname, '../build/')));
 
 
 io.on('connection', function(socket) {
-	//* SocketManager(socket);
-	console.log('connected to io');
+	SocketManager(socket);
 })
 
 server.listen(PORT, () => {
