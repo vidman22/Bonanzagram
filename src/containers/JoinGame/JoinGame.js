@@ -12,8 +12,10 @@ import io from 'socket.io-client';
 //  "polling duration": 10
 // })
 
-const socket = io({transports: ['websocket']});
-
+const socket = io({
+	transports: ['websocket'],
+	path: '/'
+});
 // const socket = io.connect('http://localhost:3001');
 
 

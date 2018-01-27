@@ -13,8 +13,10 @@ import './Modal.css'
 //  "polling duration": 10
 // })
 
-const socket = io({transports: ['websocket']});
-
+const socket = io({
+	transports: ['websocket'],
+	path: '/'
+});
 
 const animationTiming = {
     enter: 400,
