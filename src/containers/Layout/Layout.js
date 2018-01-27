@@ -13,8 +13,17 @@ import WordModal from '../../components/WordModal/StartModal';
 import Finish from '../../components/FinishModal/FinishModal';
 // import axios from 'axios';
 
-const socketUrl = "http://localhost:3001";
-const socket = io(socketUrl);
+// const socket = io.connect('http://localhost:3001');
+// const socket = io();
+// const socket = io('https://frozen-caverns-17261.herokuapp.com');
+const socket = io({
+	transports: ['websocket']
+});
+// const socket = io("http://localhost:3001",{
+//  path: "/socket.io",
+//  "transports": ["xhr-polling"], 
+//  "polling duration": 10
+// })
 
 class Layout extends Component {
 
