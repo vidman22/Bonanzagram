@@ -1,7 +1,7 @@
 /// Dependencies ///////////
+const path = require('path')
 const express = require('express')
 const app = express()
-const path = require('path')
 const http = require('http')
 const server = http.createServer(app)
 const bodyParser = require('body-parser')
