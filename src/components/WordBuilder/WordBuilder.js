@@ -5,9 +5,7 @@ import io from 'socket.io-client';
 
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
 // const socket = io();
-const socket = io({
- transports: ["websocket"]
-})
+const socket = io.connect('http://localhost:3001');
 
  export default class WordBuilder extends Component {
   constructor(props) {

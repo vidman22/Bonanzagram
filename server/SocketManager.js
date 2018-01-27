@@ -1,7 +1,7 @@
 const io = require('./index.js');
 
 const { VERIFY_USER, USER_CONNECTED, USER_DISCONNECTED, LOGOUT, LETTER_UPDATE, WORD_CHALLENGED, PLAYER_UNSUCCESSFUL, PLAYER_SUCCESSFUL, YOUR_TURN, SEND_MODAL, NEW_ROOM, START } = require('../src/Events');
-const MAX_WAITING = 5000;
+const MAX_WAITING = 15000;
 const db = require('./models')
 
 const sessions = [];
@@ -57,8 +57,8 @@ class SessionObject {
 				 points = this.text.length;
 			}
 
-				console.log(player.name + ' has lost ' + points );
-				this.connectedUsers[turn].score - points;
+				
+				
 				
 				io.emit('lost_points', this.connectedUsers[turn].id, this.connectedUsers, this.room, points);
 				clearTimeout(this.timeOut);
@@ -77,16 +77,12 @@ class SessionObject {
 		} else {
 			 points = this.text.length;
 		}
-			console.log(player.name + ' has lost' +  points );
 			
-			this.connectedUsers[turn].score - points;
+			
 			io.emit('lost_points', this.connectedUsers[turn].id, this.connectedUsers, this.room, points);
 			clearTimeout(this.timeOut);
 			this.text= [];
 			this.next_turn();
-
-			if (player.score <= 0) {
-				io.emit('player_lost', player.id);
 		}
 
 	}
@@ -140,9 +136,9 @@ module.exports = function(socket){
 		for (var i = 0; i < sessions.length; i ++ ) {
 			for ( var j = 0; j < sessions[i].connectedUsers.length; j++) {
 				if (sessions[i].connectedUsers[j].id === socket.id) {
-					if (sessions[i].connectedUsers.length <= 1) {
+					if (sessions[i].connectedUsers.length === 1) {
 						clearTimeout(sessions[i].timeOut);
-						io.emit('winner', sessions[i].connectedUser.id);
+						io.emit('winner', sessions[i].connectedUser[0].id);
 					}
 					// console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
 
@@ -164,7 +160,7 @@ module.exports = function(socket){
 				if (sessions[i].connectedUsers[j].id === player_id) {
 					if (sessions[i].connectedUsers.length === 1) {
 						clearTimeout(sessions[i].timeOut);
-						io.emit('winner', sessions[i].connectedUser.id)
+						io.emit('winner', sessions[i].connectedUser[0].id)
 					} 
 					// console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
 
@@ -231,6 +227,7 @@ module.exports = function(socket){
 					
 				} if (!data.length && type === 'completed') {
 					console.log("current player loses points");
+					io.emit('wrong_word', word, room);
 					sessions[index].currentPlayerLoss(sessions[index].turn);
 
 				} if (data.length && type=== 'completed') {
@@ -241,6 +238,7 @@ module.exports = function(socket){
 
 				} if (!data.length && type=== 'spell'){
 					console.log("prev player loses points");
+					io.emit('wrong_word', word, room);
 					sessions[index].prevPlayerLoss();
 					
 				} else {
