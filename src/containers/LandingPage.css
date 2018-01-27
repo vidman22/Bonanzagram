@@ -76,36 +76,35 @@
       color: black;
       font-size: 45px;
       font-weight: 650;
-      -webkit-animation: jump 1.5s ease-out infinite ;
-      animation: jump 1.5s ease-out infinite; 
-  
+      -webkit-animation: jump 1s ease-out infinite ;
+      animation: jump 1s ease-out infinite; 
  }
 }
 
 .text-B {
     animation-delay:250ms;
   }.text-O {
-    animation-delay:500ms;
+    animation-delay:450ms;
   }.text-N {
-    animation-delay:750ms;
+    animation-delay:650ms;
   }.text-A {
-    animation-delay:1s;
+    animation-delay:850ms;
   }.text-N2 {
-    animation-delay:1250ms;
+    animation-delay:1050ms;
   }.text-Z {
-    animation-delay:1500ms;
+    animation-delay:1250ms;
   }.text-A2 {
-    animation-delay:1750ms;
+    animation-delay:1450ms;
   }.text-G {
-    animation-delay:2000ms;
+    animation-delay:1650ms;
   }.text-R {
-    animation-delay:2250ms;
+    animation-delay:1850ms;
   }.text-A3 {
-    animation-delay:2500ms;
+    animation-delay:2050ms;
   }.text-M {
-    animation-delay:2750ms;
+    animation-delay:2250ms;
   }.text-! {
-    animation-delay:3000ms;
+    animation-delay:2450ms;
   }
 
 @keyframes jump {

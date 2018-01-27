@@ -1,7 +1,8 @@
-import React from "react";
+import React  from "react";
 import CSSTransition from "react-transition-group/CSSTransition";
 
-import "../StartModal/StartModal.css";
+import "./FinishModal.css";
+
 
 const animationTiming = {
     enter: 400,
@@ -22,12 +23,9 @@ const finish = props => {
             exitActive: 'ModalClosed'
         }}>
           <div className="Modal">
-            <h1>You Lost</h1>
-            <button className="Start" onClick={props.clicked}>
+            <h1>{props.message}</h1>
+            <button onClick={props.closed}>
               Home
-            </button>
-            <button className="Start" onClick={props.click}>
-              Play Again
             </button>
           </div>
     </CSSTransition>
