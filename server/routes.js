@@ -22,20 +22,20 @@ module.exports = function(app, passport, db, path) {
 		})
 	});
 
-	app.post("/signup", passport.authenticate('signup', {
-		// successRedirect:'/home',
-		// failureRedirect: '/signup',
-		// successFlash: 'Welcome', 
-		// failureFlash: true
-	}), (req, res, something, otherThing) => {
-		res.send(something, otherThing);
-	});
+	// app.post("/signup", passport.authenticate('signup', {
+	// 	// successRedirect:'/home',
+	// 	// failureRedirect: '/signup',
+	// 	// successFlash: 'Welcome', 
+	// 	// failureFlash: true
+	// }), (req, res, something, otherThing) => {
+	// 	res.send(something, otherThing);
+	// });
 
-	app.post("/login", passport.authenticate('login', {
-		successRedirect: '/home',
-		failureRedirect: '/login',
-		failureFlash: true
-	}));
+	// app.post("/login", passport.authenticate('login', {
+	// 	successRedirect: '/home',
+	// 	failureRedirect: '/login',
+	// 	failureFlash: true
+	// }));
 
 
 	// app.get("/home", isLoggedIn, (req, res) => {
@@ -43,13 +43,13 @@ module.exports = function(app, passport, db, path) {
 		// res.send("hello");
 	// });
 
-	app.get("/thing", (req,res) => {
-		res.send("hi");
-	});
+	// app.get("/thing", (req,res) => {
+	// 	res.send("hi");
+	// });
 
-	// app.get('/*', (req, res) => {
-	// 	res.sendFile(path.join(__dirname, '../build/index.html'));
-	// })
+	app.get('/*', (req, res) => {
+		res.sendFile(path.join(__dirname, '../build/index.html'));
+	})
 
 	function isLoggedIn(req, res, next) {
 		if(req.isAuthenticated()) return next();

@@ -37,8 +37,10 @@ export default class CreateGame extends Component {
 			this.setState({players: users});
 			if (users.length >= 2) {
 
-				this.setState({disableButton: false});
-				this.setState({waiting:"Enough Players to Start"})
+				this.setState({
+					disableButton: false,
+					waiting:"Enough Players to Start"
+				})
 			}
 		}
 	)}
@@ -47,9 +49,8 @@ export default class CreateGame extends Component {
 		e.preventDefault()
 		console.log(this.state);
 		const nickname = this.state.nickname;
-		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users, words) =>{
+		socket.emit(NEW_ROOM, socket.id, nickname, (data, room, users) =>{
 			console.log(data);
-			console.log(words);
 			this.setState({
 				action: 'waiting',
 				room: room,
@@ -92,9 +93,9 @@ export default class CreateGame extends Component {
 			  break;
 			case 'waiting':
 			  result = (
-			  	<div>
+			  	<div className="login-form">
 			  		<Waiting players={this.state.players} waiting={this.state.waiting} room={this.state.room}/>
-			  		<button className="Play" disabled={this.state.disableButton} onClick={() => this.startGame()}>Play</button>
+			  		<button disabled={this.state.disableButton} onClick={() => this.startGame()}>Play</button>
 			  	</div>
 			  )		   
 			  break;

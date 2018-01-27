@@ -29,14 +29,14 @@ class SessionObject {
 		this.turn = this.current_turn++ % this.connectedUsers.length;
 		console.log( this.connectedUsers[this.turn].name + "'s turn");
 		io.emit(YOUR_TURN, this.connectedUsers[this.turn].id);
-		this.triggerTimout();
+		this.triggerTimout(this.turn);
 	}
 
-	triggerTimout() {
+	triggerTimout(turn) {
 	
-	this.timeOut = setTimeout(()=>{
-		this.currentPlayerLoss();
-	}, MAX_WAITING);
+		this.timeOut = setTimeout(()=>{
+		this.currentPlayerLoss(turn);
+	   }, MAX_WAITING);
    }
 
    resetTimout(){
@@ -46,35 +46,42 @@ class SessionObject {
 	}
    }
 
-    currentPlayerLoss(room) {
-		
-		let turn = (this.current_turn--) % this.connectedUsers.length;
+    currentPlayerLoss(turn) {
+    	let points; 
+			
 		const player = this.connectedUsers[turn];
-		let points = this.text.length;
+		if (this.text.length <= 0 ) {
+			points = 1 
+		} else {
+			 points = this.text.length;
+		}
 
-			this.connectedUsers[turn].score - points;
-			console.log(this.connectedUsers[turn] );
-			console.log(player.name + ' has ' + this.connectedUsers[turn].score + ' points' );
+			console.log('points ln 59: ' + points);
+			console.log(player.name + ' has lost ' + points );
 				
-			io.emit('lost_points', this.connectedUsers, room);
+			io.emit('lost_points', this.connectedUsers[turn].id, points);
 			clearTimeout(this.timeOut);
-			this.text = '';
+			this.text = [];
 			this.next_turn();
 	}
 
 	prevPlayerLoss(room) {
-		
-		let turn = (this.current_turn-2) % this.connectedUsers.length;
+		let points
+		let current_turn = this.current_turn;
+		let turn = (current_turn-2) % this.connectedUsers.length;
 		const player = this.connectedUsers[turn];
-		let points = this.text.length;
-			
-			this.connectedUsers[turn].score - points;
-
-			console.log(player.name + ' has ' + player.score + ' points' );
+		if (this.text.length <= 0 ) {
+			 points = 1 
+		} else {
+			 points = this.text.length;
+		}
+			console.log('points ln 85: ' + points);
+			console.log(player.name + ' has lost' +  points );
 			console.log(this.connectedUsers[turn].score);
-			io.emit('lost_points', this.connectedUsers, room);
+
+			io.emit('lost_points', this.connectedUsers[turn].id, points);
 			clearTimeout(this.timeOut);
-			this.text= '';
+			this.text= [];
 			this.next_turn();
 
 			if (player.score <= 0) {
@@ -92,10 +99,11 @@ module.exports = function(socket){
 		let newRoom = new SessionObject();
 		newRoom.addUser(user, id);
 		sessions.push(newRoom);
+		callback(sessions, newRoom.room, newRoom.connectedUsers);
 		// db.Word.find({"word": 'apple'},(err, data) => {
 		// 	if(err) console.log(err);
-		// 	console.log(data.length)
-		// 	callback(sessions, newRoom.room, newRoom.connectedUsers, data);
+		
+			
 		// })
 		
 	});
@@ -109,7 +117,6 @@ module.exports = function(socket){
 		// name: nickname}
 	 //      })
 	 //   } 
-		console.log(data);
 		callback(data);
 	});
 
@@ -132,14 +139,14 @@ module.exports = function(socket){
 		for (var i = 0; i < sessions.length; i ++ ) {
 			for ( var j = 0; j < sessions[i].connectedUsers.length; j++) {
 				if (sessions[i].connectedUsers[j].id === socket.id) {
-					console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
+					// console.log('found user disconnected: ' + sessions[i].connectedUsers[j].id);
 
 					const id = sessions[i].connectedUsers[j].id;
 
 					sessions[i].connectedUsers = sessions[i].connectedUsers.filter((user) => user.id !== id);
 
 			io.emit(USER_DISCONNECTED, sessions[i].connectedUsers , sessions[i].room );
-			console.log("Disconnect", sessions[i].connectedUsers);
+			console.log("After disconnect", sessions[i].connectedUsers);
 		}
 	  }	
 	 }
@@ -152,7 +159,7 @@ module.exports = function(socket){
 		var index = sessionSearch(room_id);
 		io.emit('START', sessions[index].room, sessions[index].connectedUsers);
 		callback(room_id);
-		sessions[index].next_turn(room_id);
+		sessions[index].next_turn();
 	});
 
 	
@@ -160,17 +167,17 @@ module.exports = function(socket){
 	socket.on(LETTER_UPDATE, (data, room )=> {
 		const index = sessionSearch(room);
 		const text = sessions[index].text
-		console.log('text:' + text);
+	
 			text.push(data);
 			io.emit('LETTER_UPDATE', text, room);
-			console.log(text);
+	
 
 			activePlayer = sessions[index].connectedUsers[sessions[index].turn].name;
 			console.log( activePlayer + ' went');
 		
 		
-			sessions[index].resetTimout(room);
-			sessions[index].next_turn(room);
+			sessions[index].resetTimout();
+			sessions[index].next_turn();
 		
 	});
 
@@ -185,21 +192,30 @@ module.exports = function(socket){
 
 	});
 
-	socket.on(WORD_CHALLENGED, (data, room, type) => {
-		var check = checkWord(data);
+	socket.on(WORD_CHALLENGED, (word, room, type) => {
+
 		var index = sessionSearch(room);
-			console.log('challenged word: ' + data);
-			if ((check && type=== 'spell') || (!check && type === 'completed') ){
+		clearTimeout(sessions[index].timout);
+		db.Word.find({"word": word}).then(data => {
+			console.log('data: ',  data)
+			
 				
-				sessions[index].currentPlayerLoss();
-				
-			} if ((check && type=== 'completed') || (!check && type=== 'spell')){
-				sessions[index].prevPlayerLoss();
+				console.log('challenged word: ' + word + ' result ' + data );
+				if ((data.length && type=== 'spell') || (!data.length && type === 'completed') ){
+					console.log("current player loses points");
+					sessions[index].currentPlayerLoss(sessions[index].turn);
+					
+				} if ((data.length && type=== 'completed') || (!data.length && type=== 'spell')){
+					console.log("prev player loses points");
+					sessions[index].prevPlayerLoss();
 
+				} else {
+					console.log("ln 208 error");
+				}
 
-			} else {
-				console.log("error");
-			}
+		  }).catch(err => console.log(err)) 
+
+		
 	});
 
 	
@@ -215,11 +231,10 @@ module.exports = function(socket){
 
 // Database query ============================================================================
 function checkWord(word){
-	console.log('word: ' + word);
 	db.Word.find({"word": word}, (err, data) => {
 		if(err) return console.log(err);
-		console.log(data);
-		return data.length 
+		console.log("function check data", data);
+		return data.word 
 
 	})
 }

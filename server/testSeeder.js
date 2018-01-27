@@ -3,8 +3,13 @@ mongoose.Promise = Promise;
 const fs = require('fs');
 const Word = require('./models/Word.js')
 
+
 var uri = "mongodb://localhost/banana_spell";
 // var uri = 'mongodb://JonP:phrase@ds213338.mlab.com:13338/heroku_7gln3b0z';
+
+// var uri = process.env.MONGODB_URI || "mongodb://localhost/banana_spell";
+// var uri = 'mongodb://<>:<>@ds213338.mlab.com:13338/heroku_7gln3b0z';
+
 
 mongoose.connect(uri);
 
