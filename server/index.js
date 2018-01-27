@@ -7,7 +7,7 @@ const server = http.createServer(app)
 const bodyParser = require('body-parser')
 
 // old way
-const io = module.exports = require('socket.io')(http).listen(server);
+const io = module.exports = require('socket.io').listen(server);
 
 // const io = require('socket.io');
 // const socket = io("http://frozen-caverns-17261.herokuapp.com",{
