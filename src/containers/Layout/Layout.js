@@ -34,9 +34,11 @@ class Layout extends Component {
 	  	showBackdrop: true,
 	  	showStart: true,
 	  	showFinish: false,
+
+	  	endGame: '',
 	  	isWord: 'Word not Challenged',
-	  	intervalId: null,
-		currentTime: 20
+	  	score: '3'
+
 	  };
 
 	};
@@ -50,9 +52,7 @@ class Layout extends Component {
 		this.setState({intervalId: intervalId});
 	};
 
-	componentWillUnmount() {
-		clearInterval(this.state.intervalId);
-	}
+
 
 
 	/* 
@@ -75,12 +75,15 @@ class Layout extends Component {
 					showBackdrop: false,
 					turn: 'Your Turn!'
 				});
-				//// this.triggerTimer();
-				
-			} else {
+
+				this.clearTimer();
+				this.triggerTimer();
+		} 
+			else {
+
 				this.setState({
 					showBackdrop: true,
-					turn: 'not your turn'
+					turn: 'Not Your Turn'
 				});
 			}
 		});
@@ -110,13 +113,21 @@ class Layout extends Component {
        } else return;
           });
 
-		socket.on('lost_points', (players, room) => {
-			if (this.props.room === room){
-			this.setState({players});
-			console.log(this.state.players);
+		socket.on('lost_points', (player, points) => {
+			
+			if (this.props.player === player){
+			let score = this.state.score;
+			let newScore = score - points;
+			this.setState({score: newScore,
+							turn: 'you lost points'});
+			console.log("lost points received");
 		}
 				if (this.state.score <= 0) {
-					this.setState({showFinish: true});
+					this.setState({
+						showFinish: true,
+						endGame: 'You Lost',
+						score: 0
+					});
 					socket.emit('player_lost');
 				}
 		 
@@ -150,6 +161,9 @@ class Layout extends Component {
 		this.setState({openModal: false});
 	}
  	
+ 	closeFinish = () => {
+ 		this.setState({showFinish:false});
+ 	}
 
  	startGame = () => {
  		
@@ -160,38 +174,39 @@ class Layout extends Component {
  		
  		socket.emit(SEND_MODAL, this.props.room);
  	}
+ 	// Timer functions ======================================================
 
- 	triggerTimer = () => {
-		console.log(this.state.currentTime);
-		var newTime = this.state.currentTime - 1;
-		if(newTime >= 0) {
-			this.setState({currentTime: newTime});
-		} else clearInterval(this.state.intervalId);
+
+ 	tick() {
+		this.setState({time:(this.state.time-1)})
+		if (this.state.time === 0) {
+			this.setState({time: 5});
+		}
 	}
 
-	// timer() {
-	// 	console.log(this.state);
-	// 	var newTime = this.state.currentTime - 1;
-	// 	if(newTime >= 0) {
-	// 		this.setState({currentTime: newTime});
-	// 	} else clearInterval(this.state.intervalId);
-		
-	// }
+	triggerTimer() {
+		clearInterval(this.timer)
+		this.timer = setInterval(this.tick.bind(this), 1000)
+	}
+
+	clearTimer() {
+		this.setState({time: 5});
+		clearInterval(this.timer);
+	}
+
+	// ==================================================================================
 
 		
 	render() {
-		console.log(this.state.players);
-		 //  players = (
-			// <div>
-			//   { this.props.players.map((player, index) => {
-			// 	return <Player 
-			// 	score={player.score}
-			// 	key={player.id}
-			// 	name={player.name}
-		 //        />
-			//   })}
-		 //    </div>
-	  //      );
+		let players = 
+			this.props.players.map((player, index) => {
+					return <Player 
+					score={player.score}
+					key={player.id}
+					name={player.name}
+			        />
+			})
+
 	    
 	    
 		const charList = this.state.userInput.toUpperCase().split('').map((ch, index) => {
@@ -205,16 +220,13 @@ class Layout extends Component {
 			<div className="Layout">	
 				<div>
 					{/*JSON.stringify(this.props.players) + ' ' + this.props.players.length*/}
-				  {this.props.players.map((player, index) => {
-					return <Player 
-					score={player.score}
-					key={player.id}
-					name={player.name}
-			        />
-				  })}
+				  {players}
+				  <h3>Score: {this.state.score}</h3>
+				  <h3>Time Left: {this.state.time}</h3>
+				  <h3>{this.state.turn}</h3>
 				</div>
 						<div>
-							<h4>{this.state.turn}</h4>
+							
 							{charList}
 							<Buttons 
 								disabled={this.state.disabled}
@@ -230,7 +242,7 @@ class Layout extends Component {
 			
 					{this.state.showBackdrop ? <Backdrop show /> : null}
 
-					<Finish show={this.state.showFinish} clicked={this.home} click={this.home}/> 
+					<Finish show={this.state.showFinish} message={this.state.endGame} closed={this.closeFinish} /> 
 					{this.state.showFinish ? <Backdrop show /> : null}
 					
 					

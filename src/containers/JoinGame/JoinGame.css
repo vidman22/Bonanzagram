@@ -43,13 +43,3 @@ input,textarea{
 		padding:5px 10px;
 		color:#c92c43
 	}
-.login-form button {
-	display: inline-block;
-	width: 200px;
-	height: 70px;
-	border-radius: 10px;
-	background-color: gray;
-	color: black;
-	font-size: 30px;
-	margin-bottom: 9px;
-}

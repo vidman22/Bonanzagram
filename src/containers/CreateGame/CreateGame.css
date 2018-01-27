@@ -9,7 +9,24 @@
 
 } 
 
+
+
 .Play:hover {
+	cursor: pointer;
+	background-color: #d58282;
+}
+
+button.Play {
+	width: 320px; 
+	height: 40px; 
+	border-radius: 10px;
+	background-color: #4970bd;
+	font-size: 30px;
+	color: white;
+
+} 
+
+button.Play:hover {
 	cursor: pointer;
 	background-color: #d58282;
 }
