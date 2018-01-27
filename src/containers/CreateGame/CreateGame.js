@@ -4,7 +4,7 @@ import Waiting from '../../components/WaitingPage/WaitingPage'
 import { NEW_ROOM, START } from '../../Events';
 import io from 'socket.io-client';
 
-// const socket = io.connect('http://localhost:3001');
+const socket = io.connect('http://localhost:3001');
 
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
 // const socket = io();
@@ -15,9 +15,9 @@ import io from 'socket.io-client';
 // })
 
 // const socket = io.connect();
-const socket = io({
-	transports: ['websocket']
-});
+// const socket = io({
+// 	transports: ['websocket']
+// });
 export default class CreateGame extends Component {
 	constructor(props) {
 	  super(props);

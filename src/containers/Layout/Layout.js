@@ -13,12 +13,12 @@ import WordModal from '../../components/WordModal/StartModal';
 import Finish from '../../components/FinishModal/FinishModal';
 // import axios from 'axios';
 
-// const socket = io.connect('http://localhost:3001');
+const socket = io.connect('http://localhost:3001');
 // const socket = io();
 // const socket = io('https://frozen-caverns-17261.herokuapp.com');
-const socket = io({
-	transports: ['websocket']
-});
+// const socket = io({
+// 	transports: ['websocket']
+// });
 // const socket = io("http://localhost:3001",{
 //  path: "/socket.io",
 //  "transports": ["xhr-polling"], 
@@ -34,7 +34,7 @@ class Layout extends Component {
 	  	wordChallenge: '',
 	  	socket:null,
 	  	players: [],
-	  	time: 5,
+	  	time: 15,
 	  	turn: 'Not Your Turn',
 	  	openModal: false,
 	  	wordModal: false,
@@ -73,8 +73,13 @@ class Layout extends Component {
 			this.setState({
 					players: newPlayers,
 					showPlayers: true});
+			if (this.state.players.length === 1 ){
+				this.setState({
+					showFinish: true,
+					endGame: 'You Won!'});
+			}
 			
-		  }
+		  } 
 		});
 
 		socket.on('winner', (player) => {
@@ -164,7 +169,7 @@ class Layout extends Component {
 			console.log(word);
 			if (this.props.room === room) {
 				this.setState({
-					isWord: 'The word was spelled was ' + word,
+					isWord: 'The word spelled was ' + word,
 					wordModal: true
 				 });
 
@@ -176,10 +181,10 @@ class Layout extends Component {
 			if (this.props.room === room) {
 				this.setState({
 					isWord: 'There is no such word as ' + word,
-					wrongModal: true
+					wordModal: true
 				})
 
-				this.wrongModal();
+				this.wordModal();
 			}
 		})
   }
@@ -226,7 +231,7 @@ class Layout extends Component {
  	}
 
  	wordModal = () => {
- 		setTimeout(this.setState({wordModal: false}), 7000);
+ 		setTimeout(this.setState({wordModal: false}), 70000);
  	}
  	// Timer functions ======================================================
 
